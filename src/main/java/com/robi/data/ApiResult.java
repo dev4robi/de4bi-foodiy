@@ -30,8 +30,8 @@ public class ApiResult {
     public static final String KEY_API_RESULT_MSG   = "result_msg";
     public static final String KEY_API_RESULT_DATA  = "result_data";
     
-    public static final String DEFAULT_API_RESULT_CODE_POSSITIVE    = "0000";
-    public static final String DEFAULT_API_RESULT_CODE_NEGATIVE     = "9999";
+    public static final String DEFAULT_API_RESULT_CODE_POSSITIVE    = "O";
+    public static final String DEFAULT_API_RESULT_CODE_NEGATIVE     = "X";
     public static final String DEFAULT_API_RESULT_MSG_POSITIVE      = "OK";
     public static final String DEFAULT_API_RESULT_MSG_NEGATIVE      = "FAIL";
 

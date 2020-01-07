@@ -1,7 +1,6 @@
 package com.robi.foodiy.aop;
 
 import java.util.Enumeration;
-import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -9,6 +8,7 @@ import com.robi.data.ApiResult;
 import com.robi.util.RandomUtil;
 
 import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.Signature;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.slf4j.Logger;
@@ -38,6 +38,8 @@ public class ControllerAop {
         // Logger init
         MDC.put("tId", traceId);
         MDC.put("layer", "CTR");
+        final Signature sign = pjp.getSignature();
+        logger.info("<<CtrBgn>> '{}.{}()'", sign.getDeclaringTypeName(), sign.getName());
 
         // Logging request
         ServletRequestAttributes servletReqAttr = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
@@ -94,7 +96,8 @@ public class ControllerAop {
         // Logging reply
         final long ctrEndTimeMs = System.currentTimeMillis();
         final long timeElapsedMs = ctrEndTimeMs - ctrBgnTimeMs;
-        logger.info("<Rpy> '{}' (Time: {}ms)", apiRst.toString(), timeElapsedMs);
+        logger.info("<Rpy> '{}'", apiRst.toString());
+        logger.info("<<CtrEnd>> (Time: {}ms)", timeElapsedMs);
 
         // Logger deinit
         MDC.put("layer", oldLayer);

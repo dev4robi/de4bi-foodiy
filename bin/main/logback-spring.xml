@@ -2,7 +2,7 @@
 
 <configuration scan="true" scanPeriod="1 minutes">
 	<include resource="org/springframework/boot/logging/logback/defaults.xml"/>
-	<property value="./log/ghasix" name="LOG_FILE_PREFIX"/>
+	<property value="./log/foodiy" name="LOG_FILE_PREFIX"/>
 	<!-- 콘솔 로그 -->
 	<appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
 		<encoder>
