@@ -1,4 +1,4 @@
-package com.robi.foodiy.controller;
+package com.robi.foodiy.controller.api;
 
 import com.robi.data.ApiResult;
 import com.robi.foodiy.service.TestService;

@@ -1,12 +1,6 @@
 package com.robi.foodiy.aop;
 
-import java.util.Enumeration;
-
-import javax.servlet.http.HttpServletRequest;
-
 import com.robi.data.ApiResult;
-import com.robi.util.RandomUtil;
-
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.Signature;
 import org.aspectj.lang.annotation.Around;
@@ -15,8 +9,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
 import org.springframework.stereotype.Component;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 
 import lombok.AllArgsConstructor;
 
@@ -59,6 +51,7 @@ public class ServiceAop {
         }
         catch (Throwable e) {
             logger.error("Exception in service AOP! {}", e);
+            apiRst.setResultMsg("SVC_INTERNAL_ERROR");
         }
 
         // Logging reply
