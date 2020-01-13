@@ -18,10 +18,11 @@
 	<!-- fontawesome 5.8.1 -->
 	<link rel="stylesheet" href="/common/lib/fontawesome-5.8.1/css/fontawesome-5.8.1.css">
 	<script type="text/javascript" src="/common/lib/fontawesome-5.8.1/js/fontawesome-5.8.1.js"></script>
-	<!-- common.js -->
+	<!-- lib common.js -->
 	<script type="text/javascript" src="/common/js/common.js?ver=<%=System.currentTimeMillis()%>"></script>
-	<!-- main.js -->
-	<script type="text/javascript" src="/view/js/main.js?ver=<%=System.currentTimeMillis()%>"></script>
+	<!-- main.css/js -->
+	<script type="text/javascript" src="/foodiy/js/common.js?ver=<%=System.currentTimeMillis()%>"></script>
+	<script type="text/javascript" src="/foodiy/js/main.js?ver=<%=System.currentTimeMillis()%>"></script>
 </head>
 <body class="container-fluid">
 	<!-- 로고 -->
@@ -30,8 +31,12 @@
 			<img src="/foodiy/img/foodiy_logo.png" class="card-img-top" alt="Foodiy!">
 		</div>
 	</div>
+	<!-- 로그인 -->
+	<div class="row align-items-center justify-content-center" id="div_login">
+		<!--<iframe class="embed-responsive-item allowfullscreen" src="" id="iframe_record"></iframe>-->
+	</div>
 	<!-- 서비스 네이게이션 바 -->
-	<div class="row align-items-center justify-content-center">
+	<div class="row align-items-center justify-content-center" id="div_main">
 		<div class="col">
 			<ul class="nav nav-tabs" id="ul_navitab_tab" role="tablist">
 				<!-- 탭:기록하기 -->
@@ -53,20 +58,20 @@
 			</ul>
 			<div class="tab-content" id="div_navitab_content">
 				<!-- 콘텐츠:기록하기 -->
-				<div class="tab-pane fade embed-responsive embed-responsive-16by9 show active" id="record" role="tabpanel" aria-labelledby="home-tab">
-					<iframe class="embed-responsive-item allowfullscreen" src="/page/record" id="iframe_record"></iframe>
+				<div class="tab-pane fade embed-responsive embed-responsive-16by9 show active" id="record" role="tabpanel" aria-labelledby="record-tab">
+					<iframe class="embed-responsive-item allowfullscreen" src="" id="iframe_record"></iframe>
 				</div>
 				<!-- 콘텐츠:검색 -->
-				<div class="tab-pane fade embed-responsive embed-responsive-16by9" id="search" role="tabpanel" aria-labelledby="profile-tab">
-					<iframe class="embed-responsive-item allowfullscreen" src="/page/search" id="iframe_search"></iframe>
+				<div class="tab-pane fade embed-responsive embed-responsive-16by9" id="search" role="tabpanel" aria-labelledby="search-tab">
+					<iframe class="embed-responsive-item allowfullscreen" src="" id="iframe_search"></iframe>
 				</div>
 				<!-- 콘텐츠:맛집지도 -->
-				<div class="tab-pane fade embed-responsive embed-responsive-16by9" id="map" role="tabpanel" aria-labelledby="contact-tab">
-					<iframe class="embed-responsive-item allowfullscreen" src="/page/map" id="iframe_map"></iframe>
+				<div class="tab-pane fade embed-responsive embed-responsive-16by9" id="map" role="tabpanel" aria-labelledby="map-tab">
+					<iframe class="embed-responsive-item allowfullscreen" src="" id="iframe_map"></iframe>
 				</div>
 				<!-- 콘텐츠:통계 -->
-				<div class="tab-pane fade embed-responsive embed-responsive-16by9" id="stat" role="tabpanel" aria-labelledby="contact-tab">
-					<iframe class="embed-responsive-item allowfullscreen" src="/page/stat" id="iframe_stat"></iframe>
+				<div class="tab-pane fade embed-responsive embed-responsive-16by9" id="stat" role="tabpanel" aria-labelledby="stat-tab">
+					<iframe class="embed-responsive-item allowfullscreen" src="" id="iframe_stat"></iframe>
 				</div>
 			</div>
 		</div>

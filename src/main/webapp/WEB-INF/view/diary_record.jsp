@@ -18,12 +18,23 @@
 	<!-- fontawesome 5.8.1 -->
 	<link rel="stylesheet" href="/common/lib/fontawesome-5.8.1/css/fontawesome-5.8.1.css">
 	<script type="text/javascript" src="/common/lib/fontawesome-5.8.1/js/fontawesome-5.8.1.js"></script>
+	<!-- bootstrap-datepicker -->
+	<link rel="stylesheet" href="/common/lib/bootstrap-datepicker/css/bootstrap-datepicker.standalone.min.css">
+	<script type="text/javascript" src="/common/lib/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
+	<script type="text/javascript" src="/common/lib/bootstrap-datepicker/locale/bootstrap-datepicker.kr.min.js"></script>
 	<!-- common.js -->
 	<script type="text/javascript" src="/common/js/common.js?ver=<%=System.currentTimeMillis()%>"></script>
-	<!-- main.js -->
-	<script type="text/javascript" src="/view/js/diary_record.js?ver=<%=System.currentTimeMillis()%>"></script>
+	<!-- diary_record.css/js -->
+	<script type="text/javascript" src="/foodiy/js/common.js?ver=<%=System.currentTimeMillis()%>"></script>
+	<script type="text/javascript" src="/foodiy/js/diary_record.js?ver=<%=System.currentTimeMillis()%>"></script>
 </head>
 <body class="container-fluid">
-	<h1>Diary Record</h1>
+	<div class="row align-items-center justify-content-center">
+		<div class="input-group date" data-provide="datepicker">
+			<input type="text" class="form-control">
+			<div class="input-group-addon">
+				<span class="glyphicon glyphicon-th"></span>
+			</div>
+		</div>
 </body>
 </html>
