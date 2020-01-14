@@ -18,10 +18,9 @@
 	<!-- fontawesome 5.8.1 -->
 	<link rel="stylesheet" href="/common/lib/fontawesome-5.8.1/css/fontawesome-5.8.1.css">
 	<script type="text/javascript" src="/common/lib/fontawesome-5.8.1/js/fontawesome-5.8.1.js"></script>
-	<!-- bootstrap-datepicker -->
-	<link rel="stylesheet" href="/common/lib/bootstrap-datepicker/css/bootstrap-datepicker.standalone.min.css">
-	<script type="text/javascript" src="/common/lib/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
-	<script type="text/javascript" src="/common/lib/bootstrap-datepicker/locale/bootstrap-datepicker.kr.min.js"></script>
+	<!-- bootstrap-datetimepicker 0.0.11 -->
+	<link rel="stylesheet" href="/common/lib/bootstrap-datetimepicker-0.0.11/css/bootstrap-datetimepicker.min.css">
+	<script type="text/javascript" src="/common/lib/bootstrap-datetimepicker-0.0.11/js/bootstrap-datetimepicker.min.js"></script>
 	<!-- common.js -->
 	<script type="text/javascript" src="/common/js/common.js?ver=<%=System.currentTimeMillis()%>"></script>
 	<!-- diary_record.css/js -->
@@ -30,11 +29,22 @@
 </head>
 <body class="container-fluid">
 	<div class="row align-items-center justify-content-center">
-		<div class="input-group date" data-provide="datepicker">
-			<input type="text" class="form-control">
-			<div class="input-group-addon">
-				<span class="glyphicon glyphicon-th"></span>
+		<div clss="col">
+			<div id="div_datepicker" class="input-append">
+				<input id="input_date" data-format="yyyy-MM-dd" type="text">
+				<span class="add-on">
+					<i class="far fa-calendar-check fa-lg fa-border fa-pull-right"></i>
+				</span>
 			</div>
 		</div>
+		<div clss="col">
+			<div id="div_timepicker" class="input-append">
+				<input id="input_time" data-format="hh:mm" type="text">
+				<span class="add-on">
+					<i class="far fa-clock fa-lg fa-border fa-pull-right"></i>
+				</span>
+			</div>
+		</div>
+	</div>
 </body>
 </html>

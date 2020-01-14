@@ -58,20 +58,20 @@
 			</ul>
 			<div class="tab-content" id="div_navitab_content">
 				<!-- 콘텐츠:기록하기 -->
-				<div class="tab-pane fade embed-responsive embed-responsive-16by9 show active" id="record" role="tabpanel" aria-labelledby="record-tab">
-					<iframe class="embed-responsive-item allowfullscreen" src="" id="iframe_record"></iframe>
+				<div class="tab-pane fade show active" id="record" role="tabpanel" aria-labelledby="record-tab">
+					<iframe class="w-100" src="" id="iframe_record" style="border:none; height:100vh" allowfullscreen></iframe>
 				</div>
 				<!-- 콘텐츠:검색 -->
-				<div class="tab-pane fade embed-responsive embed-responsive-16by9" id="search" role="tabpanel" aria-labelledby="search-tab">
-					<iframe class="embed-responsive-item allowfullscreen" src="" id="iframe_search"></iframe>
+				<div class="tab-pane fade embed-responsive embed-responsive-4by3" id="search" role="tabpanel" aria-labelledby="search-tab">
+					<iframe class="embed-responsive-item" src="" id="iframe_search" style="border:none; height:100vh" allowfullscreen></iframe>
 				</div>
 				<!-- 콘텐츠:맛집지도 -->
-				<div class="tab-pane fade embed-responsive embed-responsive-16by9" id="map" role="tabpanel" aria-labelledby="map-tab">
-					<iframe class="embed-responsive-item allowfullscreen" src="" id="iframe_map"></iframe>
+				<div class="tab-pane fade embed-responsive embed-responsive-4by3" id="map" role="tabpanel" aria-labelledby="map-tab">
+					<iframe class="embed-responsive-item" src="" id="iframe_map" style="border:none; height:100vh" allowfullscreen></iframe>
 				</div>
 				<!-- 콘텐츠:통계 -->
-				<div class="tab-pane fade embed-responsive embed-responsive-16by9" id="stat" role="tabpanel" aria-labelledby="stat-tab">
-					<iframe class="embed-responsive-item allowfullscreen" src="" id="iframe_stat"></iframe>
+				<div class="tab-pane fade embed-responsive embed-responsive-4by3" id="stat" role="tabpanel" aria-labelledby="stat-tab">
+					<iframe class="embed-responsive-item" src="" id="iframe_stat" style="border:none; height:100vh" allowfullscreen></iframe>
 				</div>
 			</div>
 		</div>
