@@ -28,21 +28,42 @@
 	<script type="text/javascript" src="/foodiy/js/diary_record.js?ver=<%=System.currentTimeMillis()%>"></script>
 </head>
 <body class="container-fluid">
-	<div class="row align-items-center justify-content-center">
-		<div clss="col">
-			<div id="div_datepicker" class="input-append">
-				<input id="input_date" data-format="yyyy-MM-dd" type="text">
-				<span class="add-on">
-					<i class="far fa-calendar-check fa-lg fa-border fa-pull-right"></i>
-				</span>
+	<div class="row align-items-center">
+		<div class="col-10 border border-primary">
+			<div class="form-group">
+				<span>일자</span>
+				<div class="input-group" id="div_datepicker">
+					<input class="form-control" data-format="yyyy-MM-dd" type="text" id="input_date">
+					<span class="input-group-append add-on">
+						<i class="far fa-calendar fa-lg fa-border fa-pull-right"></i>
+					</span>
+				</div>
 			</div>
 		</div>
-		<div clss="col">
-			<div id="div_timepicker" class="input-append">
-				<input id="input_time" data-format="hh:mm" type="text">
-				<span class="add-on">
-					<i class="far fa-clock fa-lg fa-border fa-pull-right"></i>
-				</span>
+	</div>
+	<div class="row align-items-center">
+		<div class="col-10 border border-primary">
+			<div class="form-group">
+				<span>시간</span>
+				<div class="input-group" id="div_timepicker">
+					<input class="form-control" data-format="HH:mm" type="text" id="input_time">
+					<span class="input-group-addon add-on">
+						<i class="far fa-clock fa-lg fa-border fa-pull-right"></i>
+					</span>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="row align-items-center">
+		<div class="col-12 border border-primary">
+			<div class="form-group">
+				<span>장소</span>
+				<div class="input-group" id="div_timepicker">
+					<input class="form-control" type="text" id="input_place">
+					<span class="input-group-addon">
+						<i class="fas fa-map-marked-alt fa-lg fa-border fa-pull-right"></i>
+					</span>
+				</div>
 			</div>
 		</div>
 	</div>
