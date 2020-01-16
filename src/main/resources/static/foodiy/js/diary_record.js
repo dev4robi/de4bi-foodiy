@@ -16,31 +16,48 @@ $(document).ready(function(){
 
     // 일자 초기화
     var ts = new Date();
-    $('#div_datepicker').datetimepicker({
-        // [Note] 기본값
-        // maskInput: true,           // disables the text input mask
-        // pickDate: true,            // disables the date picker
-        // pickTime: true,            // disables de time picker
-        // pick12HourFormat: false,   // enables the 12-hour format time picker
-        // pickSeconds: true,         // disables seconds in the time picker
-        // startDate: -Infinity,      // set a minimum date
-        // endDate: Infinity          // set a maximum date
-        maskInput: true,
-        pickDate: true,
-        pickTime: false,
+    var dateStr = ts.format('yyyy-MM-dd');
+    var datepicker = $('#div_datepicker');
+    datepicker.datetimepicker({
+        format : 'YYYY-MM-DD',
+        locale : 'ko',
+        showTodayButton : true,
+        showClose : false,
+        icons: {
+            time: 'far fa-clock',
+            date: 'far fa-calendar',
+            up: 'fas fa-chevron-up',
+            down: 'fas fa-chevron-down',
+            previous: 'fas fa-chevron-left',
+            next: 'fas fa-chevron-right',
+            today: 'fas fa-history',
+            clear: 'far fa-trash',
+            close: 'fas fa-times'
+        }
     });
-
-    $('#input_date').val(ts.format('yyyy-MM-dd'));
+    $('#input_datepicker').val(dateStr);
 
     // 시간 초기화
-    $('#div_timepicker').datetimepicker({
-        maskInput: true,
-        pickDate: false,
-        pickTime: true,
-        pickSeconds: false,
+    var timeStr = ts.format('a/p hh:mm').replace('AM', '오전').replace('PM', '오후');
+    var timepicker = $('#div_timepicker');
+    timepicker.datetimepicker({
+        format : 'A hh:mm',
+        locale : 'ko',
+        showTodayButton : true,
+        showClose : false,
+        icons: {
+            time: 'far fa-clock',
+            date: 'far fa-calendar',
+            up: 'fas fa-chevron-up',
+            down: 'fas fa-chevron-down',
+            previous: 'fas fa-chevron-left',
+            next: 'fas fa-chevron-right',
+            today: 'fas fa-history',
+            clear: 'far fa-trash',
+            close: 'fas fa-times'
+        }
     });
-
-    $('#input_time').val(ts.format('HH:mm'));
+    $('#input_timepicker').val(timeStr);
 });
 
 // navi-bar 탭 클릭 시
