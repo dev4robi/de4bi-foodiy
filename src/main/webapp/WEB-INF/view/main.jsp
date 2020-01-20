@@ -59,7 +59,7 @@
 			<div class="tab-content" id="div_navitab_content">
 				<!-- 콘텐츠:기록하기 -->
 				<div class="tab-pane fade show active" id="record" role="tabpanel" aria-labelledby="record-tab">
-					<iframe class="w-100" src="" id="iframe_record" style="border:none; height:100vh" allowfullscreen></iframe>
+					<iframe class="w-100" src="" id="iframe_record" style="border:none; height:50vh" allowfullscreen></iframe>
 				</div>
 				<!-- 콘텐츠:검색 -->
 				<div class="tab-pane fade embed-responsive embed-responsive-4by3" id="search" role="tabpanel" aria-labelledby="search-tab">
