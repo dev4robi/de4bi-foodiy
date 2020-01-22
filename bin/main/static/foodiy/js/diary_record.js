@@ -14,6 +14,10 @@ $(document).ready(function(){
         // ...
     }
 
+    // 버튼 이벤트 초기화
+    // 메뉴추가 버튼
+    $('#btn_add_menu').on('click', onClickAddMenu);
+
     // 일자 초기화
     var ts = new Date();
     var dateStr = ts.format('yyyy-MM-dd');
@@ -60,32 +64,73 @@ $(document).ready(function(){
     $('#input_timepicker').val(timeStr);
 });
 
-// navi-bar 탭 클릭 시
-function onTabClick(id) {
-    var iframe_tag = null;
+// 메뉴추가 클릭 시
+function onClickAddMenu() {
+    var addMenuBtn = $('#btn_add_menu');
+    addMenuBtn.prop('disabled', true);
 
-    if (id == 'record') {
-        iframe_tag = $('#iframe_record');
-        if (!iframe_tag.attr('src')) {
-            iframe_tag.attr('src', recordPageUrl);
+    var newCardId = '';
+    var menuCardIdx = 0;
+
+    for (var i = 0; i <= 10; ++i) {
+        menuCardIdx = i;
+        newCardId = 'div_card_' + menuCardIdx;
+
+        if (menuCardIdx == 10) {
+            // 메뉴 개수는 10개 이하
+            alert('메뉴를 너무 많이 추가했어요!');
+            addMenuBtn.prop('disabled', false);
+            return;
+        }
+        else if ($('#' + newCardId).length > 0) {
+            // 해당 카드id가 존재하면 반복
+            continue;
+        }
+        else {
+            // 해당 카드id가 존재하지 않으면 탈출
+            break;
         }
     }
-    else if (id == 'search') {
-        iframe_tag = $('#iframe_search');
-        if (!iframe_tag.attr('src')) {
-            iframe_tag.attr('src', searchPageUrl);
-        }
-    }
-    else if (id == 'map') {
-        iframe_tag = $('#iframe_map');
-        if (!iframe_tag.attr('src')) {
-            iframe_tag.attr('src', mapPageUrl);
-        }
-    }
-    else if (id == 'stat') {
-        iframe_tag = $('#iframe_stat');
-        if (!iframe_tag.attr('src')) {
-            iframe_tag.attr('src', statPageUrl);
-        }
+
+    var menuCardList = $('#div_menucard_list');
+    var menuCardHtml =
+        '<div class="card" style="display: none;" id="' + newCardId + '">' +
+        '<img src="/foodiy/img/foodiy_logo.png" class="card-img-top" alt="사진 불러오기 실패!" id="img_menu_pic_' + menuCardIdx + '">' +
+        '<div class="card-body">' +
+        '<div class="form-group">' + 
+        '<span>메뉴</span>' +
+        '<input type="text" class="form-control" id="input_menu_name_' + menuCardIdx + '"/>' +
+        '<span>가격</span>' +
+        '<input type="text" class="form-control" id="input_menu_price_' + menuCardIdx + '"/>' +
+        '<span>평점</span>' +
+        '<div class="starrating risingstar d-flex justify-content-center flex-row-reverse">' +
+        '<input type="radio" id="input_star5_' + menuCardIdx + '" name="rating_' + menuCardIdx + '" value="5" />       <label for="input_star5_' + menuCardIdx + '"title="5Star">5&nbsp;&nbsp;&nbsp;</label>' + 
+        '<input type="radio" id="input_star4_' + menuCardIdx + '" name="rating_' + menuCardIdx + '" value="4" />       <label for="input_star4_' + menuCardIdx + '"title="4Star">4&nbsp;&nbsp;&nbsp;</label>' + 
+        '<input type="radio" id="input_star3_' + menuCardIdx + '" name="rating_' + menuCardIdx + '" value="3" checked/><label for="input_star3_' + menuCardIdx + '"title="3Star">3&nbsp;&nbsp;&nbsp;</label>' + 
+        '<input type="radio" id="input_star2_' + menuCardIdx + '" name="rating_' + menuCardIdx + '" value="2" />       <label for="input_star2_' + menuCardIdx + '"title="2Star">2&nbsp;&nbsp;&nbsp;</label>' + 
+        '<input type="radio" id="input_star1_' + menuCardIdx + '" name="rating_' + menuCardIdx + '" value="1" />       <label for="input_star1_' + menuCardIdx + '"title="1Star">1&nbsp;&nbsp;&nbsp;</label>' + 
+        '</div>' +
+        '<span>태그</span>' +
+        '<input type="text" class="form-control" id="input_menu_tag_' + menuCardIdx + '"/>' +
+        '</div>' +
+        '<span style="color: red;" onclick="onClickDeleteMenu(' + menuCardIdx + ')"id="span_remove_menu"><i class="far fa-minus-square"></i>삭제</span>' +
+        '</div>' +
+        '</div><br id="br_' + menuCardIdx + '">';
+
+    menuCardList.append(menuCardHtml);
+    $('#' + newCardId).fadeIn('slow');
+    addMenuBtn.prop('disabled', false);
+}
+
+// 메뉴삭제 클릭 시
+function onClickDeleteMenu(idx) {
+    var cardMenuId = '#div_card_' + idx;
+    var cardMenu = $(cardMenuId);
+    var cardMenuName = cardMenu.find('#input_menu_name_' + idx);
+    var menuNameStr = ((!!cardMenuName.val()) ? (' "' + cardMenuName.val() + '"을(를)') : ('를'));
+
+    if (confirm('메뉴' + menuNameStr + ' 정말로 삭제하나요?')) {
+        $('#br_' + idx).remove();
+        cardMenu.remove();
     }
 }

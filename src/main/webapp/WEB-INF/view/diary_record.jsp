@@ -107,33 +107,11 @@
 			<span><i class="fas fa-utensils fa-sm fa-pull-left"></i>메뉴는?</span>
 			<div id="div_menucard_list">
 				<!-- 메뉴카드 리스트 항목 -->
-				<div class="card" id="div_card_000">
-					<img src="/foodiy/img/foodiy_logo.png" class="card-img-top" alt="...">
-					<div class="card-body">
-						<div class="form-group">
-							<span>메뉴</span>
-							<input type="text" class="form-control"/>
-							<span>가격</span>
-							<input type="text" class="form-control"/>
-							<span>평점</span>
-							<div class="starrating risingstar d-flex justify-content-center flex-row-reverse">
-								<input type="radio" id="input_star5" name="rating" value="5" /><label for="input_star5" title="5Star">5&nbsp;&nbsp;&nbsp;</label>
-								<input type="radio" id="input_star4" name="rating" value="4" /><label for="input_star4" title="4Star">4&nbsp;&nbsp;&nbsp;</label>
-								<input type="radio" id="input_star3" name="rating" value="3" checked/><label for="input_star3" title="3Star">3&nbsp;&nbsp;&nbsp;</label>
-								<input type="radio" id="input_star2" name="rating" value="2" /><label for="input_star2" title="2Star">2&nbsp;&nbsp;&nbsp;</label>
-								<input type="radio" id="input_star1" name="rating" value="1" /><label for="input_star1" title="1Star">1&nbsp;&nbsp;&nbsp;</label>
-							</div>
-							<span>태그</span>
-							<input type="text" class="form-control"/>
-						</div>
-						<span style="color: red;" id="span_remove_menu"><i class="far fa-minus-square"></i>삭제</span>
-					</div>
-				</div>
-				<br>
+				<!-- ... -->
 			</div>			
 		</div>
 		<div class="col-12">
-			<button class="btn-sm btn-primary w-100"><i class="far fa-plus-square fa-lg"></i>&nbsp;추가</button>
+			<button class="btn-sm btn-primary w-100" id="btn_add_menu"><i class="far fa-plus-square fa-lg"></i>&nbsp;추가</button>
 		</div>
 	</div>
 </div>
