@@ -94,14 +94,20 @@ function onClickAddMenu() {
 
     var menuCardList = $('#div_menucard_list');
     var menuCardHtml =
-        '<div class="card" style="display: none;" id="' + newCardId + '">' +
-        '<img src="/foodiy/img/foodiy_logo.png" class="card-img-top" alt="사진 불러오기 실패!" id="img_menu_pic_' + menuCardIdx + '">' +
+        '<div class="card p-1" style="display: none;" id="' + newCardId + '">' +
+        '<img src="/foodiy/img/foodiy_logo.png" class="card-img-top shadow-sm rounded" alt="사진 불러오기 실패!" onclick="onClickPicture(' + menuCardIdx + ')" id="img_menu_pic_' + menuCardIdx + '">' +
+        '<div class="custom-file mb-3 d-none">' +
+        '<input type="file" class="custom-file-input" onchange=onChangePicture(' + menuCardIdx + ') id="input_pic_' + menuCardIdx + '" accept="image/*">' +
+        '<label class="custom-file-label"></label>' +
+        '</div>' +
         '<div class="card-body">' +
         '<div class="form-group">' + 
         '<span>메뉴</span>' +
         '<input type="text" class="form-control" id="input_menu_name_' + menuCardIdx + '"/>' +
         '<span>가격</span>' +
         '<input type="text" class="form-control" id="input_menu_price_' + menuCardIdx + '"/>' +
+        '<span>태그</span>' +
+        '<input type="text" class="form-control" id="input_menu_tag_' + menuCardIdx + '"/>' +
         '<span>평점</span>' +
         '<div class="starrating risingstar d-flex justify-content-center flex-row-reverse">' +
         '<input type="radio" id="input_star5_' + menuCardIdx + '" name="rating_' + menuCardIdx + '" value="5" />       <label for="input_star5_' + menuCardIdx + '"title="5Star">5&nbsp;&nbsp;&nbsp;</label>' + 
@@ -110,16 +116,41 @@ function onClickAddMenu() {
         '<input type="radio" id="input_star2_' + menuCardIdx + '" name="rating_' + menuCardIdx + '" value="2" />       <label for="input_star2_' + menuCardIdx + '"title="2Star">2&nbsp;&nbsp;&nbsp;</label>' + 
         '<input type="radio" id="input_star1_' + menuCardIdx + '" name="rating_' + menuCardIdx + '" value="1" />       <label for="input_star1_' + menuCardIdx + '"title="1Star">1&nbsp;&nbsp;&nbsp;</label>' + 
         '</div>' +
-        '<span>태그</span>' +
-        '<input type="text" class="form-control" id="input_menu_tag_' + menuCardIdx + '"/>' +
         '</div>' +
-        '<span style="color: red;" onclick="onClickDeleteMenu(' + menuCardIdx + ')"id="span_remove_menu"><i class="far fa-minus-square"></i>삭제</span>' +
+        '<span style="color: red;" onclick="onClickDeleteMenu(' + menuCardIdx + ')" id="span_remove_menu"><i class="far fa-minus-square"></i>삭제</span>' +
         '</div>' +
         '</div><br id="br_' + menuCardIdx + '">';
 
     menuCardList.append(menuCardHtml);
     $('#' + newCardId).fadeIn('slow');
     addMenuBtn.prop('disabled', false);
+}
+
+// 사진 클릭 시
+function onClickPicture(idx) {    
+    // 선택이벤트를 발생시켜서 숨겨진 input type="file" 태그를 실행시킴
+    $('#input_pic_' + idx).trigger('click');
+}
+
+// 사진 촬영 혹은 저장소에서 선택 시
+function onChangePicture(idx) {
+    if (!window.File || !window.FileReader) {
+        return alert('사진 업로드가 지원되지 않는 브라우저입니다!');
+    }
+
+    var files = event.target.files, file;
+    var img = null;
+
+    if (files && files.length > 0) {
+        img = files[0];
+    }
+
+    var imgReader = new FileReader();
+    imgReader.onload = function(e) {
+        $('#img_menu_pic_' + idx).attr('src', e.target.result);
+    }
+
+    imgReader.readAsDataURL(img);
 }
 
 // 메뉴삭제 클릭 시
