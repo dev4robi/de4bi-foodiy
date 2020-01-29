@@ -43,11 +43,6 @@
 			</div>
 		</div>
 	</div>
-	<!-- 사진 -->
-	<div class="row">
-		<div class="col">
-		</div>
-	</div>
 	<!-- 일자 -->
 	<div class="row">
 		<div class="col">
@@ -98,6 +93,38 @@
 				<div class="input-group" id="div_who">
 					<input type="text" class="form-control"/>
 				</div>
+			</div>
+		</div>
+	</div>
+	<!-- 가게 사진 -->
+	<div class="row">
+		<div class="col">
+			<span><i class="fas fa-camera fa-sm fa-pull-left"></i>사진</span>
+			<div class="d-flex justify-content-around">
+				<div style="width:32%" class="embed-responsive embed-responsive-1by1 shadow-sm rounded">
+					<img src="/foodiy/img/foodiy_logo.png" class="embed-responsive-item" alt="사진 불러오기 실패!" onclick="onClickPicture(-3)" id="img_menu_pic_-3">
+        			<div class="custom-file mb-3 d-none">
+        				<input type="file" class="custom-file-input" onchange="onChangePicture(-3)" id="input_pic_-3" accept="image/*">
+        				<label class="custom-file-label"></label>
+					</div>
+				</div>
+				<div style="width:32%" class="embed-responsive embed-responsive-1by1 shadow-sm rounded">
+					<img src="/foodiy/img/foodiy_logo.png" class="embed-responsive-item" alt="사진 불러오기 실패!" onclick="onClickPicture(-2)" id="img_menu_pic_-2">
+        			<div class="custom-file mb-3 d-none">
+        				<input type="file" class="custom-file-input" onchange="onChangePicture(-2)" id="input_pic_-2" accept="image/*">
+        				<label class="custom-file-label"></label>
+					</div>
+				</div>
+				<div style="width:32%" class="embed-responsive embed-responsive-1by1 shadow-sm rounded">
+					<img src="/foodiy/img/foodiy_logo.png" class="embed-responsive-item" alt="사진 불러오기 실패!" onclick="onClickPicture(-1)" id="img_menu_pic_-1">
+        			<div class="custom-file mb-3 d-none">
+        				<input type="file" class="custom-file-input" onchange="onChangePicture(-1)" id="input_pic_-1" accept="image/*">
+        				<label class="custom-file-label"></label>
+					</div>
+				</div>
+			</div>
+			<div class="d-flex justify-content-end pt-3 pb-3">
+				<span style="color: red;" onclick="onClickPictureInit()"><i class="far fa-minus-square"></i>&nbsp;사진 초기화</span>
 			</div>
 		</div>
 	</div>

@@ -102,7 +102,7 @@ function onClickAddMenu() {
         '</div>' +
         '<div class="card-body">' +
         '<div class="form-group">' + 
-        '<span>메뉴</span>' +
+        '<span>메뉴명</span>' +
         '<input type="text" class="form-control" id="input_menu_name_' + menuCardIdx + '"/>' +
         '<span>가격</span>' +
         '<input type="text" class="form-control" id="input_menu_price_' + menuCardIdx + '"/>' +
@@ -117,7 +117,7 @@ function onClickAddMenu() {
         '<input type="radio" id="input_star1_' + menuCardIdx + '" name="rating_' + menuCardIdx + '" value="1" />       <label for="input_star1_' + menuCardIdx + '"title="1Star">1&nbsp;&nbsp;&nbsp;</label>' + 
         '</div>' +
         '</div>' +
-        '<span style="color: red;" onclick="onClickDeleteMenu(' + menuCardIdx + ')" id="span_remove_menu"><i class="far fa-minus-square"></i>삭제</span>' +
+        '<div class="d-flex justify-content-end pt-3"><span style="color: red;" onclick="onClickDeleteMenu(' + menuCardIdx + ')" id="span_remove_menu"><i class="far fa-minus-square"></i>&nbsp;삭제</span></div>' +
         '</div>' +
         '</div><br id="br_' + menuCardIdx + '">';
 
@@ -150,7 +150,24 @@ function onChangePicture(idx) {
         $('#img_menu_pic_' + idx).attr('src', e.target.result);
     }
 
-    imgReader.readAsDataURL(img);
+    if (img instanceof Blob) {
+        imgReader.readAsDataURL(img);
+    }
+}
+
+// 사진 초기화 클릭 시
+function onClickPictureInit() {
+    if (confirm('정말로 사진을 초기화 하나요?')) {
+        for (i = -3; i < 0; ++i) {
+            $('#' + 'input_pic_' + i).val('');
+            $('#' + 'img_menu_pic_' + i).attr('src', '/foodiy/img/foodiy_logo.png');
+        }
+
+        return alert('사진 초기화를 완료했습니다.');
+    }
+    else {
+        return alert('사진 초기화를 취소했습니다.');
+    }
 }
 
 // 메뉴삭제 클릭 시
@@ -163,5 +180,9 @@ function onClickDeleteMenu(idx) {
     if (confirm('메뉴' + menuNameStr + ' 정말로 삭제하나요?')) {
         $('#br_' + idx).remove();
         cardMenu.remove();
+        return alert('메뉴' + menuNameStr + ' 삭제했습니다.');
+    }
+    else {
+        return alert('메뉴 삭제를 취소했습니다.');
     }
 }
