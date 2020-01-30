@@ -1,0 +1,41 @@
+-- Service: foodiy
+-- Last Modified: 2020.01.30
+-- Version: 1.0.0
+-- db_ghasix_test : db_foodiy
+
+CREATE DATABASE db_foodiy;
+USE db_foodiy;
+
+-- 기록 테이블
+CREATE TABLE `db_foodiy`.`records` (
+    `id`                BIGINT NOT NULL AUTO_INCREMENT, -- 고유 ID
+    `write_user_id`     BIGINT NOT NULL,                -- 기록 작성자 회원ID
+    `title`             VARCHAR(128) NOT NULL,          -- 제목
+    `when_date`         DATE NOT NULL,                  -- 일자(yyyy-MM-dd)
+    `when_time`         TIME NOT NULL,                  -- 시간(HH:mm:ss)
+    `where_place`       VARCHAR(128) NOT NULL,          -- 장소명
+    `where_lati`        FLOAT,                          -- 위도
+    `where_longi`       FLOAT,                          -- 경도
+    `who_with`          VARCHAR(256),                   -- 같이있던 사람
+    `pic_urls`          VARCHAR(512),                   -- 사진URL들
+    `menu_ids`          VARCHAR(256),                   -- 링크된 메뉴ID들
+
+    PRIMARY KEY (`id`)
+);
+
+-- 메뉴 테이블
+CREATE TABLE `db_foodiy`.`menus` (
+    `id`            BIGINT NOT NULL AUTO_INCREMENT, -- 고유 ID
+    `record_id`     BIGINT NOT NULL,                -- 게시글 ID
+    `name`          VARCHAR(128) NOT NULL,          -- 메뉴명
+    `pic_url`       VARCHAR(128),                   -- 사진URL
+    `price`         INT,                            -- 가격
+    `tags`          VARCHAR(128),                   -- 태그들
+    `score`         INT NOT NULL,                   -- 평점
+    
+    PRIMARY KEY (`id`),
+    CONSTRAINT `menus_fk_own_record_id`
+        FOREIGN KEY (`record_id`) REFERENCES `db_foodiy`.`records` (`id`)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE
+);
