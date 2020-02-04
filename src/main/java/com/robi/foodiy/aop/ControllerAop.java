@@ -92,7 +92,7 @@ public class ControllerAop {
         // Logging reply
         final long ctrEndTimeMs = System.currentTimeMillis();
         final long timeElapsedMs = ctrEndTimeMs - ctrBgnTimeMs;
-        logger.info("<Rpy> '{}'", ctrRtnObj.toString());
+        logger.info("<Rpy> '{}'", ctrRtnObj == null ? "null" : ctrRtnObj.toString());
         logger.info("<<PageCtrEnd>> (Time: {}ms)", timeElapsedMs);
 
         // Logger deinit
@@ -135,9 +135,12 @@ public class ControllerAop {
         logger.info(" -> Headers: {" + reqSb.toString() + "}");
         reqSb.setLength(0);
 
-        Enumeration<String> bodyEnum = request.getParameterNames();
+        Enumeration<String> bodyEnum = request.getParameterNames(); // 여기부터 시작... 파일 전송시 터진다... 예외로그 확인!
         while (bodyEnum.hasMoreElements()) {
-            String bodyKey = headerEnum.nextElement();
+            String bodyKey = bodyEnum.nextElement();
+            if (bodyKey == null) {
+                continue;
+            }
             reqSb.append("'").append(bodyKey).append("':'").append(request.getParameter(bodyKey)).append("', ");
         }
         

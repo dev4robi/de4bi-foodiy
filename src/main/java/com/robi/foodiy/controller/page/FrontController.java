@@ -10,31 +10,32 @@ import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 @Controller
+@RequestMapping("/page")
 public class FrontController {
 
     private static final Logger logger = LoggerFactory.getLogger(FrontController.class);
 
-    @RequestMapping("/page/main")
+    @RequestMapping("/main")
     public ModelAndView mainPage() {
         return new ModelAndView("main");
     }
 
-    @RequestMapping("/page/record")
+    @RequestMapping("/record")
     public ModelAndView recordPage() {
         return new ModelAndView("diary_record");
     }
 
-    @RequestMapping("/page/search")
+    @RequestMapping("/search")
     public ModelAndView searchPage() {
         return new ModelAndView("diary_search");
     }
 
-    @RequestMapping("/page/map")
+    @RequestMapping("/map")
     public ModelAndView mapPage() {
         return new ModelAndView("diary_map");
     }
 
-    @RequestMapping("/page/stat")
+    @RequestMapping("/stat")
     public ModelAndView statPage() {
         return new ModelAndView("diary_stat");
     }
