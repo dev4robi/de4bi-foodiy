@@ -1,5 +1,7 @@
 package com.robi.foodiy.controller.api;
 
+import java.util.Arrays;
+
 import com.robi.data.ApiResult;
 import com.robi.foodiy.data.dto.TestDto;
 import com.robi.foodiy.service.TestService;
@@ -33,9 +35,8 @@ public class TestApiController {
     public ApiResult upload(
         @ModelAttribute TestDto testDto
     ) {
-        logger.info("name: " + testDto.getName());
-        logger.info("pic: " + testDto.getPic().toString());
-        logger.info("subs: " + testDto.getSubs().toString());
+        logger.info("sub_name: " + testDto.getSubName());
+        logger.info("sub_pic: " + testDto.getSubPics());
         return ApiResult.make(true);
     }
 }

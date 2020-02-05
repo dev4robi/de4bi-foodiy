@@ -2,6 +2,7 @@ package com.robi.foodiy.data.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import lombok.Data;
@@ -15,6 +16,9 @@ public class TestDto {
     @JsonProperty("pic")
     MultipartFile pic;
 
-    @JsonProperty("subs")
-    TestSubDto[] subs;
+    @JsonProperty("sub_name")
+    String[] subName;
+
+    @JsonProperty("sub_pics")
+    MultipartFile[] subPics;
 }

@@ -31,21 +31,12 @@
 						console.log(files[i]);
 					}
 
-					var subFormDataA = new FormData();
-					subFormDataA.append('sub_name', 's1');
-					subFormDataA.append('sub_pics', files[0]);
-
-					var subFormDataB = new FormData();
-					subFormDataB.append('sub_name', 's2');
-					subFormDataB.append('sub_pics', files[0]);
-
 					var formData = new FormData();
 					formData.append('name', 'Hello Files!');
-					formData.append('pic', files[0]);
-					formData.append('subs', new Array(subFormDataA, subFormDataB));
-
-					// 여기부터 시작.... subformdata 를 배열에 넣는 방법은?
-					// 지금 방식대로 넣으면 object FormData -> Dto 로 치환이 안된다고 스프링부트 에러... @@
+					formData.append('sub_name', 's1');
+					formData.append('sub_name', 's2');
+					formData.append('sub_pics', files[0]);
+					formData.append('sub_pics', files[0]);
 					
 					$.ajax({
 						url : 'http://localhost:40003/upload',

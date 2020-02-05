@@ -72,12 +72,12 @@ function onClickAddMenu() {
     var newCardId = '';
     var menuCardIdx = 0;
 
-    for (var i = 0; i <= 10; ++i) {
+    for (var i = 0; i <= 6; ++i) {
         menuCardIdx = i;
         newCardId = 'div_card_' + menuCardIdx;
 
-        if (menuCardIdx == 10) {
-            // 메뉴 개수는 10개 이하
+        if (menuCardIdx == 6) {
+            // 메뉴 개수는 6개 이하
             alert('메뉴를 너무 많이 추가했어요!');
             addMenuBtn.prop('disabled', false);
             return;

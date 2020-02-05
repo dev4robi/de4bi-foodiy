@@ -6,6 +6,7 @@ import com.robi.foodiy.data.dto.PostRecordsDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -35,10 +36,10 @@ public class RecordsController {
     @PostMapping("/records")
     public ApiResult postRecords(
         @RequestHeader("user_jwt") String userJwt,
-        @RequestBody PostRecordsDto postRecordDto
+        @ModelAttribute PostRecordsDto postRecordDto
     ) {
         logger.info("user_jwt:" + userJwt);
-        logger.info("post_record_dto:" + postRecordDto.toString());
+        logger.info("post_record_dto:" + postRecordDto.toString()); // @여기부터 시작...
         return ApiResult.make(true);
     }
 }

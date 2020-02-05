@@ -13,5 +13,5 @@ public class TestSubDto {
     String subName;
 
     @JsonProperty("sub_pics")
-    MultipartFile[] subPics;
+    MultipartFile subPics;
 }
