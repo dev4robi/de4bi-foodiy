@@ -39,7 +39,7 @@ public class PostRecordsDto {
     // [Note]
     // 이하 데이터들은 원래 별도의 MenusDTO 클래스로 구성했지만,
     // 이미지 전송을 위해 ajax Content-Type을 form/multipart을 사용할 수 밖에 없었고,
-    // 해당 Content-Type의 전송 특성 상 배열등에 담아서 보낼 수 없었다.
+    // 해당 Content-Type의 전송방식 특성상 배열등에 담아서 보낼 수 없었다.
     // 사진 데이터들만 따로 전송하는 방법이 있겠지만, 이번 프로젝트에서는
     // 수동으로 길이를 다루는 방식으로 접근해 보자.
 

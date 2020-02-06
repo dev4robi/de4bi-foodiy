@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC
+    "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.robi.mapper.MenusMapper">
+    <select id="selectById" parameterType="Long" resultType="com.robi.data.dao.MenusDao">
+        <!-- ... -->
+    </select>
+    <select id="selectAllByRecordId" parameterType="Long" resultType="com.robi.data.dao.MenusDao">
+        <!-- ... -->
+    </select>
+    <insert id="insert" parameterType="com.robi.data.dao.MenusDao">
+        <!-- ... -->
+    </insert>
+    <update id="update" parameterType="com.robi.data.dao.MenusDao">
+        <!-- ... -->
+    </update>
+    <delete id="deleteById" parameterType="Long">
+        <!-- ... -->
+    </delete>
+</mapper>
