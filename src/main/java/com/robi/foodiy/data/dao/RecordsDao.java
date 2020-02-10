@@ -9,7 +9,7 @@ import lombok.Data;
 public class RecordsDao {
 
     private long id;                // 고유 ID
-    private String writeUserId;     // 기록 작성자 회원ID
+    private long writeUserId;       // 기록 작성자 회원ID
     private String title;           // 제목
     private Date whenDate;          // 일자(yyyy-MM-dd)
     private Time whenTime;          // 시간(HH:mm:ss)
