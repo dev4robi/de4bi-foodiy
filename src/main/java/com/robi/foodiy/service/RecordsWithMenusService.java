@@ -1,9 +1,13 @@
 package com.robi.foodiy.service;
 
+import java.sql.Date;
+import java.sql.Time;
+import java.util.Calendar;
 import java.util.List;
 
 import com.robi.data.ApiResult;
 import com.robi.foodiy.data.dao.RecordsDao;
+import com.robi.foodiy.data.dto.PostRecordsDto;
 import com.robi.foodiy.mapper.RecordsMapper;
 import com.robi.util.MapUtil;
 import com.robi.util.ValidatorUtil;
@@ -68,7 +72,7 @@ public class RecordsWithMenusService {
         // 결과 반환
         if (selectedRecord == null) {
             logger.error("저장된 기록 찾기에 실패했습니다.");
-            ApiResult.make(false, ApiResult.DEFAULT_API_RESULT_CODE_NEGATIVE, "저장된 기록 찾기에 실패했습니다.");
+            return ApiResult.make(false, ApiResult.DEFAULT_API_RESULT_CODE_NEGATIVE, "저장된 기록 찾기에 실패했습니다.");
         }
 
         return ApiResult.make(true, MapUtil.toMap("selectedRecord", selectedRecord));
@@ -123,7 +127,7 @@ public class RecordsWithMenusService {
      * @param recordsDao : 추가할 record데이터
      * @return ApiResult
      */
-    public ApiResult insertRecordsWithMenus(String userJwt, RecordsDao recordsDao) {
+    public ApiResult insertRecordsWithMenus(String userJwt, PostRecordsDto recordsDto) {
         // 파라미터 검사
         ApiResult validResult = null;
 
@@ -132,9 +136,9 @@ public class RecordsWithMenusService {
             return ApiResult.make(false, ApiResult.DEFAULT_API_RESULT_CODE_NEGATIVE, validResult.getResultMsg());
         }
 
-        if (recordsDao == null) {
-            logger.error("recordsDao == null");
-            return ApiResult.make(false, ApiResult.DEFAULT_API_RESULT_CODE_NEGATIVE, "recordsDao == null");
+        if (recordsDto == null) {
+            logger.error("recordsDto == null");
+            return ApiResult.make(false, ApiResult.DEFAULT_API_RESULT_CODE_NEGATIVE, "recordsDto == null");
         }
 
         // 사용자 인증
@@ -145,9 +149,32 @@ public class RecordsWithMenusService {
             return userAuthResult;
         }
 
-        // RecordsDao 수정
+        // RecordsDao 생성
+        String whenDate = recordsDto.getWhenDate();
+        String whenTime = recordsDto.getWhenTime();
+        Calendar dateTimeCal = Calendar.getInstance();
+        dateTimeCal.set(
+            Integer.valueOf(whenDate.substring(0, 4)),  // year
+            Integer.valueOf(whenDate.substring(4, 6)),  // month
+            Integer.valueOf(whenDate.substring(6, 8)),  // date
+            Integer.valueOf(whenTime.substring(0, 2)),  // hoursOfDay
+            Integer.valueOf(whenTime.substring(2, 4)),  // minute
+            Integer.valueOf(whenTime.substring(4, 6))   // second
+        );
+        long dateTimeMs = dateTimeCal.getTime().getTime();
+
         long writeUserId = Long.valueOf(userAuthResult.getDataAsStr("id"));
+        RecordsDao recordsDao = new RecordsDao();
         recordsDao.setWriteUserId(writeUserId);
+        recordsDao.setTitle(recordsDto.getTitle());
+        recordsDao.setWhenDate(new Date(dateTimeMs));
+        recordsDao.setWhenTime(new Time(dateTimeMs));
+        recordsDao.setWherePlace("GOOGLE-API-RESULT-HERE"); // 이거 작업 필요@@
+        recordsDao.setWhereLati(recordsDto.getWhereLati());
+        recordsDao.setWhereLongi(recordsDto.getWhereLongi());
+        recordsDao.setWhoWith(recordsDto.getWhoWith());
+        recordsDao.setPicUrls(recordsDto.getPic1() + ";" + recordsDto.getPic2() + ";" + recordsDto.getPic3());
+        recordsDao.setMenuIds("MENU_IDS_AFTER_INSERTING_MENUS"); // 이거도 작업 필요@@
 
         // DB에 추가 (RecordsMapper.xml)
         try {
@@ -163,7 +190,7 @@ public class RecordsWithMenusService {
     }
 
     /**
-     * <p>userJwt내의 user_id를 write_user_id로 하여 record갱신합니다.</p>
+     * <p>userJwt내의 user_id를 write_user_id로 하여 record를갱신합니다.</p>
      * @param userJwt : auth서버로부터 발급된 JWT
      * @param recordsDao : 갱신할 record데이터
      * @return ApiResult
@@ -249,6 +276,3 @@ public class RecordsWithMenusService {
         return ApiResult.make(true);
     }
 }
-
-// 메서드 테스트부터 수행...
-// 이후, 이미지 업로드하는 부분 작업... @@

@@ -36,9 +36,12 @@ public class RecordsController {
     @PostMapping("/records")
     public ApiResult postRecordsWithMenus(
         @RequestHeader("user_jwt") String userJwt,
-        @ModelAttribute PostRecordsDto postRecordDto
+        @ModelAttribute PostRecordsDto postRecordsDto
     ) {
-        //return recordsWithMenusSvc.insert
-        return null;
+        // @@ postRecordsDto에서 title값을 제외하고 자동 대입이 되지 않는다...
+        // 모델 어트리뷰트 말고 다른 방식을 사용하면 멀티파트 전송이 안되는것 같다...
+        // 괜찮은 방법은 없을까? 이미지를 base64로 변환해서 전송해버려...?
+        // 여기부터 시작...!
+        return recordsWithMenusSvc.insertRecordsWithMenus(userJwt, postRecordsDto);
     }
 }
