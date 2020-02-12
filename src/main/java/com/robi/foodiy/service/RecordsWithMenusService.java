@@ -173,7 +173,7 @@ public class RecordsWithMenusService {
         recordsDao.setWhereLati(recordsDto.getWhereLati());
         recordsDao.setWhereLongi(recordsDto.getWhereLongi());
         recordsDao.setWhoWith(recordsDto.getWhoWith());
-        recordsDao.setPicUrls(recordsDto.getPic1() + ";" + recordsDto.getPic2() + ";" + recordsDto.getPic3());
+        //recordsDao.setPicUrls(recordsDto.getPic1() + ";" + recordsDto.getPic2() + ";" + recordsDto.getPic3());
         recordsDao.setMenuIds("MENU_IDS_AFTER_INSERTING_MENUS"); // 이거도 작업 필요@@
 
         // DB에 추가 (RecordsMapper.xml)

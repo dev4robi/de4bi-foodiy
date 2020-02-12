@@ -13,12 +13,12 @@ public class TestDto {
     @JsonProperty("name")
     String name;
 
-    @JsonProperty("pic")
-    MultipartFile pic;
+    //@JsonProperty("pic")
+    //MultipartFile pic;
 
     @JsonProperty("sub_name")
-    String[] subName;
+    String subName;
 
-    @JsonProperty("sub_pics")
-    MultipartFile[] subPics;
+    //@JsonProperty("sub_pics")
+    //MultipartFile subPics;
 }

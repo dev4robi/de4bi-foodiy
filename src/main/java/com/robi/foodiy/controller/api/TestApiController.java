@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -33,10 +34,12 @@ public class TestApiController {
 
     @PostMapping("/upload")
     public ApiResult upload(
-        @ModelAttribute TestDto testDto
+        @RequestPart("name") String name,
+        @RequestPart("sub_name") String subName,
+        @RequestPart("pic") MultipartFile pic1,
+        @RequestPart("sub_pics") MultipartFile pic2
     ) {
-        logger.info("sub_name: " + testDto.getSubName());
-        logger.info("sub_pic: " + testDto.getSubPics());
+        //logger.info("sub_pic: " + testDto.getSubPics());
         return ApiResult.make(true);
     }
 }
