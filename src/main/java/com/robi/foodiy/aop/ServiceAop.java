@@ -1,6 +1,8 @@
 package com.robi.foodiy.aop;
 
 import com.robi.data.ApiResult;
+import com.robi.exception.ApiException;
+
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.Signature;
 import org.aspectj.lang.annotation.Around;
@@ -49,7 +51,13 @@ public class ServiceAop {
                                             svcRtnObj.getClass().getName() + ")");
             }
         }
+        catch (ApiException e) {
+            // Rpy exception msg
+            logger.error("ApiException in controller! {}", e);
+            apiRst.setResultMsg(e.getMessage());
+        }
         catch (Throwable e) {
+            // Rpy common msg
             logger.error("Exception in service AOP! {}", e);
             apiRst.setResultMsg("SVC_INTERNAL_ERROR");
         }

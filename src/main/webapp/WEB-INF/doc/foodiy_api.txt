@@ -51,9 +51,9 @@
 | Cont-Type : multipart/file                                                                     |
 | ReqHeader : "user_jwt"(R)                                                                      |
 | ReqBody   : "title", "when_date", "when_time",                                                 |
-|             ("where_lati"), ("where_longi"), "where_place", ("who_with"), ("pic_#"),           |
-|             "menu_name_*", ("menu_pic_*"), ("menu_price_*"), ("menu_tags_*"), "menu_socre_*"   |
-|             < * : 1~6 >, < # : 1~3 >                                                           |
+|             ("where_lati"), ("where_longi"), "where_place", ("who_with"), ("pics"),            |
+|             ("menu_names", ("menu_pics"), ("menu_prices"), ("menu_tags"), "menu_socres")       |
+|             ※ s로 끝나는 속성들은 '`' 문자를 구분자로 연결하여 전송                            |
 | ResHeader : -                                                                                  |
 | ResBody   : -                                                                                  |
 | Comment   : 기록 추가 시, 메뉴까지 같이 추가됨.                                                |

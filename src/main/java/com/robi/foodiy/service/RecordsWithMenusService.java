@@ -6,8 +6,10 @@ import java.util.Calendar;
 import java.util.List;
 
 import com.robi.data.ApiResult;
+import com.robi.foodiy.data.dao.MenusDao;
 import com.robi.foodiy.data.dao.RecordsDao;
 import com.robi.foodiy.data.dto.PostRecordsDto;
+import com.robi.foodiy.mapper.MenusMapper;
 import com.robi.foodiy.mapper.RecordsMapper;
 import com.robi.util.MapUtil;
 import com.robi.util.ValidatorUtil;
@@ -27,6 +29,7 @@ public class RecordsWithMenusService {
 
     UsersService usersService;      // Users 회원인증을 위한 서비스
     RecordsMapper recordsMapper;    // Records DB접근 매퍼
+    MenusMapper menusMapper;        // Menus DB접근 매퍼
 
     /**
      * <p>userJwt의 user_id값과 write_user_id값이 일치하는 경우, id값을 가진 {@link RecordsDao}를 반환합니다.</p>
@@ -123,10 +126,13 @@ public class RecordsWithMenusService {
 
     /**
      * <p>userJwt내의 user_id를 write_user_id로 하여 record추가합니다.</p>
+     * <p>(※순서: 파라미터 검사 -> 사용자 인증 -> Google Geocoding API -> 이미지 저장 -> RecordsDao생성 ->
+     * Records DB Insert -> MenusDao생성 -> MenusDao DB Insert -> 결과 반환)</p>
      * @param userJwt : auth서버로부터 발급된 JWT
-     * @param recordsDao : 추가할 record데이터
+     * @param recordsDto : 추가할 record데이터
      * @return ApiResult
      */
+    @Transactional
     public ApiResult insertRecordsWithMenus(String userJwt, PostRecordsDto recordsDto) {
         // 파라미터 검사
         ApiResult validResult = null;
@@ -149,6 +155,13 @@ public class RecordsWithMenusService {
             return userAuthResult;
         }
 
+        // Google Geocoding API
+        String wherePlaceName = "GOOGLE-API-RESULT-HERE";
+
+        // 이미지 저장
+        // ...
+        
+
         // RecordsDao 생성
         String whenDate = recordsDto.getWhenDate();
         String whenTime = recordsDto.getWhenTime();
@@ -161,20 +174,19 @@ public class RecordsWithMenusService {
             Integer.valueOf(whenTime.substring(2, 4)),  // minute
             Integer.valueOf(whenTime.substring(4, 6))   // second
         );
+        
         long dateTimeMs = dateTimeCal.getTime().getTime();
-
         long writeUserId = Long.valueOf(userAuthResult.getDataAsStr("id"));
+        
         RecordsDao recordsDao = new RecordsDao();
         recordsDao.setWriteUserId(writeUserId);
         recordsDao.setTitle(recordsDto.getTitle());
         recordsDao.setWhenDate(new Date(dateTimeMs));
         recordsDao.setWhenTime(new Time(dateTimeMs));
-        recordsDao.setWherePlace("GOOGLE-API-RESULT-HERE"); // 이거 작업 필요@@
+        recordsDao.setWherePlace(wherePlaceName);
         recordsDao.setWhereLati(recordsDto.getWhereLati());
         recordsDao.setWhereLongi(recordsDto.getWhereLongi());
         recordsDao.setWhoWith(recordsDto.getWhoWith());
-        //recordsDao.setPicUrls(recordsDto.getPic1() + ";" + recordsDto.getPic2() + ";" + recordsDto.getPic3());
-        recordsDao.setMenuIds("MENU_IDS_AFTER_INSERTING_MENUS"); // 이거도 작업 필요@@
 
         // DB에 추가 (RecordsMapper.xml)
         try {
@@ -185,7 +197,22 @@ public class RecordsWithMenusService {
             return ApiResult.make(false, ApiResult.DEFAULT_API_RESULT_CODE_NEGATIVE, "기록 추가에 실패했습니다.");
         }
 
-        logger.info("RecordsDB insert success! (recordsDao: " + recordsDao.toString() + ")");
+        // MenusDao 생성
+        MenusDao[] menusDao = null;
+        // ...
+
+        // DB에 추가 (MenusMapper.xml)
+        try {
+            for (int i = 0; i < menusDao.length; ++i) {
+                menusMapper.insert(menusDao[i]);
+            }
+        }
+        catch (Exception e) {
+            logger.error("MenusDB insert Exception!", e);
+            return ApiResult.make(false, ApiResult.DEFAULT_API_RESULT_CODE_NEGATIVE, "메뉴 추가에 실패했습니다.");
+        }
+
+        logger.info("Records & MenusDB insert success! (recordsDao: " + recordsDao.toString() + " / " + Arrays.toString(menusDao) + ")");
         return ApiResult.make(true);
     }
 

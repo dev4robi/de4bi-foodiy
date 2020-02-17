@@ -18,7 +18,6 @@ CREATE TABLE `db_foodiy`.`records` (
     `where_longi`       FLOAT,                          -- 경도
     `who_with`          VARCHAR(256),                   -- 같이있던 사람
     `pic_urls`          VARCHAR(512),                   -- 사진URL들
-    `menu_ids`          VARCHAR(256),                   -- 링크된 메뉴ID들
 
     PRIMARY KEY (`id`)
 );

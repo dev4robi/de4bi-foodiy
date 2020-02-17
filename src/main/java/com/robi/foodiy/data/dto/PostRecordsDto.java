@@ -24,6 +24,9 @@ public class PostRecordsDto {
     @JsonProperty("where_longi")
     float whereLongi;
 
+    @JsonProperty("where_place")
+    String wherePlace;
+
     @JsonProperty("who_with")
     String whoWith;
 

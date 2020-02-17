@@ -5,6 +5,7 @@ import java.util.Enumeration;
 import javax.servlet.http.HttpServletRequest;
 
 import com.robi.data.ApiResult;
+import com.robi.exception.ApiException;
 import com.robi.util.RandomUtil;
 
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -85,7 +86,12 @@ public class ControllerAop {
                                             ctrRtnObj.getClass().getName() + ")");
             }
         }
+        catch (ApiException e) {
+            // Rpy exception msg
+            logger.error("ApiException in controller! {}", e);
+        }
         catch (Throwable e) {
+            // Rpy common msg
             logger.error("Exception in controller AOP! {}", e);
         }
 
@@ -135,7 +141,7 @@ public class ControllerAop {
         logger.info(" -> Headers: {" + reqSb.toString() + "}");
         reqSb.setLength(0);
 
-        Enumeration<String> bodyEnum = request.getParameterNames(); // 여기부터 시작... 파일 전송시 터진다... 예외로그 확인!
+        Enumeration<String> bodyEnum = request.getParameterNames();
         while (bodyEnum.hasMoreElements()) {
             String bodyKey = bodyEnum.nextElement();
             if (bodyKey == null) {
@@ -167,7 +173,13 @@ public class ControllerAop {
                                             ctrRtnObj.getClass().getName() + ")");
             }
         }
+        catch (ApiException e) {
+            // Rpy exception msg
+            logger.error("ApiException in controller! {}", e);
+            apiRst.setResultMsg(e.getMessage());
+        }
         catch (Throwable e) {
+            // Rpy common msg
             logger.error("Exception in controller AOP! {}", e);
             apiRst.setResultMsg("CTR_INTERNAL_ERROR");
         }

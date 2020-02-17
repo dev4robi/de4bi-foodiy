@@ -18,5 +18,4 @@ public class RecordsDao {
     private float whereLongi;       // 경도
     private String whoWith;         // 같이있던 사람
     private String picUrls;         // 사진URL들
-    private String menuIds;         // 링크된 메뉴ID들
 }

@@ -5,18 +5,37 @@
 
 <mapper namespace="com.robi.mapper.RecordsMapper">
     <select id="selectById" parameterType="Long" resultType="com.robi.data.dao.RecordsDao">
-        <!-- ... -->
+        SELECT *
+        FROM records
+        WHERE id = #{id};
     </select>
     <select id="selectAllByWriteUserId" parameterType="Long" resultType="com.robi.data.dao.RecordsDao">
-        <!-- ... -->
+        SELECT *
+        FROM records
+        WHERE id = #{writeUserId};
     </select>
     <insert id="insert" parameterType="com.robi.data.dao.RecordsDao">
-        <!-- ... -->
+        INSERT INTO records (write_user_id,title,when_date,when_time,where_place,where_lati,where_longi,who_with,pic_urls,menu_ids)
+        VALUES (#{writeUserId},#{title},#{whenDate},#{whenTime},#{wherePlace},#{whereLati},#{whereLongi},#{whoWith},#{picUrls},#{menuIds});
     </insert>
     <update id="update" parameterType="com.robi.data.dao.RecordsDao">
-        <!-- ... -->
+        UPDATE records
+        SET (
+            writeUserId=#{writeUserId},
+            title=#{title},
+            when_date=#{whenDate},
+            when_time=#{whenTime},
+            where_place=#{wherePlace},
+            where_lati=#{whereLati},
+            where_longi=#{whereLongi},
+            who_with=#{whoWith},
+            pic_urls=#{picUrls},
+            menu_ids=#{menuIds}
+        )
+        WHERE id = #{id};
     </update>
     <delete id="deleteById" parameterType="Long">
-        <!-- ... -->
+        DELETE FROM records
+        WHERE id = #{id};
     </delete>
 </mapper>
