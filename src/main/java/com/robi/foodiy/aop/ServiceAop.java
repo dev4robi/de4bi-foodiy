@@ -53,12 +53,12 @@ public class ServiceAop {
         }
         catch (ApiException e) {
             // Rpy exception msg
-            logger.error("ApiException in controller! {}", e);
+            logger.error("ApiException in controller!", e);
             apiRst.setResultMsg(e.getMessage());
         }
         catch (Throwable e) {
             // Rpy common msg
-            logger.error("Exception in service AOP! {}", e);
+            logger.error("Exception in service AOP!", e);
             apiRst.setResultMsg("SVC_INTERNAL_ERROR");
         }
 

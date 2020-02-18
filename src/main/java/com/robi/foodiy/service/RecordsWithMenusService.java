@@ -1,9 +1,13 @@
 package com.robi.foodiy.service;
 
+import java.io.File;
+import java.io.IOException;
 import java.sql.Date;
 import java.sql.Time;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Map;
 
 import com.robi.data.ApiResult;
 import com.robi.foodiy.data.dao.MenusDao;
@@ -12,15 +16,21 @@ import com.robi.foodiy.data.dto.PostRecordsDto;
 import com.robi.foodiy.mapper.MenusMapper;
 import com.robi.foodiy.mapper.RecordsMapper;
 import com.robi.util.MapUtil;
+import com.robi.util.MdUtil;
 import com.robi.util.ValidatorUtil;
 
+import org.apache.commons.codec.binary.Hex;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import lombok.AllArgsConstructor;
 
+@PropertySource("classpath:config.properties")
 @AllArgsConstructor
 @Service
 public class RecordsWithMenusService {
@@ -30,6 +40,7 @@ public class RecordsWithMenusService {
     UsersService usersService;      // Users 회원인증을 위한 서비스
     RecordsMapper recordsMapper;    // Records DB접근 매퍼
     MenusMapper menusMapper;        // Menus DB접근 매퍼
+    Environment env;                // config.properties
 
     /**
      * <p>userJwt의 user_id값과 write_user_id값이 일치하는 경우, id값을 가진 {@link RecordsDao}를 반환합니다.</p>
@@ -132,7 +143,6 @@ public class RecordsWithMenusService {
      * @param recordsDto : 추가할 record데이터
      * @return ApiResult
      */
-    @Transactional
     public ApiResult insertRecordsWithMenus(String userJwt, PostRecordsDto recordsDto) {
         // 파라미터 검사
         ApiResult validResult = null;
@@ -159,8 +169,30 @@ public class RecordsWithMenusService {
         String wherePlaceName = "GOOGLE-API-RESULT-HERE";
 
         // 이미지 저장
-        // ...
-        
+        MultipartFile[] recordsPic = recordsDto.getPics();
+        if (recordsPic != null) {
+            for (int i = 0; i < recordsPic.length; ++i) {
+                try {
+                    MultipartFile picFile = recordsPic[i];
+                    String originFileName = picFile.getOriginalFilename();
+                    String fileDir = env.getProperty("foodiy.records.img.basedir");
+                    String fileName = Hex.encodeHexString(MdUtil.sha128((originFileName + System.currentTimeMillis()).getBytes()), true);
+                    String fileExt = originFileName.substring(originFileName.lastIndexOf("."), originFileName.length());
+                    String filePath = fileDir + "/" + fileName + fileExt;
+                    File recordPicDir = new File(fileDir);
+                    if (!recordPicDir.exists()) {
+                        boolean rst = recordPicDir.mkdirs();
+                        logger.debug("rst: " + rst);
+                    }
+                    File recordPicFile = new File(filePath);
+                    picFile.transferTo(recordPicFile); // 여기부터 시작... vscode 테스트시의 경로와 file 경로가 매칭되지 않는듯...! @@
+                }
+                catch (IOException | IllegalStateException e) {
+                    logger.warn("Exception while store records img file!", e);
+                    continue;
+                }
+            }
+        }
 
         // RecordsDao 생성
         String whenDate = recordsDto.getWhenDate();
