@@ -3,22 +3,22 @@
     "-//mybatis.org//DTD Mapper 3.0//EN"
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.robi.mapper.RecordsMapper">
-    <select id="selectById" parameterType="Long" resultType="com.robi.data.dao.RecordsDao">
+<mapper namespace="com.robi.foodiy.mapper.RecordsMapper">
+    <select id="selectById" parameterType="Long" resultType="com.robi.foodiy.data.dao.RecordsDao">
         SELECT *
         FROM records
         WHERE id = #{id};
     </select>
-    <select id="selectAllByWriteUserId" parameterType="Long" resultType="com.robi.data.dao.RecordsDao">
+    <select id="selectAllByWriteUserId" parameterType="Long" resultType="com.robi.foodiy.data.dao.RecordsDao">
         SELECT *
         FROM records
         WHERE id = #{writeUserId};
     </select>
-    <insert id="insert" parameterType="com.robi.data.dao.RecordsDao">
-        INSERT INTO records (write_user_id,title,when_date,when_time,where_place,where_lati,where_longi,who_with,pic_urls,menu_ids)
-        VALUES (#{writeUserId},#{title},#{whenDate},#{whenTime},#{wherePlace},#{whereLati},#{whereLongi},#{whoWith},#{picUrls},#{menuIds});
+    <insert id="insert" parameterType="com.robi.foodiy.data.dao.RecordsDao">
+        INSERT INTO records (write_user_id,title,when_date,when_time,where_place,where_lati,where_longi,who_with,pic_urls)
+        VALUES (#{writeUserId},#{title},#{whenDate},#{whenTime},#{wherePlace},#{whereLati},#{whereLongi},#{whoWith},#{picUrls});
     </insert>
-    <update id="update" parameterType="com.robi.data.dao.RecordsDao">
+    <update id="update" parameterType="com.robi.foodiy.data.dao.RecordsDao">
         UPDATE records
         SET (
             writeUserId=#{writeUserId},

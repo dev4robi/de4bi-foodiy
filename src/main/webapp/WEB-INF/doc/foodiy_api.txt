@@ -51,7 +51,7 @@
 | Cont-Type : multipart/file                                                                     |
 | ReqHeader : "user_jwt"(R)                                                                      |
 | ReqBody   : "title", "when_date", "when_time",                                                 |
-|             ("where_lati"), ("where_longi"), "where_place", ("who_with"), ("pics"),            |
+|             ("where_lati"), ("where_longi"), ("where_place"), ("who_with"), ("pics"),          |
 |             ("menu_names", ("menu_pics"), ("menu_prices"), ("menu_tags"), "menu_socres")       |
 |             ※ s로 끝나는 속성들은 '`' 문자를 구분자로 연결하여 전송                            |
 | ResHeader : -                                                                                  |

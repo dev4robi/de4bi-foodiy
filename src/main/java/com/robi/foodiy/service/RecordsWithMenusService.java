@@ -17,6 +17,7 @@ import com.robi.foodiy.mapper.MenusMapper;
 import com.robi.foodiy.mapper.RecordsMapper;
 import com.robi.util.MapUtil;
 import com.robi.util.MdUtil;
+import com.robi.util.RestHttpUtil;
 import com.robi.util.ValidatorUtil;
 
 import org.apache.commons.codec.binary.Hex;
@@ -166,10 +167,15 @@ public class RecordsWithMenusService {
         }
 
         // Google Geocoding API
+        String googleRpyStr = RestHttpUtil.urlConnection("https://maps.googleapis.com/maps/api/geocode/json?latlng=" + 
+            recordsDto.getWhereLati() + "," + recordsDto.getWhereLongi() + 
+            "&key=AIzaSyDTxpWl_A8b_V9e2lktHYgJg1HYmfyzLhM", 
+            RestHttpUtil.METHOD_GET, null, null);
         String wherePlaceName = "GOOGLE-API-RESULT-HERE";
 
         // 이미지 저장
         MultipartFile[] recordsPic = recordsDto.getPics();
+        StringBuilder fileUrlSb = new StringBuilder(128);
         if (recordsPic != null) {
             for (int i = 0; i < recordsPic.length; ++i) {
                 try {
@@ -179,13 +185,14 @@ public class RecordsWithMenusService {
                     String fileName = Hex.encodeHexString(MdUtil.sha128((originFileName + System.currentTimeMillis()).getBytes()), true);
                     String fileExt = originFileName.substring(originFileName.lastIndexOf("."), originFileName.length());
                     String filePath = fileDir + "/" + fileName + fileExt;
+                    fileUrlSb.append(filePath + "`");
                     File recordPicDir = new File(fileDir);
                     if (!recordPicDir.exists()) {
                         boolean rst = recordPicDir.mkdirs();
                         logger.debug("rst: " + rst);
                     }
                     File recordPicFile = new File(filePath);
-                    picFile.transferTo(recordPicFile); // 여기부터 시작... vscode 테스트시의 경로와 file 경로가 매칭되지 않는듯...! @@
+                    picFile.transferTo(recordPicFile);
                 }
                 catch (IOException | IllegalStateException e) {
                     logger.warn("Exception while store records img file!", e);
@@ -193,6 +200,14 @@ public class RecordsWithMenusService {
                 }
             }
         }
+
+        fileUrlSb.setLength(fileUrlSb.length() - 1);
+
+        // 여기부터 시작... 구글 geocoding api는 공인 ip 환경에서만 테스트 가능...
+        // 정상데이터 응답받은 경우 파싱하여 set 하는 부분까지만 작업해놓고,
+        // 실패할 경우에는 빈 문자를 채워넣는 방식으로 접근... (로컬에선 무조건 실패니까!)
+        // RecordsDao 인서트까지 정상적이고, MenusDao 생성하여 인서트하는부분 작업하면 될 듯!
+        // 조금 만 더 화이팅합시다... !! @@
 
         // RecordsDao 생성
         String whenDate = recordsDto.getWhenDate();
@@ -219,6 +234,7 @@ public class RecordsWithMenusService {
         recordsDao.setWhereLati(recordsDto.getWhereLati());
         recordsDao.setWhereLongi(recordsDto.getWhereLongi());
         recordsDao.setWhoWith(recordsDto.getWhoWith());
+        recordsDao.setPicUrls(fileUrlSb.toString());
 
         // DB에 추가 (RecordsMapper.xml)
         try {

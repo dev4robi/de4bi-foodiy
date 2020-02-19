@@ -44,10 +44,12 @@ public class RestHttpUtil {
         HttpHeaders httpHeader = new HttpHeaders();
         httpHeader.setContentType(MediaType.APPLICATION_PROBLEM_JSON);
         
-        for (String key : reqHeadMap.keySet()) {
-            Object value = reqHeadMap.get(key);
-            if (value != null) {
-                httpHeader.add(key, value.toString());
+        if (reqHeadMap != null) {
+            for (String key : reqHeadMap.keySet()) {
+                Object value = reqHeadMap.get(key);
+                if (value != null) {
+                    httpHeader.add(key, value.toString());
+                }
             }
         }
 
