@@ -12,6 +12,7 @@ import java.util.Map;
 import com.robi.data.ApiResult;
 import com.robi.foodiy.data.dao.MenusDao;
 import com.robi.foodiy.data.dao.RecordsDao;
+import com.robi.foodiy.data.dto.PostMenusDto;
 import com.robi.foodiy.data.dto.PostRecordsDto;
 import com.robi.foodiy.mapper.MenusMapper;
 import com.robi.foodiy.mapper.RecordsMapper;
@@ -144,7 +145,7 @@ public class RecordsWithMenusService {
      * @param recordsDto : 추가할 record데이터
      * @return ApiResult
      */
-    public ApiResult insertRecordsWithMenus(String userJwt, PostRecordsDto recordsDto) {
+    public ApiResult insertRecordsWithMenus(String userJwt, PostRecordsDto recordsDto, PostMenusDto[] menusDtoAry) {
         // 파라미터 검사
         ApiResult validResult = null;
 
@@ -166,14 +167,14 @@ public class RecordsWithMenusService {
             return userAuthResult;
         }
 
-        // Google Geocoding API
+        // Google Geocoding API (추후 작업)
         String googleRpyStr = RestHttpUtil.urlConnection("https://maps.googleapis.com/maps/api/geocode/json?latlng=" + 
             recordsDto.getWhereLati() + "," + recordsDto.getWhereLongi() + 
             "&key=AIzaSyDTxpWl_A8b_V9e2lktHYgJg1HYmfyzLhM", 
             RestHttpUtil.METHOD_GET, null, null);
-        String wherePlaceName = "GOOGLE-API-RESULT-HERE";
+        String wherePlaceName = "GOOGLE-API-RESULT-HERE"; // <-- 여기 작업
 
-        // 이미지 저장
+        // 기록 이미지 저장
         MultipartFile[] recordsPic = recordsDto.getPics();
         StringBuilder fileUrlSb = new StringBuilder(128);
         if (recordsPic != null) {
@@ -181,7 +182,7 @@ public class RecordsWithMenusService {
                 try {
                     MultipartFile picFile = recordsPic[i];
                     String originFileName = picFile.getOriginalFilename();
-                    String fileDir = env.getProperty("foodiy.records.img.basedir");
+                    String fileDir = env.getProperty("foodiy.records.img.basedir") + "/records";
                     String fileName = Hex.encodeHexString(MdUtil.sha128((originFileName + System.currentTimeMillis()).getBytes()), true);
                     String fileExt = originFileName.substring(originFileName.lastIndexOf("."), originFileName.length());
                     String filePath = fileDir + "/" + fileName + fileExt;
@@ -202,12 +203,6 @@ public class RecordsWithMenusService {
         }
 
         fileUrlSb.setLength(fileUrlSb.length() - 1);
-
-        // 여기부터 시작... 구글 geocoding api는 공인 ip 환경에서만 테스트 가능...
-        // 정상데이터 응답받은 경우 파싱하여 set 하는 부분까지만 작업해놓고,
-        // 실패할 경우에는 빈 문자를 채워넣는 방식으로 접근... (로컬에선 무조건 실패니까!)
-        // RecordsDao 인서트까지 정상적이고, MenusDao 생성하여 인서트하는부분 작업하면 될 듯!
-        // 조금 만 더 화이팅합시다... !! @@
 
         // RecordsDao 생성
         String whenDate = recordsDto.getWhenDate();
@@ -245,9 +240,60 @@ public class RecordsWithMenusService {
             return ApiResult.make(false, ApiResult.DEFAULT_API_RESULT_CODE_NEGATIVE, "기록 추가에 실패했습니다.");
         }
 
+        // 메뉴 이미지 저장
+        MultipartFile[] menusPic = recordsDto.getMenuPics();
+        fileUrlSb.setLength(0);
+        if (menusPic != null) {
+            for (int i = 0; i < menusPic.length; ++i) {
+                try {
+                    MultipartFile picFile = menusPic[i];
+                    String originFileName = picFile.getOriginalFilename();
+                    String fileDir = env.getProperty("foodiy.records.img.basedir") + "/menus";
+                    String fileName = Hex.encodeHexString(MdUtil.sha128((originFileName + System.currentTimeMillis()).getBytes()), true);
+                    String fileExt = originFileName.substring(originFileName.lastIndexOf("."), originFileName.length());
+                    String filePath = fileDir + "/" + fileName + fileExt;
+                    fileUrlSb.append(filePath + "`");
+                    File recordPicDir = new File(fileDir);
+                    if (!recordPicDir.exists()) {
+                        boolean rst = recordPicDir.mkdirs();
+                        logger.debug("rst: " + rst);
+                    }
+                    File recordPicFile = new File(filePath);
+                    picFile.transferTo(recordPicFile);
+                }
+                catch (IOException | IllegalStateException e) {
+                    logger.warn("Exception while store menus img file!", e);
+                    continue;
+                }
+            }
+        }
+
+        fileUrlSb.setLength(fileUrlSb.length() - 1);
+
         // MenusDao 생성
-        MenusDao[] menusDao = null;
-        // ...
+        String[] menuNames = recordsDto.getMenuNames();
+        String[] menuPicUrls = fileUrlSb.toString().split("`");
+        String[] menuPrices = recordsDto.getMenuPrices();
+        String[] menuTags = recordsDto.getMenuTags();
+        String[] menuScores = recordsDto.getMenuScores();
+        int menusCnt = menuNames.length; // 메뉴명(menuName)이 NOT NULL 속성이므로 개수 기준으로 사용
+        MenusDao[] menusDao = new MenusDao[menusCnt];
+
+        for (int i = 0; i < menusCnt; ++i) {
+            MenusDao newMenus = new MenusDao();
+            String menuName = (menuNames == null ? null : menuNames[i]);
+            String menuPicUrl = (menuPicUrls == null ? null : menuPicUrls[i]);
+            int menuPirce = (menuPrices == null ? -1 : Integer.valueOf(menuPrices[i]));
+            String menuTag = (menuTags == null ? null : menuTags[i]);
+            int menuScore = (menuScores == null ? -1 : Integer.valueOf(menuScores[i]));
+            newMenus.setName(menuName);
+            newMenus.setRecordId(recordsDao.getId());
+            newMenus.setPicUrl(menuPicUrl);
+            newMenus.setPrice(Integer.valueOf(menuPirce));
+            newMenus.setTags(menuTag);
+            newMenus.setScore(Integer.valueOf(menuScore));
+            menusDao[i] = newMenus;
+        }
 
         // DB에 추가 (MenusMapper.xml)
         try {

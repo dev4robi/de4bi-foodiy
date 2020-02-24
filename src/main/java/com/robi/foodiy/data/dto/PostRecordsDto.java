@@ -32,20 +32,4 @@ public class PostRecordsDto {
 
     @JsonProperty("pics")
     MultipartFile[] pics;
-
-    // 메뉴데이터
-    @JsonProperty("menu_names")
-    String[] menuNames;
-
-    @JsonProperty("menu_prices")
-    String[] menuPrices;
-
-    @JsonProperty("menu_tags")
-    String[] menuTags;
-
-    @JsonProperty("menu_scores")
-    String[] menuScores;
-
-    @JsonProperty("menu_pics")
-    MultipartFile[] menuPics;
 }

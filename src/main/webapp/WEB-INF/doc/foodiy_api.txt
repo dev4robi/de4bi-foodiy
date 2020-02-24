@@ -52,8 +52,8 @@
 | ReqHeader : "user_jwt"(R)                                                                      |
 | ReqBody   : "title", "when_date", "when_time",                                                 |
 |             ("where_lati"), ("where_longi"), ("where_place"), ("who_with"), ("pics"),          |
-|             ("menu_names", ("menu_pics"), ("menu_prices"), ("menu_tags"), "menu_socres")       |
-|             ※ s로 끝나는 속성들은 '`' 문자를 구분자로 연결하여 전송                            |
+|             ("menus":[[menu_name,menu_price,menu_tags,menu_score,menu_pic_cnt],[...]])         |
+|                                                                                                |
 | ResHeader : -                                                                                  |
 | ResBody   : -                                                                                  |
 | Comment   : 기록 추가 시, 메뉴까지 같이 추가됨.                                                |

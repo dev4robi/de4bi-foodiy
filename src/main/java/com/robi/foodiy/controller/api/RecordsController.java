@@ -1,12 +1,16 @@
 package com.robi.foodiy.controller.api;
 
+import java.util.Arrays;
 import java.util.List;
 
 import com.robi.data.ApiResult;
 import com.robi.exception.ApiException;
+import com.robi.foodiy.data.dto.PostMenusDto;
 import com.robi.foodiy.data.dto.PostRecordsDto;
 import com.robi.foodiy.service.RecordsWithMenusService;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.lang.Nullable;
@@ -53,10 +57,7 @@ public class RecordsController {
         @Nullable @RequestPart("who_with")    String whoWith,
         @Nullable @RequestPart("pics")        MultipartFile[] pics,
         // menus
-        @Nullable @RequestPart("menu_names")  String menuNames,
-        @Nullable @RequestPart("menu_prices") String menuPrices,
-        @Nullable @RequestPart("menu_tags")   String menuTags,
-        @Nullable @RequestPart("menu_scores") String menuScores,
+        @Nullable @RequestPart("menus")       String menusJsonStr,
         @Nullable @RequestPart("menu_pics")   MultipartFile[] menuPics
     ) {
         // [Note]
@@ -66,11 +67,14 @@ public class RecordsController {
         // DTO객체를 생성하도록 만드는 것이 가장 합리적인 선택으로 판단되었다.
         // 또한, @RequestPart 어노테이션은 MultipartFile[]에 대해서는 스트림으로
         // 처리가 가능하나, String[] 등 다른 클래스에 대해서는 처리하지 못하기에,
-        // menuNames등 menus항목에 대해서는 "`" 문자를 구분자로 전송하여
-        // 컨트롤러단에서 split 하도록 로직을 작성하였다.
+        // menuNames등 menus항목에 대해서는 JSON Array로 구분하여 컨트롤러단에서
+        // 재조립하도록 구현하였다.
 
         PostRecordsDto postRecordsDto = new PostRecordsDto();
+        PostMenusDto[] postMenusDtoAry = null;
+
         try {
+            // Records
             postRecordsDto.setTitle(title);
             postRecordsDto.setWhenDate(whenDate);
             postRecordsDto.setWhenTime(whenTime);
@@ -79,16 +83,33 @@ public class RecordsController {
             postRecordsDto.setWherePlace(wherePlace);
             postRecordsDto.setWhoWith(whoWith);
             postRecordsDto.setPics(pics);
-            postRecordsDto.setMenuNames((menuNames == null ? null : menuNames.split("`")));
-            postRecordsDto.setMenuPrices((menuPrices == null ? null : menuPrices.split("`")));
-            postRecordsDto.setMenuTags((menuTags == null ? null : menuTags.split("`")));
-            postRecordsDto.setMenuScores((menuScores == null ? null : menuScores.split("`")));
+
+            // Menus
+            if (menusJsonStr != null) {
+                JSONArray menuAry = new JSONArray(menusJsonStr);
+                int menuCnt = menuAry.length();
+                postMenusDtoAry = new PostMenusDto[menuCnt];
+                int menuPicBaseIdx = 0;                
+                
+                for (int i = 0; i < menuCnt; ++i) {
+                    JSONArray menu = menuAry.getJSONArray(i);
+                    postMenusDtoAry[i].setMenuName(menu.get(0).toString());
+                    postMenusDtoAry[i].setMenuPrice(menu.get(1).toString());
+                    postMenusDtoAry[i].setMenuTag(menu.get(2).toString());
+                    postMenusDtoAry[i].setMenuScore(menu.get(3).toString());
+                    
+                    int menuPicCnt = Integer.valueOf(menu.get(4).toString());
+                    int newMenuPicIdx = menuPicBaseIdx + menuPicCnt;
+                    postMenusDtoAry[i].setMenuPics(Arrays.copyOfRange(menuPics, menuPicBaseIdx, newMenuPicIdx));
+                    menuPicBaseIdx = newMenuPicIdx;
+                }
+            } // 여기 디버깅부터 시작...! @@
         }
         catch (Exception e) {
             logger.error("Exception! {}", e);
-            throw new ApiException("레코드 파라미터 오류!");
+            throw new ApiException("레코드/메뉴 파라미터 오류!");
         }
 
-        return recordsWithMenusSvc.insertRecordsWithMenus(userJwt, postRecordsDto);
+        return recordsWithMenusSvc.insertRecordsWithMenus(userJwt, postRecordsDto, postMenusDtoAry);
     }
 }
