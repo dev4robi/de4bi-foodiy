@@ -92,6 +92,7 @@ public class RecordsController {
                 int menuPicBaseIdx = 0;                
                 
                 for (int i = 0; i < menuCnt; ++i) {
+                    postMenusDtoAry[i] = new PostMenusDto();
                     JSONArray menu = menuAry.getJSONArray(i);
                     postMenusDtoAry[i].setMenuName(menu.get(0).toString());
                     postMenusDtoAry[i].setMenuPrice(menu.get(1).toString());
@@ -103,7 +104,7 @@ public class RecordsController {
                     postMenusDtoAry[i].setMenuPics(Arrays.copyOfRange(menuPics, menuPicBaseIdx, newMenuPicIdx));
                     menuPicBaseIdx = newMenuPicIdx;
                 }
-            } // 여기 디버깅부터 시작...! @@
+            }
         }
         catch (Exception e) {
             logger.error("Exception! {}", e);

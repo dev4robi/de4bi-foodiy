@@ -19,6 +19,7 @@ import com.robi.foodiy.mapper.RecordsMapper;
 import com.robi.util.MapUtil;
 import com.robi.util.MdUtil;
 import com.robi.util.RestHttpUtil;
+import com.robi.util.StorageUtil;
 import com.robi.util.ValidatorUtil;
 
 import org.apache.commons.codec.binary.Hex;
@@ -72,7 +73,7 @@ public class RecordsWithMenusService {
         RecordsDao selectedRecord = null;
 
         try {
-            selectedRecord = recordsMapper.selectById(id);
+            selectedRecord = recordsMapper.selectById(id); // 조회 결과, getWriteUserId 값이 0으로 채워져서 나온다... 이유는? @@ 여기부터 시작 @@
         }
         catch (Exception e) {
             logger.error("RecordsDB Exception!", e);
@@ -81,7 +82,7 @@ public class RecordsWithMenusService {
         if (selectedRecord != null && selectedRecord.getWriteUserId() != writerId) {
             // 작성자가 아닌 경우 조회실패
             logger.error("write_user_id != writerId (writer_user_id: " + selectedRecord.getWriteUserId() +
-                         "writerId: " + writerId + ")");
+                         ", writerId: " + writerId + ")");
             selectedRecord = null;
         }
 
@@ -94,6 +95,25 @@ public class RecordsWithMenusService {
         return ApiResult.make(true, MapUtil.toMap("selectedRecord", selectedRecord));
     }
 
+/*
+    // TEST
+    curl -i -X POST \
+   -H "user_jwt:-CkcWpJaYYF5ThH0UkXadT8b6AOTQQH3-6BC9kjjGTqQCYj4TRbjpye3AJJKUL9ZLowwVkA8bgs6u8YVQjPeGtNXoOqMcXKWkmQsFRJIG-xp4GD9maPe5iEuF2nWs27AHvXAskMVkMFE8WqVPZqSDFuyTJcEGlEqWDc7-Yhn7mxvRf2roCLLJXvZFYgBPmwGGz4xr_sa9RxjPIR7kdyIpPIz2sVLGzeYHDbChJNX2zWX-utaZblUH979uXmgMfcbKDZ9GJhxQxXwc1oOhOLBqyX-sBF5Yy7nOTf8R3G9Nu1wFUWj3Ur6IdoVon_Uua9FNkUiOqO-ob7jAQCoDuJj5HH2DFC6EfwTXW1jRAUTg4PYIdZ75jwWX3hSaz76Let_" \
+   -H "Content-Type:multipart/form-data" \
+   -F "title=hello title!" \
+   -F "when_date=20200212" \
+   -F "when_time=220030" \
+   -F "where_lati=37.576824" \
+   -F "where_longi=127.050757" \
+   -F "who_with=me alone" \
+   -F "where_place=서울시 어디" \
+   -F "pics=@\"./R1.png\";type=image/png;filename=\"R1.png\"" \
+   -F "pics=@\"./R2.png\";type=image/png;filename=\"R2.png\"" \
+   -F "menus=[[\"m1\",\"10000\",\"#존맛탱\",\"5\",\"1\"],[\"m2\",\"1000\",\"#노맛\",\"1\",\"1\"]]" \
+   -F "menu_pics=@\"./M1.png\";type=image/png;filename=\"M1.png\"" \
+   -F "menu_pics=@\"./M2.png\";type=image/png;filename=\"M2.png\"" \
+ 'http://localhost:40003/api/records'
+ */
     /**
      * <p>userJwt의 user_id값과 write_user_id값이 일치하는 값들을 List<{@link RecordsDao}>로 반환합니다.</p>
      * @param userJwt : 유저 토큰
@@ -174,35 +194,30 @@ public class RecordsWithMenusService {
             RestHttpUtil.METHOD_GET, null, null);
         String wherePlaceName = "GOOGLE-API-RESULT-HERE"; // <-- 여기 작업
 
+        // 레코드
         // 기록 이미지 저장
+        StringBuilder fileUrlSb = new StringBuilder(256);
         MultipartFile[] recordsPic = recordsDto.getPics();
-        StringBuilder fileUrlSb = new StringBuilder(128);
-        if (recordsPic != null) {
-            for (int i = 0; i < recordsPic.length; ++i) {
-                try {
-                    MultipartFile picFile = recordsPic[i];
-                    String originFileName = picFile.getOriginalFilename();
-                    String fileDir = env.getProperty("foodiy.records.img.basedir") + "/records";
-                    String fileName = Hex.encodeHexString(MdUtil.sha128((originFileName + System.currentTimeMillis()).getBytes()), true);
-                    String fileExt = originFileName.substring(originFileName.lastIndexOf("."), originFileName.length());
-                    String filePath = fileDir + "/" + fileName + fileExt;
-                    fileUrlSb.append(filePath + "`");
-                    File recordPicDir = new File(fileDir);
-                    if (!recordPicDir.exists()) {
-                        boolean rst = recordPicDir.mkdirs();
-                        logger.debug("rst: " + rst);
-                    }
-                    File recordPicFile = new File(filePath);
-                    picFile.transferTo(recordPicFile);
-                }
-                catch (IOException | IllegalStateException e) {
-                    logger.warn("Exception while store records img file!", e);
-                    continue;
-                }
+        String rFileDir = env.getProperty("foodiy.records.img.basedir") + "/records";
+        
+        for (int mPicIdx = 0; mPicIdx < recordsPic.length; ++mPicIdx) {
+            try {
+                MultipartFile rMpFile = recordsPic[mPicIdx];
+                String rOriName = rMpFile.getOriginalFilename();
+                String fileExt = rOriName.substring(rOriName.lastIndexOf("."), rOriName.length());
+                String fileName = Hex.encodeHexString(MdUtil.sha128((rOriName + System.currentTimeMillis()).getBytes()), true) + fileExt;
+                String fileUrl =  StorageUtil.storeMultipartAsFile(recordsPic[mPicIdx], rFileDir, fileName);
+                fileUrlSb.append(fileUrl != null ? fileUrl : "").append("`");
+            }
+            catch (NullPointerException | IndexOutOfBoundsException | IllegalArgumentException | IOException e) {
+                logger.warn("Exception while storing record img!", e);
+                continue;
             }
         }
 
-        fileUrlSb.setLength(fileUrlSb.length() - 1);
+        if (fileUrlSb.length() > 0) {
+            fileUrlSb.setLength(fileUrlSb.length() - 1);
+        }
 
         // RecordsDao 생성
         String whenDate = recordsDto.getWhenDate();
@@ -240,73 +255,55 @@ public class RecordsWithMenusService {
             return ApiResult.make(false, ApiResult.DEFAULT_API_RESULT_CODE_NEGATIVE, "기록 추가에 실패했습니다.");
         }
 
-        // 메뉴 이미지 저장
-        MultipartFile[] menusPic = recordsDto.getMenuPics();
-        fileUrlSb.setLength(0);
-        if (menusPic != null) {
-            for (int i = 0; i < menusPic.length; ++i) {
+        // 메뉴
+        MenusDao menusDao = null;
+
+        for (int menuIdx = 0; menuIdx < menusDtoAry.length; ++menuIdx) {
+            // 메뉴 이미지 저장    
+            PostMenusDto menusDto = menusDtoAry[menuIdx];
+            fileUrlSb.setLength(0);
+            MultipartFile[] menusPic = menusDto.getMenuPics();
+            String mFileDir = env.getProperty("foodiy.records.img.basedir") + "/menus";
+            
+            for (int mPicIdx = 0; mPicIdx < menusPic.length; ++mPicIdx) {
                 try {
-                    MultipartFile picFile = menusPic[i];
-                    String originFileName = picFile.getOriginalFilename();
-                    String fileDir = env.getProperty("foodiy.records.img.basedir") + "/menus";
-                    String fileName = Hex.encodeHexString(MdUtil.sha128((originFileName + System.currentTimeMillis()).getBytes()), true);
-                    String fileExt = originFileName.substring(originFileName.lastIndexOf("."), originFileName.length());
-                    String filePath = fileDir + "/" + fileName + fileExt;
-                    fileUrlSb.append(filePath + "`");
-                    File recordPicDir = new File(fileDir);
-                    if (!recordPicDir.exists()) {
-                        boolean rst = recordPicDir.mkdirs();
-                        logger.debug("rst: " + rst);
-                    }
-                    File recordPicFile = new File(filePath);
-                    picFile.transferTo(recordPicFile);
+                    MultipartFile mMpFile = menusPic[mPicIdx];
+                    String mOriName = mMpFile.getOriginalFilename();
+                    String fileExt = mOriName.substring(mOriName.lastIndexOf("."), mOriName.length());
+                    String fileName = Hex.encodeHexString(MdUtil.sha128((mOriName + System.currentTimeMillis()).getBytes()), true) + fileExt;
+                    String fileUrl =  StorageUtil.storeMultipartAsFile(menusPic[mPicIdx], mFileDir, fileName);
+                    fileUrlSb.append(fileUrl != null ? fileUrl : "").append("`");
                 }
-                catch (IOException | IllegalStateException e) {
-                    logger.warn("Exception while store menus img file!", e);
+                catch (NullPointerException | IndexOutOfBoundsException | IllegalArgumentException | IOException e) {
+                    logger.warn("Exception while storing menus img!", e);
                     continue;
                 }
             }
-        }
+    
+            if (fileUrlSb.length() > 0) {
+                fileUrlSb.setLength(fileUrlSb.length() - 1);
+            }
 
-        fileUrlSb.setLength(fileUrlSb.length() - 1);
+            // MenusDao 생성
+            menusDao = new MenusDao();
+            menusDao.setName(menusDto.getMenuName());
+            menusDao.setRecordId(recordsDao.getId());
+            menusDao.setPicUrl(fileUrlSb.toString());
+            menusDao.setPrice(Integer.valueOf(menusDto.getMenuPrice()));
+            menusDao.setTags(menusDto.getMenuTag());
+            menusDao.setScore(Integer.valueOf(menusDto.getMenuScore()));
 
-        // MenusDao 생성
-        String[] menuNames = recordsDto.getMenuNames();
-        String[] menuPicUrls = fileUrlSb.toString().split("`");
-        String[] menuPrices = recordsDto.getMenuPrices();
-        String[] menuTags = recordsDto.getMenuTags();
-        String[] menuScores = recordsDto.getMenuScores();
-        int menusCnt = menuNames.length; // 메뉴명(menuName)이 NOT NULL 속성이므로 개수 기준으로 사용
-        MenusDao[] menusDao = new MenusDao[menusCnt];
-
-        for (int i = 0; i < menusCnt; ++i) {
-            MenusDao newMenus = new MenusDao();
-            String menuName = (menuNames == null ? null : menuNames[i]);
-            String menuPicUrl = (menuPicUrls == null ? null : menuPicUrls[i]);
-            int menuPirce = (menuPrices == null ? -1 : Integer.valueOf(menuPrices[i]));
-            String menuTag = (menuTags == null ? null : menuTags[i]);
-            int menuScore = (menuScores == null ? -1 : Integer.valueOf(menuScores[i]));
-            newMenus.setName(menuName);
-            newMenus.setRecordId(recordsDao.getId());
-            newMenus.setPicUrl(menuPicUrl);
-            newMenus.setPrice(Integer.valueOf(menuPirce));
-            newMenus.setTags(menuTag);
-            newMenus.setScore(Integer.valueOf(menuScore));
-            menusDao[i] = newMenus;
-        }
-
-        // DB에 추가 (MenusMapper.xml)
-        try {
-            for (int i = 0; i < menusDao.length; ++i) {
-                menusMapper.insert(menusDao[i]);
+            // DB에 추가 (MenusMapper.xml)
+            try {
+                menusMapper.insert(menusDao);
+            }
+            catch (Exception e) {
+                logger.error("MenusDB insert Exception!", e);
+                return ApiResult.make(false, ApiResult.DEFAULT_API_RESULT_CODE_NEGATIVE, "메뉴 추가에 실패했습니다.");
             }
         }
-        catch (Exception e) {
-            logger.error("MenusDB insert Exception!", e);
-            return ApiResult.make(false, ApiResult.DEFAULT_API_RESULT_CODE_NEGATIVE, "메뉴 추가에 실패했습니다.");
-        }
 
-        logger.info("Records & MenusDB insert success! (recordsDao: " + recordsDao.toString() + " / " + Arrays.toString(menusDao) + ")");
+        logger.info("Records & MenusDB insert success! (recordsDao: " + recordsDao.toString() + " / " + menusDao.toString() + ")");
         return ApiResult.make(true);
     }
 
