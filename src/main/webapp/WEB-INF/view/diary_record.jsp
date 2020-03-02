@@ -30,7 +30,7 @@
 	<script type="text/javascript" src="/foodiy/js/common.js?ver=<%=System.currentTimeMillis()%>"></script>
 	<script type="text/javascript" src="/foodiy/js/diary_record.js?ver=<%=System.currentTimeMillis()%>"></script>
 </head>
-<body class="container-fluid">
+<body class="container-fluid" id="body_record">
 <div class="container">
 	<!-- 제목 -->
 	<div class="row pt-4">
@@ -77,9 +77,11 @@
 			<div class="form-group">
 				<span><i class="fas fa-map-marked-alt fa-sm fa-pull-left"></i>어디서?</span>
 				<div class="input-group" id="div_map">
-					<input type="text" class="form-control"/>
+					<input type="hidden" class="form-control" id="input_where_lati"/>
+					<input type="hidden" class="form-control" id="input_where_longi"/>
+					<input type="text" class="form-control" id="input_where_place"/>
 					<span class="input-group-addon">
-						<i class="fas fa-map-marked-alt fa-2x fa-pull-right"></i>
+						<i class="fas fa-map-marked-alt fa-2x fa-pull-right" id="btn_gps"></i>
 					</span>
 				</div>
 			</div>
@@ -90,7 +92,7 @@
 		<div class="col">
 			<div class="form-group">
 				<span><i class="fas fa-user-alt fa-sm fa-pull-left"></i>누구랑?</span>
-				<div class="input-group" id="div_who">
+				<div class="input-group" id="div_who_with">
 					<input type="text" class="form-control"/>
 				</div>
 			</div>
@@ -138,7 +140,22 @@
 			</div>			
 		</div>
 		<div class="col-12">
-			<button class="btn-sm btn-primary w-100" id="btn_add_menu"><i class="far fa-plus-square fa-lg"></i>&nbsp;추가</button>
+			<button class="btn-sm btn-primary w-100" id="btn_add_menu"><i class="far fa-plus-square fa-lg"></i>&nbsp;메뉴 추가</button>
+		</div>
+	</div>
+	<!-- 초기화/맨위로 버튼 -->
+	<div class="row pt-4 pb-1 no-gutters">
+		<div class="col-5">
+			<button class="btn-sm btn-danger w-100" id="btn_init_record"><i class="fas fa-eraser"></i>&nbsp;초기화</button>
+		</div>
+		<div class="col">
+			<button class="btn-sm btn-warning w-100" id="btn_goto_top"><i class="fas fa-arrow-circle-up"></i>&nbsp;맨 위로</button>
+		</div>
+	</div>
+	<!-- 기록 버튼 -->
+	<div class="row pt-1 pb-2">
+		<div class="col">
+			<button class="btn-sm btn-success w-100" id="btn_upload_record"><i class="fas fa-pencil-alt"></i>&nbsp;기록 올리기</button>
 		</div>
 	</div>
 </div>
