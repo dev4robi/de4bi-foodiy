@@ -25,6 +25,7 @@ CREATE TABLE `db_foodiy`.`records` (
 -- 메뉴 테이블
 CREATE TABLE `db_foodiy`.`menus` (
     `id`            BIGINT NOT NULL AUTO_INCREMENT, -- 고유 ID
+    `write_user_id` BIGINT NOT NULL,                -- 메뉴 작성자 회원ID
     `record_id`     BIGINT NOT NULL,                -- 게시글 ID
     `name`          VARCHAR(128) NOT NULL,          -- 메뉴명
     `pic_url`       VARCHAR(128),                   -- 사진URL

@@ -232,8 +232,8 @@ public class RecordsWithMenusService {
             Integer.valueOf(whenTime.substring(4, 6))   // second
         );
         
-        long dateTimeMs = dateTimeCal.getTime().getTime();
-        long writeUserId = Long.valueOf(userAuthResult.getDataAsStr("id"));
+        final long dateTimeMs = dateTimeCal.getTime().getTime();
+        final long writeUserId = Long.valueOf(userAuthResult.getDataAsStr("id"));
         
         RecordsDao recordsDao = new RecordsDao();
         recordsDao.setWriteUserId(writeUserId);
@@ -287,6 +287,7 @@ public class RecordsWithMenusService {
             // MenusDao 생성
             menusDao = new MenusDao();
             menusDao.setName(menusDto.getMenuName());
+            menusDao.setWriteUserId(writeUserId);
             menusDao.setRecordId(recordsDao.getId());
             menusDao.setPicUrl(fileUrlSb.toString());
             menusDao.setPrice(Integer.valueOf(menusDto.getMenuPrice()));

@@ -15,12 +15,13 @@
         WHERE record_id = #{recordId};
     </select>
     <insert id="insert" parameterType="com.robi.foodiy.data.dao.MenusDao" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO menus (record_id,name,pic_url,price,tags,score)
-        VALUES (#{recordId},#{name},#{picUrl},#{price},#{tags},#{score});
+        INSERT INTO menus (write_user_id,record_id,name,pic_url,price,tags,score)
+        VALUES (#{writeUserId},#{recordId},#{name},#{picUrl},#{price},#{tags},#{score});
     </insert>
     <update id="update" parameterType="com.robi.foodiy.data.dao.MenusDao">
         UPDATE menus
         SET (
+            write_user_id=#{writeUserId},
             record_id=#{recordId},
             name=#{name},
             pic_url=#{picUrl},
