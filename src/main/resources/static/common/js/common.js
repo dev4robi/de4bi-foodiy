@@ -1,5 +1,38 @@
 // AJAX API
 var AJAX = {
+    mpApiCall : function(httpMethod, apiURL, reqHeader, multipartBody, alwaysFunc, doneFunc, failFunc) {
+        if (!httpMethod) {
+            console.log("Parameter 'httpMethod' warning! (httpMethod:" + httpMethod + ")");
+            console.log("'httpMethod' forcibly changed to 'GET'");
+            httpMethod = 'GET';
+        }
+
+        if (!apiURL) {
+            console.log("Parameter 'apiURL' error! (apiURL:" + httpMethod + ")");
+            return false;
+        }
+
+        $.ajax({
+            method : httpMethod,
+            url : apiURL,
+            headers: reqHeader,
+            type : 'json',
+            processData : false,
+            contentType : false,
+            data : (!!multipartBody ? multipartBody : '')
+        })
+        .always(function(data_jqXHR, textStatus, jqXHR_errorThrown) {
+            if (!!alwaysFunc) return alwaysFunc(data_jqXHR, textStatus, jqXHR_errorThrown);
+        })
+        .done(function(data, textStatus, jqXHR) {
+            if (!!doneFunc) return doneFunc(data, textStatus, jqXHR);
+            return true;
+        })
+        .fail(function(jqXHR, textStatus, errorThrown) {
+            if (!!failFunc) return failFunc(jqXHR, JSON.stringify(textStatus), errorThrown);
+            return false;
+        });
+    },
     apiCall : function(httpMethod, apiURL, reqHeader, reqBody, alwaysFunc, doneFunc, failFunc) {
         if (!httpMethod) {
             console.log("Parameter 'httpMethod' warning! (httpMethod:" + httpMethod + ")");

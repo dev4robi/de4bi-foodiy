@@ -148,7 +148,7 @@ function onClickAddMenu() {
             '<label class="custom-file-label"></label>' +
             '</div>' +
             '<div class="card-body">' +
-            '<div class="form-group">' + 
+            '<div class="form-group">' +
             '<span>메뉴명</span>' +
             '<input type="text" class="form-control" id="input_menu_name_' + menuCardIdx + '"/>' +
             '<span>가격</span>' +
@@ -278,8 +278,8 @@ function onClickUploadRecord() {
             var r_when_time = $('#input_timepicker').val();
             var r_where_lati = $('#input_where_lati').val();
             var r_where_longi = $('#input_where_longi').val();
-            var r_where_place = $('input_where_place').val();
-            var r_who_with = $('div_who_with').val();
+            var r_where_place = $('#input_where_place').val();
+            var r_who_with = $('#input_who_with').val();
             
             // 레코드 필수 파라미터 검사
             // 제목
@@ -298,28 +298,46 @@ function onClickUploadRecord() {
                 return;
             }
 
-            console.log(
-                "r_title"       + " : " + r_title       + "\n" +
-                "r_when_date"   + " : " + r_when_date   + "\n" +
-                "r_when_time"   + " : " + r_when_time   + "\n" +
-                "r_where_lati"  + " : " + r_where_lati  + "\n" +
-                "r_where_longi" + " : " + r_where_longi + "\n" +
-                "r_where_place" + " : " + r_where_place + "\n" +
-                "r_who_with"    + " : " + r_who_with    + "\n"
-            );
+            // 메뉴 파라미터 획득
+            var mAry = new Array();
 
-            // 여기부터 시작. @@
-            // 사진을 어떻게 가져올 건지, 이후 조립하는 부분, 클라단 검사(날자등) 빡시게 추가! @@
+            for (i = 0; i < g_max_menus; ++i) {
+                // 메뉴 필수 파라미터 검사
+                var menu_name = $('#input_menu_name_' + i);
+                
+                if (!menu_name) {
+                    // 메뉴 태그검사
+                    continue;
+                }
 
-            return;
+                menu_name = menu_name.val();
+                
+                var menu_score = $('input[name=rating_' + i + ']:checked').val();
+                
+                if (!menu_name) {
+                    continue;
+                }
 
-            // 메뉴 필수 파라미터 검사
-            // 제목
-            // 점수
+                if (!menu_score) {
+                    alert('메뉴 점수가 빈 항목이 있습니다.');
+                    return;
+                }
 
+                var menu_cols = [
+                    menu_name,
+                    $('#input_menu_price_' + i).val(),
+                    $('#input_menu_tag_' + i).val(),
+                    menu_score,
+                    (!!$('#input_pic_' + i).val() ? 1 : 0)
+                ];
+
+                mAry.push(menu_cols);
+            }
 
             // 멀티파트 폼 데이터 생성
             var mpForm = new FormData();
+
+            // 레코드
             mpForm.append('title', r_title);
             mpForm.append('when_date', r_when_date);
             mpForm.append('when_time', r_when_time);
@@ -327,14 +345,50 @@ function onClickUploadRecord() {
             mpForm.append('where_longi', r_where_longi);
             mpForm.append('where_place', r_where_place);
             mpForm.append('who_with', r_who_with);
-            
-            var img_files = event.target.files;
-            var r_img_cnts = max(img_files.length, g_max_records_img);
-            
-            for (var imgCnt = 0; imgCnt < r_img_cnts; ++imgCnt) {
-                mpForm.append('pics', imgFiles[imgCnt]);
+
+            for (i = -3; i < 0; ++i) {
+                var r_img = $('#input_pic_' + i);
+
+                if (!r_img == false) {
+                    continue;
+                }
+
+                r_img = r_img.prop('files');
+
+                if (!r_img == false) {
+                    continue;
+                }
+
+                console.log('!');
+
+                mpForm.append('pics', r_img[0]);
             }
 
+            // 메뉴
+            mpForm.append('menus', JSON.stringify(mAry));
+
+            for (i = 0; i < g_max_records_img; ++i) {
+                var m_img = $('#input_pic_' + i);
+
+                if (!m_img == false) {
+                    continue;
+                }
+
+                m_img = m_img.prop('files');
+
+                if (!m_img == false) {
+                    continue;
+                }
+
+                mpForm.append('menu_pics', m_img[0]);
+            }
+
+            // AJAX 업로드 호출
+            var reqHeader = {
+                'user_jwt' : '-CkcWpJaYYF5ThH0UkXadT8b6AOTQQH3-6BC9kjjGTqQCYj4TRbjpye3AJJKUL9ZLowwVkA8bgs6u8YVQjPeGtNXoOqMcXKWkmQsFRJIG-xp4GD9maPe5iEuF2nWs27AHvXAskMVkMFE8WqVPZqSDFuyTJcEGlEqWDc7-Yhn7mxvRf2roCLLJXvZFYgBPmwGGz4xr_sa9RxjPIR7kdyIpPIz2sVLGzeYHDbChJNX2zWX-utaZblUH979uXmgMfcbKDZ9GJhxQxXwc1oOhOLBqyX-sBF5Yy7nOTf8R3G9Nu1wFUWj3Ur6IdoVon_Uua9FNkUiOqO-ob7jAQCoDuJj5HH2DFC6EfwTXW1jRAUTg4PYIdZ75jwWX3hSaz76Let_'
+            };
+            
+            AJAX.mpApiCall('POST', recordApiUrl, reqHeader, mpForm, null, recordSuccess, recordFail);
         }
         else {
             alert('기록이 취소되었습니다.');
@@ -343,4 +397,19 @@ function onClickUploadRecord() {
     catch (e) {
         alert(e);
     }
+}
+
+// 기록 성공
+function recordSuccess(rst) {
+    if (AJAX.checkResultSuccess(rst)) {
+        alert('기록이 완료되었습니다.');
+    }
+    else {
+        recordFail(rst);
+    }
+}
+
+// 기록 실패
+function recordFail(rst) {
+    alert('기록에 실패했습니다.\n(' + AJAX.getResultData(rst, 'result_msg') + ')');
 }

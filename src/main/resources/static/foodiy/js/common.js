@@ -5,3 +5,4 @@ var searchPageUrl = '/page/search';
 var mapPageUrl    = '/page/map';
 var statPageUrl   = '/page/stat';
 var loginPageUrl  = 'http://localhost:40000/main';
+var recordApiUrl  = 'http://localhost:40003/api/records';

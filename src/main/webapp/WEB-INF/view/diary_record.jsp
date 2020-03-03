@@ -92,8 +92,8 @@
 		<div class="col">
 			<div class="form-group">
 				<span><i class="fas fa-user-alt fa-sm fa-pull-left"></i>누구랑?</span>
-				<div class="input-group" id="div_who_with">
-					<input type="text" class="form-control"/>
+				<div class="input-group">
+					<input type="text" class="form-control" id="input_who_with"/>
 				</div>
 			</div>
 		</div>
