@@ -37,6 +37,10 @@ public class StorageUtil {
                 }
             }
 
+            if (storedFile.exists()) {
+                throw new IOException("File '" + mpFilePath + "'already exist!");
+            }
+
             mpFile.transferTo(storedFile);
         }
 

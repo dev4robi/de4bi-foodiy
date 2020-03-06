@@ -49,10 +49,10 @@ $(document).ready(function(){
     $('#input_datepicker').val(dateStr);
 
     // 시간 초기화
-    var timeStr = ts.format('a/p hh:mm').replace('AM', '오전').replace('PM', '오후');
+    var timeStr = ts.format('HH:mm');
     var timepicker = $('#div_timepicker');
     timepicker.datetimepicker({
-        format : 'A hh:mm',
+        format : 'HH:mm',
         locale : 'ko',
         showTodayButton : true,
         showClose : false,
@@ -292,10 +292,17 @@ function onClickUploadRecord() {
                 alert('일자를 선택해 주세요!');
                 return;
             }
+            else {
+                r_when_date = r_when_date.replace(/-/gi, '');
+            }
             // 일시
             if (!r_when_time) {
                 alert('시간을 선택해 주세요!');
                 return;
+            }
+            else {
+                r_when_time = r_when_time.replace(/:/gi, '');
+                r_when_time += '00';
             }
 
             // 메뉴 파라미터 획득
@@ -349,17 +356,15 @@ function onClickUploadRecord() {
             for (i = -3; i < 0; ++i) {
                 var r_img = $('#input_pic_' + i);
 
-                if (!r_img == false) {
+                if (r_img.length == 0) {
                     continue;
                 }
 
                 r_img = r_img.prop('files');
 
-                if (!r_img == false) {
+                if (r_img.length == 0) {
                     continue;
                 }
-
-                console.log('!');
 
                 mpForm.append('pics', r_img[0]);
             }
@@ -367,20 +372,21 @@ function onClickUploadRecord() {
             // 메뉴
             mpForm.append('menus', JSON.stringify(mAry));
 
-            for (i = 0; i < g_max_records_img; ++i) {
+            for (i = 0; i < g_max_menus; ++i) {
                 var m_img = $('#input_pic_' + i);
 
-                if (!m_img == false) {
+                if (m_img.length == 0) {
                     continue;
                 }
 
                 m_img = m_img.prop('files');
 
-                if (!m_img == false) {
+                if (m_img.length == 0) {
                     continue;
                 }
 
                 mpForm.append('menu_pics', m_img[0]);
+                console.log(m_img[0]);
             }
 
             // AJAX 업로드 호출
@@ -412,4 +418,30 @@ function recordSuccess(rst) {
 // 기록 실패
 function recordFail(rst) {
     alert('기록에 실패했습니다.\n(' + AJAX.getResultData(rst, 'result_msg') + ')');
+}
+
+// 배지태그 추가
+function addBadgeTag(base_list, color, value) {
+    var div_list = $('#' + base_list);
+
+    if (div_list.length == 0) {
+        return;
+    }
+
+    var addedTag = '<div class="pr-1 pb-1" id="div_who_with"><span class="badge badge-' + color + '" id="span_who_with">' + 
+        value + '<i class="fas fa-times fa-sm fa-pull-right" onclick="onClickCloseBadge()"></i></span></div>';
+    
+    div_list.append(addedTag);
+}
+
+// 배지제거버튼 클릭
+function onClickCloseBadge() {
+    var div_who_with = $(this).closest('div'); // 여기부터 시작... x누르면 닫아버리기 구현@
+    console.log(div_who_with);
+
+    if (div_who_with.length == 0) {
+        return;
+    }
+
+    div_who_with.remove();
 }

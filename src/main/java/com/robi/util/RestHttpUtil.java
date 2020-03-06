@@ -14,6 +14,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 public class RestHttpUtil {
@@ -40,7 +41,7 @@ public class RestHttpUtil {
         return new RestTemplate(httpFactory);
     }
 
-    public static String urlConnection(String url, int method, Map<String, Object> reqHeadMap, Map<String, Object> reqBodyMap) {
+    public static String urlConnection(String url, int method, Map<String, Object> reqHeadMap, Map<String, Object> reqBodyMap) throws RestClientException {
         HttpHeaders httpHeader = new HttpHeaders();
         httpHeader.setContentType(MediaType.APPLICATION_PROBLEM_JSON);
         

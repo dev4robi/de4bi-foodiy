@@ -3,6 +3,7 @@ package com.robi.foodiy.service;
 import java.io.IOException;
 import java.sql.Date;
 import java.sql.Time;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
 
@@ -26,6 +27,7 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.multipart.MultipartFile;
 
 import lombok.AllArgsConstructor;
@@ -92,25 +94,6 @@ public class RecordsWithMenusService {
         return ApiResult.make(true, MapUtil.toMap("selectedRecord", selectedRecord));
     }
 
-/*
-    // TEST
-    curl -i -X POST \
-   -H "user_jwt:-CkcWpJaYYF5ThH0UkXadT8b6AOTQQH3-6BC9kjjGTqQCYj4TRbjpye3AJJKUL9ZLowwVkA8bgs6u8YVQjPeGtNXoOqMcXKWkmQsFRJIG-xp4GD9maPe5iEuF2nWs27AHvXAskMVkMFE8WqVPZqSDFuyTJcEGlEqWDc7-Yhn7mxvRf2roCLLJXvZFYgBPmwGGz4xr_sa9RxjPIR7kdyIpPIz2sVLGzeYHDbChJNX2zWX-utaZblUH979uXmgMfcbKDZ9GJhxQxXwc1oOhOLBqyX-sBF5Yy7nOTf8R3G9Nu1wFUWj3Ur6IdoVon_Uua9FNkUiOqO-ob7jAQCoDuJj5HH2DFC6EfwTXW1jRAUTg4PYIdZ75jwWX3hSaz76Let_" \
-   -H "Content-Type:multipart/form-data" \
-   -F "title=hello title!" \
-   -F "when_date=20200212" \
-   -F "when_time=220030" \
-   -F "where_lati=37.576824" \
-   -F "where_longi=127.050757" \
-   -F "who_with=me alone" \
-   -F "where_place=서울시 어디" \
-   -F "pics=@\"./R1.png\";type=image/png;filename=\"R1.png\"" \
-   -F "pics=@\"./R2.png\";type=image/png;filename=\"R2.png\"" \
-   -F "menus=[[\"m1\",\"10000\",\"#존맛탱\",\"5\",\"1\"],[\"m2\",\"1000\",\"#노맛\",\"1\",\"1\"]]" \
-   -F "menu_pics=@\"./M1.png\";type=image/png;filename=\"M1.png\"" \
-   -F "menu_pics=@\"./M2.png\";type=image/png;filename=\"M2.png\"" \
- 'http://localhost:40003/api/records'
- */
     /**
      * <p>userJwt의 user_id값과 write_user_id값이 일치하는 값들을 List<{@link RecordsDao}>로 반환합니다.</p>
      * @param userJwt : 유저 토큰
@@ -185,10 +168,18 @@ public class RecordsWithMenusService {
         }
 
         // Google Geocoding API (추후 작업)
-        String googleRpyStr = RestHttpUtil.urlConnection("https://maps.googleapis.com/maps/api/geocode/json?latlng=" + 
-            recordsDto.getWhereLati() + "," + recordsDto.getWhereLongi() + 
-            "&key=AIzaSyDTxpWl_A8b_V9e2lktHYgJg1HYmfyzLhM", 
-            RestHttpUtil.METHOD_GET, null, null);
+        String googleRpyStr = null;
+        
+        try {
+            googleRpyStr = RestHttpUtil.urlConnection("https://maps.googleapis.com/maps/api/geocode/json?latlng=" + 
+                recordsDto.getWhereLati() + "," + recordsDto.getWhereLongi() + 
+                "&key=AIzaSyDTxpWl_A8b_V9e2lktHYgJg1HYmfyzLhM", 
+                RestHttpUtil.METHOD_GET, null, null);
+        }
+        catch (RestClientException e) {
+            logger.warn("Exception while geocoding API!", e);
+        }
+
         String wherePlaceName = "GOOGLE-API-RESULT-HERE"; // <-- 여기 작업
 
         // 레코드
@@ -196,15 +187,17 @@ public class RecordsWithMenusService {
         StringBuilder fileUrlSb = new StringBuilder(256);
         MultipartFile[] recordsPic = recordsDto.getPics();
         String rFileDir = env.getProperty("foodiy.records.img.basedir") + "/records";
+        Calendar todayCal = Calendar.getInstance();
+        final String filePrefix = new SimpleDateFormat("yyyyMMdd").format(todayCal.getTime());
         
         for (int mPicIdx = 0; mPicIdx < recordsPic.length; ++mPicIdx) {
             try {
                 MultipartFile rMpFile = recordsPic[mPicIdx];
                 String rOriName = rMpFile.getOriginalFilename();
                 String fileExt = rOriName.substring(rOriName.lastIndexOf("."), rOriName.length());
-                String fileName = Hex.encodeHexString(MdUtil.sha128((rOriName + System.currentTimeMillis()).getBytes()), true) + fileExt;
+                String fileName = filePrefix + "-" +Hex.encodeHexString(MdUtil.sha128((rOriName + System.currentTimeMillis()).getBytes()), true) + fileExt;
                 String fileUrl =  StorageUtil.storeMultipartAsFile(recordsPic[mPicIdx], rFileDir, fileName);
-                fileUrlSb.append(fileUrl != null ? fileUrl : "").append("`");
+                fileUrlSb.append(fileName != null ? fileName : "").append("`");
             }
             catch (NullPointerException | IndexOutOfBoundsException | IllegalArgumentException | IOException e) {
                 logger.warn("Exception while storing record img!", e);
@@ -267,9 +260,9 @@ public class RecordsWithMenusService {
                     MultipartFile mMpFile = menusPic[mPicIdx];
                     String mOriName = mMpFile.getOriginalFilename();
                     String fileExt = mOriName.substring(mOriName.lastIndexOf("."), mOriName.length());
-                    String fileName = Hex.encodeHexString(MdUtil.sha128((mOriName + System.currentTimeMillis()).getBytes()), true) + fileExt;
+                    String fileName = filePrefix + "-" + Hex.encodeHexString(MdUtil.sha128((mOriName + System.currentTimeMillis()).getBytes()), true) + fileExt;
                     String fileUrl =  StorageUtil.storeMultipartAsFile(menusPic[mPicIdx], mFileDir, fileName);
-                    fileUrlSb.append(fileUrl != null ? fileUrl : "").append("`");
+                    fileUrlSb.append(fileName != null ? fileName : "").append("`");
                 }
                 catch (NullPointerException | IndexOutOfBoundsException | IllegalArgumentException | IOException e) {
                     logger.warn("Exception while storing menus img!", e);

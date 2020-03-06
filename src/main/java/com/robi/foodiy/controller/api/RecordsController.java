@@ -75,8 +75,8 @@ public class RecordsController {
             postRecordsDto.setTitle(title);
             postRecordsDto.setWhenDate(whenDate);
             postRecordsDto.setWhenTime(whenTime);
-            postRecordsDto.setWhereLati(Float.valueOf(whereLati));
-            postRecordsDto.setWhereLongi(Float.valueOf(whereLongi));
+            postRecordsDto.setWhereLati(whereLati != null ? Float.valueOf(whereLati) : null);
+            postRecordsDto.setWhereLongi(whereLongi != null ? Float.valueOf(whereLongi) : null);
             postRecordsDto.setWherePlace(wherePlace);
             postRecordsDto.setWhoWith(whoWith);
             postRecordsDto.setPics(pics);

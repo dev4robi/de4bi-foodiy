@@ -19,10 +19,10 @@ public class PostRecordsDto {
     String whenTime;
     
     @JsonProperty("where_lati")
-    float whereLati;
+    Float whereLati;
 
     @JsonProperty("where_longi")
-    float whereLongi;
+    Float whereLongi;
 
     @JsonProperty("where_place")
     String wherePlace;

@@ -46,12 +46,13 @@
 +------------------------------------------------------------------------------------------------+
 | Access    : Public                                                                             |
 | Service   : 기록 추가                                                                          |
-| URL       : /api/records                                                                           |
+| URL       : /api/records                                                                       |
 | Method    : POST                                                                               |
 | Cont-Type : multipart/file                                                                     |
 | ReqHeader : "user_jwt"(R)                                                                      |
-| ReqBody   : "title", "when_date", "when_time",                                                 |
-|             ("where_lati"), ("where_longi"), ("where_place"), ("who_with"), ("pics"),          |
+| ReqBody   : "title", "when_date:yyyyMMdd", "when_time:HHmmss",                                 |
+|             ("where_lati":float), ("where_longi":float), ("where_place"), ("who_with"),        |
+|             ("pics"),                                                                          |
 |             ("menus":[[menu_name,menu_price,menu_tags,menu_score,menu_pic_cnt],[...]],         |
 |              "menu_pics")                                                                      |
 |                                                                                                |
