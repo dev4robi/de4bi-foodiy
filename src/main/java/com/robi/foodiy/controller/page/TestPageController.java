@@ -16,7 +16,7 @@ public class TestPageController {
 
     private static final Logger logger = LoggerFactory.getLogger(TestPageController.class);
 
-    @GetMapping("/upload")
+    @GetMapping("/test")
     public ModelAndView upload() {
         return new ModelAndView("test");
     }

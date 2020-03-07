@@ -20,6 +20,7 @@ $(document).ready(function(){
 
     // 버튼 이벤트 초기화
     $('#btn_gps').on('click', onClickGps);                      // GPS 버튼
+    $('#btn_add_person').on('click', onClickAddWhoWith);        // 누구랑 인물추가 버튼
     $('#btn_add_menu').on('click', onClickAddMenu);             // 메뉴추가 버튼
     $('#btn_init_record').on('click', onClickInitRecord);       // 초기화 버튼
     $('#btn_goto_top').on('click', onClickGotoTop);             // 맨 위로 버튼
@@ -110,6 +111,91 @@ function onClickGps() {
     }
 }
 
+// 누구랑 배지태그 추가
+function onClickAddWhoWith() {
+    var div_list = $('#div_who_with_list');
+    var color_list = [ 'primary', 'info', 'success' ];
+    var color = color_list[new Date().getTime() % 3];
+    var value_tag = $('#input_who_with');
+    var value = null;
+
+    if (div_list.length == 0) {
+        return;
+    }
+
+    if (!color) {
+        color = 'primary';
+    }
+
+    if (value_tag.length == 0) {
+        return;
+    }
+    else {
+        value = value_tag.val();
+        value_tag.val('');
+    }
+
+    if (!value || value.length == 0) {
+        return;
+    }
+
+    var addedTag = '<div class="pr-1 pb-1" id="div_who_with"><span class="badge badge-' + color + '"value="' + value + '" id="span_who_with">' + 
+        value + '<i class="fas fa-times fa-sm fa-pull-right" onclick="onClickCloseWhoWith(this)"></i></span></div>';
+    
+    div_list.append(addedTag);
+}
+
+// 누구랑 배지 제거버튼 클릭
+function onClickCloseWhoWith(btn) {
+    var div_who_with = $(btn).closest('#div_who_with');
+
+    if (div_who_with.length == 0) {
+        return;
+    }
+
+    div_who_with.remove();
+}
+
+// 메뉴 배지태그 추가
+function onClickAddMenuTag(idx) {
+    var div_list = $('#div_menu_tag_list_' + idx);
+    var color = 'warning';
+    var value_tag = $('#input_menu_tag_' + idx);
+    var value = null;
+
+    if (div_list.length == 0) {
+        return;
+    }
+
+    if (value_tag.length == 0) {
+        return;
+    }
+    else {
+        value = value_tag.val();
+        value_tag.val('');
+    }
+
+    if (!value || value.length == 0) {
+        return;
+    }
+
+    var addedTag = '<div class="pr-1 pb-1" id="div_menu_tag"><span class="badge badge-' + color + '"value="' + value + '" id="span_menu_tag">#' + 
+        value + '<i class="fas fa-times fa-sm fa-pull-right" onclick="onClickCloseMenuTag(this)"></i></span></div>';
+    
+    div_list.append(addedTag);
+}
+
+// 메뉴 배지 제거버튼 클릭
+function onClickCloseMenuTag(btn) {
+    var div_who_with = $(btn).closest('#div_menu_tag');
+
+    if (div_who_with.length == 0) {
+        return;
+    }
+
+    div_who_with.remove();
+}
+
 // 메뉴추가 클릭 시
 function onClickAddMenu() {
     try {
@@ -152,9 +238,15 @@ function onClickAddMenu() {
             '<span>메뉴명</span>' +
             '<input type="text" class="form-control" id="input_menu_name_' + menuCardIdx + '"/>' +
             '<span>가격</span>' +
-            '<input type="text" class="form-control" id="input_menu_price_' + menuCardIdx + '"/>' +
+            '<input type="number" class="form-control" id="input_menu_price_' + menuCardIdx + '"/>' +
             '<span>태그</span>' +
+            '<div class="d-flex align-content-end flex-wrap p-1" id="div_menu_tag_list_' + menuCardIdx + '">' +
+            '<!-- 여기에 배지태그 추가... -->' +
+            '</div>' +
+            '<div class="input-group">' +
             '<input type="text" class="form-control" id="input_menu_tag_' + menuCardIdx + '"/>' +
+            '<button class="btn btn-outline-secondary" type="button" onclick="onClickAddMenuTag(' + menuCardIdx + ')" id="btn_add_menu_tag">추가</button>' +
+            '</div>' +
             '<span>평점</span>' +
             '<div class="starrating risingstar d-flex justify-content-center flex-row-reverse">' +
             '<input type="radio" id="input_star5_' + menuCardIdx + '" name="rating_' + menuCardIdx + '" value="5" />       <label for="input_star5_' + menuCardIdx + '"title="5Star">5&nbsp;&nbsp;&nbsp;</label>' + 
@@ -279,7 +371,22 @@ function onClickUploadRecord() {
             var r_where_lati = $('#input_where_lati').val();
             var r_where_longi = $('#input_where_longi').val();
             var r_where_place = $('#input_where_place').val();
-            var r_who_with = $('#input_who_with').val();
+            var r_who_with = null;
+
+            var div_who_with_ary = $('#div_who_with_list').children('#div_who_with');
+            
+            if (div_who_with_ary.length > 0) {
+                r_who_with = '';
+
+                for (i = 0; i < div_who_with_ary.length; ++i) {
+                    var who_with = $(div_who_with_ary[i]).find('#span_who_with').attr('value');
+                    r_who_with += (who_with + '`');
+                }
+
+                if (r_who_with.length > 0) {
+                    r_who_with = r_who_with.substring(0, r_who_with.length - 1);
+                }
+            }
             
             // 레코드 필수 파라미터 검사
             // 제목
@@ -330,14 +437,31 @@ function onClickUploadRecord() {
                     return;
                 }
 
+                var menu_tags = null;
+                var div_menu_tag_ary = $('#div_menu_tag_list_' + i).children('#div_menu_tag');
+            
+                if (div_menu_tag_ary.length > 0) {
+                    menu_tags = '';
+
+                    for (j = 0; j < div_menu_tag_ary.length; ++j) {
+                        var menu_tag = $(div_menu_tag_ary[j]).find('#span_menu_tag').attr('value');
+                        menu_tags += (menu_tag + '`');
+                    }
+
+                    if (menu_tags.length > 0) {
+                        menu_tags = menu_tags.substring(0, menu_tags.length - 1);
+                    }
+                }
+
                 var menu_cols = [
                     menu_name,
                     $('#input_menu_price_' + i).val(),
-                    $('#input_menu_tag_' + i).val(),
+                    menu_tags,
                     menu_score,
                     (!!$('#input_pic_' + i).val() ? 1 : 0)
                 ];
 
+                console.log(menu_cols);
                 mAry.push(menu_cols);
             }
 
@@ -418,30 +542,4 @@ function recordSuccess(rst) {
 // 기록 실패
 function recordFail(rst) {
     alert('기록에 실패했습니다.\n(' + AJAX.getResultData(rst, 'result_msg') + ')');
-}
-
-// 배지태그 추가
-function addBadgeTag(base_list, color, value) {
-    var div_list = $('#' + base_list);
-
-    if (div_list.length == 0) {
-        return;
-    }
-
-    var addedTag = '<div class="pr-1 pb-1" id="div_who_with"><span class="badge badge-' + color + '" id="span_who_with">' + 
-        value + '<i class="fas fa-times fa-sm fa-pull-right" onclick="onClickCloseBadge()"></i></span></div>';
-    
-    div_list.append(addedTag);
-}
-
-// 배지제거버튼 클릭
-function onClickCloseBadge() {
-    var div_who_with = $(this).closest('div'); // 여기부터 시작... x누르면 닫아버리기 구현@
-    console.log(div_who_with);
-
-    if (div_who_with.length == 0) {
-        return;
-    }
-
-    div_who_with.remove();
 }

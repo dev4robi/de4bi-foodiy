@@ -93,11 +93,11 @@
 			<div class="form-group">
 				<span><i class="fas fa-user-alt fa-sm fa-pull-left"></i>누구랑?</span><br>
 				<div class="d-flex align-content-end flex-wrap p-1" id="div_who_with_list">
-					<div class="pr-1 pb-1" id="div_who_with"><span class="badge badge-primary id="span_who_with">{이름}<i class="fas fa-times fa-sm fa-pull-right" onclick="onClickCloseBadge()"></i></span></div>
+					<!-- 여기에 배지태그 추가... -->
 				</div>
 				<div class="input-group">
 					<input type="text" class="form-control" id="input_who_with"/>
-					<button class="btn btn-outline-secondary" type="button" id="button-addon2">추가</button>
+					<button class="btn btn-outline-secondary" type="button" id="btn_add_person"">추가</button>
 				</div>
 			</div>
 		</div>
