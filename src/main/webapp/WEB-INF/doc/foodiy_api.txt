@@ -63,7 +63,7 @@
 +------------------------------------------------------------------------------------------------+
 | Access    : Public                                                                             |
 | Service   : 기록 수정                                                                          |
-| URL       : /api/records/{id}                                                                      |
+| URL       : /api/records/{id}                                                                  |
 | Method    : PUT                                                                                |
 | Cont-Type : multipart/file                                                                     |
 | ReqHeader : "user_jwt"(R)                                                                      |

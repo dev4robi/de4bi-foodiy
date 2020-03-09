@@ -24,6 +24,43 @@
 	<script type="text/javascript" src="/view/js/diary_search.js?ver=<%=System.currentTimeMillis()%>"></script>
 </head>
 <body class="container-fluid">
-	<h1>Diary Search</h1>
+	<div class="row">
+		<!-- 검색 필터 -->
+		<div class="col-12 pt-4">
+			<span><i class="fas fa-tasks fa-sm fa-pull-left"></i>필터</span>
+			<!-- 금액 -->
+			<!-- 평점 --> <!-- 여기 GUI부터 시작! -->
+		</div>
+		<!-- 검색 및 종류 -->
+		<div class="col-12 pt-4">
+			<span><i class="fas fa-check-square fa-sm fa-pull-left"></i>검색 종류</span>
+			<div class="btn-group btn-group-toggle w-100" data-toggle="buttons">
+				<label class="btn btn-info active">
+					<input type="radio" name="options" id="input_search_by_title" checked>제목
+				</label>
+				<label class="btn btn-info">
+					<input type="radio" name="options" id="input_search_by_tag">태그
+				</label>
+				<label class="btn btn-info">
+					<input type="radio" name="options" id="input_search_by_date">일자
+				</label>
+				<label class="btn btn-info">
+					<input type="radio" name="options" id="input_search_by_place">장소
+				</label>
+				<label class="btn btn-info">
+					<input type="radio" name="options" id="input_search_by_who">누구랑
+				</label>
+			</div>
+			<div>
+				<!-- 제목, 태그, 장소, 누구랑 -->
+				<div class="input-group pt-2">
+					<input type="text" class="form-control" id="input_search_keyword"/>
+					<button class="btn btn-outline-secondary" type="button" id="btn_search"">검색</button>
+				</div>
+				<!-- 일자 -->
+
+			</div>
+		</div>
+	</div>
 </body>
 </html>
