@@ -25,15 +25,9 @@
 </head>
 <body class="container-fluid">
 	<div class="row">
-		<!-- 검색 필터 -->
+		<!-- 검색 -->
 		<div class="col-12 pt-4">
-			<span><i class="fas fa-tasks fa-sm fa-pull-left"></i>필터</span>
-			<!-- 금액 -->
-			<!-- 평점 --> <!-- 여기 GUI부터 시작! -->
-		</div>
-		<!-- 검색 및 종류 -->
-		<div class="col-12 pt-4">
-			<span><i class="fas fa-check-square fa-sm fa-pull-left"></i>검색 종류</span>
+			<span><i class="fas fa-check-square fa-sm fa-pull-left"></i><b>검색</b></span>
 			<div class="btn-group btn-group-toggle w-100" data-toggle="buttons">
 				<label class="btn btn-info active">
 					<input type="radio" name="options" id="input_search_by_title" checked>제목
@@ -58,8 +52,46 @@
 					<button class="btn btn-outline-secondary" type="button" id="btn_search"">검색</button>
 				</div>
 				<!-- 일자 -->
-
+				
 			</div>
+		</div>
+		<!-- 결과(메뉴) -->
+		<div class="col-12 pt-4">
+			<span><i class="fas fa-list fa-sm fa-pull-left"></i><b>결과</b></span>
+			<div class="d-flex flex-wrap" id="div_menu_list">
+				<span class="badge badge-primary">#치킨2</span> <!-- 여기부터 시작... sticky-bot? 뭘 사용해서 이미지 위에 태그를 올리지? -->
+				<div style="width:32%" class="embed-responsive embed-responsive-1by1 shadow-sm rounded">
+					<img src="/foodiy/img/foodiy_logo.png" class="embed-responsive-item" alt="사진 불러오기 실패!" onclick="onClickPicture(-3)" id="img_menu_pic_-3">
+					<div class="custom-file mb-3 d-none">
+						<input type="file" class="custom-file-input" onchange="" id="input_pic_" accept="image/*">
+						<label class="custom-file-label"></label>
+					</div>
+				</div>
+				<div style="width:32%" class="embed-responsive embed-responsive-1by1 shadow-sm rounded">
+					<img src="/foodiy/img/foodiy_logo.png" class="embed-responsive-item" alt="사진 불러오기 실패!" onclick="onClickPicture(-3)" id="img_menu_pic_-3">
+					<div class="custom-file mb-3 d-none">
+						<input type="file" class="custom-file-input" onchange="" id="input_pic_" accept="image/*">
+						<label class="custom-file-label"></label>
+					</div>
+				</div>
+				<div style="width:32%" class="embed-responsive embed-responsive-1by1 shadow-sm rounded">
+					<img src="/foodiy/img/foodiy_logo.png" class="embed-responsive-item" alt="사진 불러오기 실패!" onclick="onClickPicture(-3)" id="img_menu_pic_-3">
+					<div class="custom-file mb-3 d-none">
+						<input type="file" class="custom-file-input" onchange="" id="input_pic_" accept="image/*">
+						<label class="custom-file-label"></label>
+					</div>
+				</div><div style="width:32%" class="embed-responsive embed-responsive-1by1 shadow-sm rounded">
+					<img src="/foodiy/img/foodiy_logo.png" class="embed-responsive-item" alt="사진 불러오기 실패!" onclick="onClickPicture(-3)" id="img_menu_pic_-3">
+					<div class="custom-file mb-3 d-none">
+						<input type="file" class="custom-file-input" onchange="" id="input_pic_" accept="image/*">
+						<label class="custom-file-label"></label>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- 결과(기록) -->
+		<div class="col-12 pt-4 d-none">
+			<span><i class="fas fa-list fa-sm fa-pull-left"></i><b>상세</b></span>
 		</div>
 	</div>
 </body>

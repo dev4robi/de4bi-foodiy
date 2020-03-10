@@ -36,7 +36,7 @@
 	<div class="row pt-4">
 		<div class="col">
 			<div class="form-group">
-				<span><i class="fas fa-book fa-sm fa-pull-left"></i>제목</span>
+				<span><i class="fas fa-book fa-sm fa-pull-left"></i><b>제목</b></span>
 				<div class="input-group date">
 					<input type="text" class="form-control" id="input_title"/>
 				</div>
@@ -47,7 +47,7 @@
 	<div class="row">
 		<div class="col">
 			<div class="form-group">
-				<span><i class="fas fa-calendar-check fa-sm fa-pull-left"></i>언제?</span>
+				<span><i class="fas fa-calendar-check fa-sm fa-pull-left"></i><b>언제?</b></span>
 				<div class="input-group date" id="div_datepicker">
 					<input type="text" class="form-control" id="input_datepicker"/>
 					<span class="input-group-addon">
@@ -61,7 +61,7 @@
 	<div class="row">
 		<div class="col">
 			<div class="form-group">
-				<span><i class="fas fa-clock fa-sm fa-pull-left"></i>몇시?</span>
+				<span><i class="fas fa-clock fa-sm fa-pull-left"></i><b>몇시?</b></span>
 				<div class="input-group time" id="div_timepicker">
 					<input type="text" class="form-control" id="input_timepicker"/>
 					<span class="input-group-addon">
@@ -75,7 +75,7 @@
 	<div class="row">
 		<div class="col">
 			<div class="form-group">
-				<span><i class="fas fa-map-marked-alt fa-sm fa-pull-left"></i>어디서?</span>
+				<span><i class="fas fa-map-marked-alt fa-sm fa-pull-left"></i><b>어디서?</b></span>
 				<div class="input-group" id="div_map">
 					<input type="hidden" class="form-control" id="input_where_lati"/>
 					<input type="hidden" class="form-control" id="input_where_longi"/>
@@ -91,7 +91,7 @@
 	<div class="row">
 		<div class="col">
 			<div class="form-group">
-				<span><i class="fas fa-user-alt fa-sm fa-pull-left"></i>누구랑?</span><br>
+				<span><i class="fas fa-user-alt fa-sm fa-pull-left"></i><b>누구랑?</b></span><br>
 				<div class="d-flex align-content-end flex-wrap p-1" id="div_who_with_list">
 					<!-- 여기에 배지태그 추가... -->
 				</div>
@@ -105,7 +105,7 @@
 	<!-- 가게 사진 -->
 	<div class="row">
 		<div class="col">
-			<span><i class="fas fa-camera fa-sm fa-pull-left"></i>사진</span>
+			<span><i class="fas fa-camera fa-sm fa-pull-left"></i><b>사진</b></span>
 			<div class="d-flex justify-content-around">
 				<div style="width:32%" class="embed-responsive embed-responsive-1by1 shadow-sm rounded">
 					<img src="/foodiy/img/foodiy_logo.png" class="embed-responsive-item" alt="사진 불러오기 실패!" onclick="onClickPicture(-3)" id="img_menu_pic_-3">
@@ -137,7 +137,7 @@
 	<!-- 메뉴와 가격 -->
 	<div class="row">
 		<div class="col-12">
-			<span><i class="fas fa-utensils fa-sm fa-pull-left"></i>메뉴는?</span>
+			<span><i class="fas fa-utensils fa-sm fa-pull-left"></i><b>메뉴는?</b></span>
 			<div id="div_menucard_list">
 				<!-- 메뉴카드 리스트 항목 -->
 				<!-- ... -->
