@@ -141,7 +141,7 @@
 			<div id="div_menucard_list">
 				<!-- 메뉴카드 리스트 항목 -->
 				<!-- ... -->
-			</div>			
+			</div>
 		</div>
 		<div class="col-12">
 			<button class="btn-sm btn-primary w-100" id="btn_add_menu"><i class="far fa-plus-square fa-lg"></i>&nbsp;메뉴 추가</button>
