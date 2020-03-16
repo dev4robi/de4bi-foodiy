@@ -30,14 +30,14 @@
 			<span><i class="fas fa-check-square fa-sm fa-pull-left"></i><b>검색</b></span>
 			<div class="btn-group btn-group-toggle w-100" data-toggle="buttons">
 				<label class="btn btn-info active">
-					<input type="radio" name="options" id="input_search_by_title" checked>제목
+					<input type="radio" name="options" id="input_search_by_page">최근
+				</label>	
+				<label class="btn btn-info">
+					<input type="radio" name="options" id="input_search_by_title">제목
 				</label>
 				<label class="btn btn-info">
 					<input type="radio" name="options" id="input_search_by_tag">태그
 				</label>
-				<label class="btn btn-info">
-					<input type="radio" name="options" id="input_search_by_date">일자
-				</label>	
 				<label class="btn btn-info">
 					<input type="radio" name="options" id="input_search_by_place">장소
 				</label>
@@ -51,7 +51,6 @@
 					<input type="text" class="form-control" id="input_search_keyword"/>
 					<button class="btn btn-outline-secondary" type="button" id="btn_search"">검색</button>
 				</div>
-
 			</div>
 		</div>
 		<!-- 결과(메뉴) -->
@@ -67,11 +66,4 @@
 		</div>
 	</div>
 </body>
-<script>
-addMenuCard(1, '/foodiy/img/foodiy_logo.png', '테스트1', 5);
-addMenuCard(2, '/foodiy/img/foodiy_logo.png', '테스트2', 4);
-addMenuCard(3, '/foodiy/img/foodiy_logo.png', '테스트3', 3);
-addMenuCard(4, '/foodiy/img/foodiy_logo.png', '테스트4', 2);
-addMenuCard(5, '/foodiy/img/foodiy_logo.png', '테스트5', 1);
-</script>
 </html>

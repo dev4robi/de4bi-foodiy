@@ -72,7 +72,7 @@ public class RecordsWithMenusService {
         RecordsDao selectedRecord = null;
 
         try {
-            selectedRecord = recordsMapper.selectById(id); // 조회 결과, getWriteUserId 값이 0으로 채워져서 나온다... 이유는? @@ 여기부터 시작 @@
+            selectedRecord = recordsMapper.selectById(id);
         }
         catch (Exception e) {
             logger.error("RecordsDB Exception!", e);

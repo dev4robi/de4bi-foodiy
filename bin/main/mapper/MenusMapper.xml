@@ -14,6 +14,18 @@
         FROM menus
         WHERE record_id = #{recordId};
     </select>
+    <select id="selectAllByWriterIdWithPage" resultType="com.robi.foodiy.data.dao.MenusDao">
+        SELECT *
+        FROM menus
+        WHERE write_user_id = #{writerId}
+        LIMIT #{menuBgnIdx},#{menuPerPage}
+    </select>
+    <select id="selectAllByWriterIdAndMenuNameWithPage" resultType="com.robi.foodiy.data.dao.MenusDao">
+            SELECT *
+            FROM menus
+            WHERE write_user_id = #{writerId} AND name LIKE '%${menuName}%'
+            LIMIT #{menuBgnIdx},#{menuPerPage}
+    </select>
     <insert id="insert" parameterType="com.robi.foodiy.data.dao.MenusDao" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO menus (write_user_id,record_id,name,pic_url,price,tags,score)
         VALUES (#{writeUserId},#{recordId},#{name},#{picUrl},#{price},#{tags},#{score});

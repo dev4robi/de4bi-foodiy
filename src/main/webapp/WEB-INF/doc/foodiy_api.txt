@@ -30,7 +30,7 @@
 +------------------------------------------------------------------------------------------------+
 | Access    : Public                                                                             |
 | Service   : id로 게시글 조회                                                                   |
-| URL       : /api/records/{id}                                                                      |
+| URL       : /api/records/{id}                                                                  |
 | Method    : GET                                                                                |
 | Cont-Type : application/json                                                                   |
 | ReqHeader : "user_jwt"(R)                                                                      |
@@ -50,12 +50,10 @@
 | Method    : POST                                                                               |
 | Cont-Type : multipart/file                                                                     |
 | ReqHeader : "user_jwt"(R)                                                                      |
-| ReqBody   : "title", "when_date:yyyyMMdd", "when_time:HHmmss",                                 |
-|             ("where_lati":float), ("where_longi":float), ("where_place"), ("who_with"),        |
-|             ("pics"),                                                                          |
-|             ("menus":[[menu_name,menu_price,menu_tags,menu_score,menu_pic_cnt],[...]],         |
-|              "menu_pics")                                                                      |
-|                                                                                                |
+| ReqBody   : "title", "when_date", "when_time",                                                 |
+|             ("where_lati"), ("where_longi"), "where_place", ("who_with"), ("pics":[x0~3]),     |
+|             ("menus:[{"menu_name",("menu_price"),("menu_tag"),"menu_score",},...]"),           |
+|             (menu_pics"[x0~6])                                                                 |
 | ResHeader : -                                                                                  |
 | ResBody   : -                                                                                  |
 | Comment   : 기록 추가 시, 메뉴까지 같이 추가됨.                                                |
@@ -68,9 +66,9 @@
 | Cont-Type : multipart/file                                                                     |
 | ReqHeader : "user_jwt"(R)                                                                      |
 | ReqBody   : "title", "when_date", "when_time",                                                 |
-|             ("where_lati"), ("where_longi"), "where_place", ("who_with"), ("pic_#"),           |
-|             "menu_name_*", ("menu_pic_*"), ("menu_price_*"), ("menu_tags_*"), "menu_socre_*"   |
-|             < * : 1~6 >, < # : 1~3 >                                                           |
+|             ("where_lati"), ("where_longi"), "where_place", ("who_with"), ("pics":[x0~3]),     |
+|             ("menus:[{"menu_name",("menu_price"),("menu_tag"),"menu_score",},...]"),           |
+|             (menu_pics"[x0~6])                                                                 |
 | ResHeader : -                                                                                  |
 | ResBody   : -                                                                                  |
 | Comment   : 기록 수정 시, 링크된 메뉴까지 같이 수정됨.                                         |
@@ -78,7 +76,7 @@
 +------------------------------------------------------------------------------------------------+
 | Access    : Public                                                                             |
 | Service   : 기록 삭제                                                                          |
-| URL       : /api/records/{id}                                                                      |
+| URL       : /api/records/{id}                                                                  |
 | Method    : DELETE                                                                             |
 | Cont-Type : application/json                                                                   |
 | ReqHeader : "user_jwt"(R)                                                                      |
@@ -87,4 +85,63 @@
 | ResBody   : -                                                                                  |
 | Comment   : 기록 삭제 시, 링크된 메뉴까지 같이 삭제됨.                                         |
 |                                                                                                |
++------------------------------------------------------------------------------------------------+
+
++------------------------------------------------------------------------------------------------+
+| > Category : menus API                                                                         |
++------------------------------------------------------------------------------------------------+
+| Access    : Public                                                                             |
+| Service   : 메뉴 조회 (페이지)                                                                 |
+| URL       : /api/menus/page/{pageIdx}                                                          |
+| Method    : GET                                                                                |
+| Cont-Type : application/json                                                                   |
+| ReqHeader : "user_jwt"(R)                                                                      |
+| ReqBody   : -                                                                                  |
+| ResHeader : -                                                                                  |
+| ResBody   : "result_data":[{id,record_id,name,pic_url,price,tags,score},...]                   |
+| Comment   : 최근 기록건 순으로 10개씩 조회.                                                    |
++------------------------------------------------------------------------------------------------+
+| Access    : Public                                                                             |
+| Service   : 메뉴 조회 (제목)                                                                   |
+| URL       : /api/menus/name/{menuName}/page/{pageIdx}                                          |
+| Method    : GET                                                                                |
+| Cont-Type : application/json                                                                   |
+| ReqHeader : "user_jwt"(R)                                                                      |
+| ReqBody   : -                                                                                  |
+| ResHeader : -                                                                                  |
+| ResBody   : "result_data":[{id,record_id,name,pic_url,price,tags,score},...]                   |
+| Comment   : {menuName}이 포함된 메뉴 10개씩 조회.                                              |
++------------------------------------------------------------------------------------------------+
+| Access    : Public                                                                             |
+| Service   : 메뉴 조회 (태그)                                                                   |
+| URL       : /api/menus/tag/{tag}/page/{pageIdx}                                                |
+| Method    : GET                                                                                |
+| Cont-Type : application/json                                                                   |
+| ReqHeader : "user_jwt"(R)                                                                      |
+| ReqBody   : -                                                                                  |
+| ResHeader : -                                                                                  |
+| ResBody   : "result_data":[{id,record_id,name,pic_url,price,tags,score},...]                   |
+| Comment   : {tag}가 포함된 메뉴 조회.                                                          |
++------------------------------------------------------------------------------------------------+
+| Access    : Public                                                                             |
+| Service   : 메뉴 조회 (장소)                                                                   |
+| URL       : /api/menus/place/{place}/page/{pageIdx}                                            |
+| Method    : GET                                                                                |
+| Cont-Type : application/json                                                                   |
+| ReqHeader : "user_jwt"(R)                                                                      |
+| ReqBody   : -                                                                                  |
+| ResHeader : -                                                                                  |
+| ResBody   : "result_data":[{id,record_id,name,pic_url,price,tags,score},...]                   |
+| Comment   : {place}가 포함된 메뉴 조회.                                                        |
++------------------------------------------------------------------------------------------------+
+| Access    : Public                                                                             |
+| Service   : 메뉴 조회 (누구랑)                                                                 |
+| URL       : /api/menus/whowith/{who}/page/{pageIdx}                                            |
+| Method    : GET                                                                                |
+| Cont-Type : application/json                                                                   |
+| ReqHeader : "user_jwt"(R)                                                                      |
+| ReqBody   : -                                                                                  |
+| ResHeader : -                                                                                  |
+| ResBody   : "result_data":[{id,record_id,name,pic_url,price,tags,score},...]                   |
+| Comment   : {who}가 포함된 메뉴 조회.                                                          |
 +------------------------------------------------------------------------------------------------+
