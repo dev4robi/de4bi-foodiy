@@ -14,22 +14,48 @@
         FROM menus
         WHERE record_id = #{recordId};
     </select>
-    <select id="selectAllByWriterIdWithPage" resultType="com.robi.foodiy.data.dao.MenusDao">
+    <select id="selectAllByWriterIdToPage" resultType="com.robi.foodiy.data.dao.MenusDao">
         SELECT *
         FROM menus
         WHERE write_user_id = #{writerId}
-        LIMIT #{menuBgnIdx},#{menuPerPage}
+        LIMIT #{menuBgnIdx},#{menuPerPage};
     </select>
-    <select id="selectAllByWriterIdAndMenuNameWithPage" resultType="com.robi.foodiy.data.dao.MenusDao">
-            SELECT *
-            FROM menus
-            WHERE write_user_id = #{writerId} AND name LIKE '%${menuName}%'
-            LIMIT #{menuBgnIdx},#{menuPerPage}
+    <select id="selectAllByWriterIdAndMenuNameToPage" resultType="com.robi.foodiy.data.dao.MenusDao">
+        SELECT *
+        FROM menus
+        WHERE write_user_id = #{writerId} AND name LIKE '%${menuName}%'
+        LIMIT #{menuBgnIdx},#{menuPerPage};
     </select>
+    <select id="selectAllByWriterIdAndTagToPage" resultType="com.robi.foodiy.data.dao.MenusDao">
+        SELECT *
+        FROM menus
+        WHERE write_user_id = #{writerId} AND tags LIKE '%${tag}%'
+        LIMIT #{menuBgnIdx},#{menuPerPage};
+    </select>
+    <select id="selectAllByWriterIdAndPlaceToPage" resultType="com.robi.foodiy.data.dao.MenusDao">
+        SELECT *
+        FROM menus
+        WHERE record_id IN (
+            SELECT DISTINCT id
+            FROM records
+            WHERE write_user_id = #{writerId} AND where_place LIKE '%${place}%')
+        LIMIT #{menuBgnIdx},#{menuPerPage};
+    </select>
+    <select id="selectAllByWriterIdAndWhoToPage" resultType="com.robi.foodiy.data.dao.MenusDao">
+        SELECT *
+        FROM menus
+        WHERE record_id IN (
+            SELECT DISTINCT id
+            FROM records
+            WHERE write_user_id = #{writerId} AND who_with LIKE '%${who}%')
+        LIMIT #{menuBgnIdx},#{menuPerPage};
+    </select>
+
     <insert id="insert" parameterType="com.robi.foodiy.data.dao.MenusDao" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO menus (write_user_id,record_id,name,pic_url,price,tags,score)
         VALUES (#{writeUserId},#{recordId},#{name},#{picUrl},#{price},#{tags},#{score});
     </insert>
+
     <update id="update" parameterType="com.robi.foodiy.data.dao.MenusDao">
         UPDATE menus
         SET (
@@ -43,6 +69,7 @@
         )
         WHERE id = #{id};
     </update>
+
     <delete id="deleteById" parameterType="Long">
         DELETE FROM menus
         WHERE id = #{id};

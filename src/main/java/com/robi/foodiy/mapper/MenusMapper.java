@@ -12,17 +12,30 @@ public interface MenusMapper {
 
     public MenusDao selectById(long id);
     public List<MenusDao> selectAllByRecordId(long recordId);
-    public List<MenusDao> selectAllByWriterIdWithPage(
+    public List<MenusDao> selectAllByWriterIdToPage(
         @Param("writerId")      long writerId,
         @Param("menuBgnIdx")    int menuBgnIdx,
         @Param("menuPerPage")   int menuPerPage);
-    public List<MenusDao> selectAllByWriterIdAndMenuNameWithPage(
+    public List<MenusDao> selectAllByWriterIdAndMenuNameToPage(
         @Param("writerId")      long writerId,
         @Param("menuName")      String menuName,
         @Param("menuBgnIdx")    int menuBgnIdx,
         @Param("menuPerPage")   int menuPerPage);
-
-        // 태그, 장소, 누구랑으로 조회 추가부터 계속... @@
+    public List<MenusDao> selectAllByWriterIdAndTagToPage(
+        @Param("writerId")      long writerId,
+        @Param("tag")           String tag,
+        @Param("menuBgnIdx")    int menuBgnIdx,
+        @Param("menuPerPage")   int menuPerPage);
+    public List<MenusDao> selectAllByWriterIdAndPlaceToPage(
+        @Param("writerId")      long writerId,
+        @Param("place")           String place,
+        @Param("menuBgnIdx")    int menuBgnIdx,
+        @Param("menuPerPage")   int menuPerPage);
+    public List<MenusDao> selectAllByWriterIdAndWhoToPage(
+        @Param("writerId")      long writerId,
+        @Param("who")           String who,
+        @Param("menuBgnIdx")    int menuBgnIdx,
+        @Param("menuPerPage")   int menuPerPage);
 
     public void insert(MenusDao recordDao);
 

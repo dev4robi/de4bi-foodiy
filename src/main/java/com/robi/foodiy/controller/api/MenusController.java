@@ -38,4 +38,31 @@ public class MenusController {
     {
         return menusSvc.getMenusByMenuName(userJwt, menuName, pageIdx);
     }
+
+    @GetMapping("/menus/tag/{tag}/page/{pageIdx}")
+    public ApiResult getMenusByTag(
+        @RequestHeader ("user_jwt") String userJwt,
+        @PathVariable ("tag")       String tag,
+        @PathVariable ("pageIdx")   int pageIdx)
+    {
+        return menusSvc.getMenusByTag(userJwt, tag, pageIdx);
+    }
+
+    @GetMapping("/menus/place/{place}/page/{pageIdx}")
+    public ApiResult getMenusByPlace(
+        @RequestHeader ("user_jwt") String userJwt,
+        @PathVariable ("place")     String place,
+        @PathVariable ("pageIdx")   int pageIdx)
+    {
+        return menusSvc.getMenusByPlace(userJwt, place, pageIdx);
+    }
+
+    @GetMapping("/menus/who/{who}/page/{pageIdx}")
+    public ApiResult getMenusByWho(
+        @RequestHeader ("user_jwt") String userJwt,
+        @PathVariable ("who")       String who,
+        @PathVariable ("pageIdx")   int pageIdx)
+    {
+        return menusSvc.getMenusByWho(userJwt, who, pageIdx);
+    }
 }

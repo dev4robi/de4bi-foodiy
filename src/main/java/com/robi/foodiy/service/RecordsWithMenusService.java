@@ -186,7 +186,7 @@ public class RecordsWithMenusService {
         // 기록 이미지 저장
         StringBuilder fileUrlSb = new StringBuilder(256);
         MultipartFile[] recordsPic = recordsDto.getPics();
-        String rFileDir = env.getProperty("foodiy.records.img.basedir") + "/records";
+        String rFileDir = env.getProperty("foodiy.records.img.basedir");
         Calendar todayCal = Calendar.getInstance();
         final String filePrefix = new SimpleDateFormat("yyyyMMdd").format(todayCal.getTime());
         
@@ -253,7 +253,7 @@ public class RecordsWithMenusService {
             PostMenusDto menusDto = menusDtoAry[menuIdx];
             fileUrlSb.setLength(0);
             MultipartFile[] menusPic = menusDto.getMenuPics();
-            String mFileDir = env.getProperty("foodiy.records.img.basedir") + "/menus";
+            String mFileDir = env.getProperty("foodiy.records.img.basedir");
             
             for (int mPicIdx = 0; mPicIdx < menusPic.length; ++mPicIdx) {
                 try {
