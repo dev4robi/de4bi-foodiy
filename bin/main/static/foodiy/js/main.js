@@ -47,25 +47,25 @@ function onTabClick(id) {
     if (id == 'record') {
         iframe_tag = $('#iframe_record');
         if (!iframe_tag.attr('src')) {
-            iframe_tag.attr('src', recordPageUrl);
+            iframe_tag.attr('src', g_recordPageUrl);
         }
     }
     else if (id == 'search') {
         iframe_tag = $('#iframe_search');
         if (!iframe_tag.attr('src')) {
-            iframe_tag.attr('src', searchPageUrl);
+            iframe_tag.attr('src', g_searchPageUrl);
         }
     }
     else if (id == 'map') {
         iframe_tag = $('#iframe_map');
         if (!iframe_tag.attr('src')) {
-            iframe_tag.attr('src', mapPageUrl);
+            iframe_tag.attr('src', g_mapPageUrl);
         }
     }
     else if (id == 'stat') {
         iframe_tag = $('#iframe_stat');
         if (!iframe_tag.attr('src')) {
-            iframe_tag.attr('src', statPageUrl);
+            iframe_tag.attr('src', g_statPageUrl);
         }
     }
 }

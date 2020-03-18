@@ -518,7 +518,7 @@ function onClickUploadRecord() {
                 'user_jwt' : '-CkcWpJaYYF5ThH0UkXadT8b6AOTQQH3-6BC9kjjGTqQCYj4TRbjpye3AJJKUL9ZLowwVkA8bgs6u8YVQjPeGtNXoOqMcXKWkmQsFRJIG-xp4GD9maPe5iEuF2nWs27AHvXAskMVkMFE8WqVPZqSDFuyTJcEGlEqWDc7-Yhn7mxvRf2roCLLJXvZFYgBPmwGGz4xr_sa9RxjPIR7kdyIpPIz2sVLGzeYHDbChJNX2zWX-utaZblUH979uXmgMfcbKDZ9GJhxQxXwc1oOhOLBqyX-sBF5Yy7nOTf8R3G9Nu1wFUWj3Ur6IdoVon_Uua9FNkUiOqO-ob7jAQCoDuJj5HH2DFC6EfwTXW1jRAUTg4PYIdZ75jwWX3hSaz76Let_'
             };
             
-            AJAX.mpApiCall('POST', recordApiUrl, reqHeader, mpForm, null, recordSuccess, recordFail);
+            AJAX.mpApiCall('POST', g_recordApiUrl, reqHeader, mpForm, null, recordSuccess, recordFail);
         }
         else {
             alert('기록이 취소되었습니다.');

@@ -28,21 +28,21 @@
 		<!-- 검색 -->
 		<div class="col-12 pt-4" id="div_search">
 			<span><i class="fas fa-check-square fa-sm fa-pull-left"></i><b>검색</b></span>
-			<div class="btn-group btn-group-toggle w-100" data-toggle="buttons">
+			<div class="btn-group btn-group-toggle w-100" data-toggle="buttons" id="div_search_condtion">
 				<label class="btn btn-info active">
-					<input type="radio" name="options" id="input_search_by_page">최근
+					<input type="radio" name="options" value="page">최근
 				</label>	
 				<label class="btn btn-info">
-					<input type="radio" name="options" id="input_search_by_title">제목
+					<input type="radio" name="options" value="name">제목
 				</label>
 				<label class="btn btn-info">
-					<input type="radio" name="options" id="input_search_by_tag">태그
+					<input type="radio" name="options" value="tag">태그
 				</label>
 				<label class="btn btn-info">
-					<input type="radio" name="options" id="input_search_by_place">장소
+					<input type="radio" name="options" value="place">장소
 				</label>
 				<label class="btn btn-info">
-					<input type="radio" name="options" id="input_search_by_who">누구랑
+					<input type="radio" name="options" value="who">누구랑
 				</label>
 			</div>
 			<div>
@@ -56,13 +56,18 @@
 		<!-- 결과(메뉴) -->
 		<div class="col-12 pt-4" id="div_search_result">
 			<span><i class="fas fa-list fa-sm fa-pull-left"></i><b id="b_title_menu_result">결과(0)</b></span>
-			<div class="d-flex flex-wrap" id="div_menu_list">
+			<div class="text-center pt-3 d-none" id="div_menu_loading">
+				<div class="spinner-border text-primary" role="status" style="width:5rem;height:5rem;">
+  				<span class="sr-only">Loading...</span>
+			</div>
+			<div class="d-flex flex-wrap d-none" id="div_menu_list">
 				<!-- 여기에 검색결과 추가... -->
 			</div>
 		</div>
 		<!-- 결과(기록) -->
 		<div class="col-12 pt-4 d-none">
 			<span><i class="fas fa-list fa-sm fa-pull-left"></i><b>상세</b></span>
+
 		</div>
 	</div>
 </body>
