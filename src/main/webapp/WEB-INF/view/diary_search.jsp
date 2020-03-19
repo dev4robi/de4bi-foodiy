@@ -21,6 +21,7 @@
 	<!-- common.js -->
 	<script type="text/javascript" src="/common/js/common.js?ver=<%=System.currentTimeMillis()%>"></script>
 	<!-- diary_search.js -->
+	<script type="text/javascript" src="/foodiy/js/common.js?ver=<%=System.currentTimeMillis()%>"></script>
 	<script type="text/javascript" src="/foodiy/js/diary_search.js?ver=<%=System.currentTimeMillis()%>"></script>
 </head>
 <body class="container-fluid">
@@ -33,7 +34,7 @@
 					<input type="radio" name="options" value="page">최근
 				</label>	
 				<label class="btn btn-info">
-					<input type="radio" name="options" value="name">제목
+					<input type="radio" name="options" value="name">메뉴
 				</label>
 				<label class="btn btn-info">
 					<input type="radio" name="options" value="tag">태그
@@ -58,17 +59,37 @@
 			<span><i class="fas fa-list fa-sm fa-pull-left"></i><b id="b_title_menu_result">결과(0)</b></span>
 			<div class="text-center pt-3 d-none" id="div_menu_loading">
 				<div class="spinner-border text-primary" role="status" style="width:5rem;height:5rem;">
-  				<span class="sr-only">Loading...</span>
+  					<span class="sr-only">Loading...</span>
+				</div>
 			</div>
 			<div class="d-flex flex-wrap d-none" id="div_menu_list">
 				<!-- 여기에 검색결과 추가... -->
 			</div>
 		</div>
-		<!-- 결과(기록) -->
-		<div class="col-12 pt-4 d-none">
-			<span><i class="fas fa-list fa-sm fa-pull-left"></i><b>상세</b></span>
-
+		<!-- 결과 모달(기록) -->
+		<button type="button" class="btn btn-primary d-none" data-toggle="modal" data-target="#div_modal_result" id="btn_show_modal_result"></button>
+		<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="h5_modal_title" aria-hidden="true" id="div_modal_result">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="h5_modal_title">메뉴제목 </h5>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<div class="modal-body">
+						// 여기부터 시작... 디자인 아이디어!
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+						<button type="button" class="btn btn-primary">Save changes</button>
+					</div>
+				</div>
+			</div>
 		</div>
 	</div>
 </body>
+<script>
+$('#btn_show_modal_result').trigger('click');
+</script>
 </html>

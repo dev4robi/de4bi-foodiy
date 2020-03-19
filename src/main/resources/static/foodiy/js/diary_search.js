@@ -51,33 +51,87 @@ function onClickSearchBtn() {
         return;
     }
 
+    // 기존 검색결과 지움
+    removeMenuCards();
+
+    // 검색버튼 비활성화
     $('#btn_search').attr('disabled', true);
     $('#div_menu_loading').removeClass('d-none');
 
-    searchApi();
-
-    $('#div_menu_loading').addClass('d-none');
-    $('#btn_search').attr('disabled', false);
+    // 검색버튼으로 검색 시 항상 0번 페이지부터 검색
+    g_search_page_idx = 0;
+    callSearchApi();
 }
 
 // 검색
-function searchApi() {
+function callSearchApi() {
     var searchCondition = $('input[name="options"]:checked').val();
     var searchKeyword = $('#input_search_keyword').val();
-    var apiUrl = searchApiUrl;    
+    var apiUrl = g_searchApiUrl;
 
     if (searchCondition == 'page') {
         apiUrl += ('/page/' + g_search_page_idx);
     }
     else {
-        apiUrl += (searchKeyword + '/' + searchCondition + '/page/' + g_search_page_idx);
+        apiUrl += ('/' + searchCondition + '/' + searchKeyword + '/page/' + g_search_page_idx);
     }
 
-    // API 콜 하는 부분부터 계속... @@
+    var reqHead = {'user_jwt' : g_user_jwt};
+
+    AJAX.apiCall('GET', apiUrl, reqHead, null, null, successSearchApi, failSearchApi);
+}
+
+// 검색 성공
+function successSearchApi(data, textStatus, jqXHR) {
+    if (AJAX.checkResultSuccess(data)) {
+        var resultDatas = data.result_data;
+
+        if (!resultDatas) {
+            alert('비정상 응답!(' + data.result_msg + ')');
+            activeSearchBtn();
+        }
+
+        var menuDataAry = resultDatas.selectedMenusList;
+
+        if (!menuDataAry || menuDataAry.length == 0) {
+            alert('조회 결과가 없습니다.');
+            activeSearchBtn();
+        }
+
+        for (i = 0; i < menuDataAry.length; ++i) {
+            var menuData = menuDataAry[i];
+            var menuId = menuData.id;
+            var imgUrl = menuData.picUrl;
+            var name = menuData.name;
+            var score = menuData.score;
+            addMenuCard(menuId, imgUrl, name, score);
+        }
+
+        $('#b_title_menu_result').html('결과(' + menuDataAry.length + ')');
+        $('#div_menu_list').removeClass('d-none');
+        activeSearchBtn();
+    }
+    else {
+        alert('검색 실패!\n(' + data.result_msg + ')');
+        activeSearchBtn();
+        return;
+    }
+}
+
+// 검색 실패
+function failSearchApi(data) {
+    alert('서버와 통신에 실패했습니다!');
+    activeSearchBtn();
+}
+
+// 검색 버튼 활성화
+function activeSearchBtn() {
+    $('#div_menu_loading').addClass('d-none');
+    $('#btn_search').attr('disabled', false);
 }
 
 // 메뉴카드 추가
-function addMenuCard(menu_id, img, title, score) {
+function addMenuCard(menu_id, img, name, score) {
     var div_menu_list = $('#div_menu_list');
 
     if (div_menu_list.length == 0) {
@@ -89,12 +143,12 @@ function addMenuCard(menu_id, img, title, score) {
     var div_card_tag = $(
         '<div style="width:50%" class="embed-responsive embed-responsive-4by3 shadow-sm rounded p-1">' +
             '<input type="hidden" value="' + menu_id + '" id="input_menu_id">' +
-            '<img src="' + img + '" class="embed-responsive-item" alt="사진 불러오기 실패!" onclick="onClickMenu(this)">' +
-            '<span class="badge badge-' + score_color_ary[score] + ' sticky-top">' + title + '</span>' +
+            '<img src="' + g_imgApiUrl + '/' + img + '" class="embed-responsive-item" alt="사진 불러오기 실패!" onclick="onClickMenu(this)">' +
+            '<span class="badge badge-' + score_color_ary[score] + ' sticky-top">' + name + '</span>' +
         '</div>');
 
     div_menu_list.append(div_card_tag);
-    div_card_tag.fadeOut(1, function() {div_card_tag.fadeIn(2000);});
+    div_card_tag.fadeOut(1, function() {div_card_tag.fadeIn(1500);});
 }
 
 // 메뉴카드 모두 제거

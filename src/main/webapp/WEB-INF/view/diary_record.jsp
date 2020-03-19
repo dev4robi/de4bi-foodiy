@@ -147,8 +147,9 @@
 			<button class="btn-sm btn-primary w-100" id="btn_add_menu"><i class="far fa-plus-square fa-lg"></i>&nbsp;메뉴 추가</button>
 		</div>
 	</div>
+	<hr>
 	<!-- 초기화/맨위로 버튼 -->
-	<div class="row pt-4 pb-1 no-gutters">
+	<div class="row pb-1 no-gutters">
 		<div class="col-5">
 			<button class="btn-sm btn-danger w-100" id="btn_init_record"><i class="fas fa-eraser"></i>&nbsp;초기화</button>
 		</div>

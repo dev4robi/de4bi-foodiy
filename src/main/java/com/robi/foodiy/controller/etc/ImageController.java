@@ -40,6 +40,6 @@ public class ImageController {
             logger.error("Exception!", e);
         }
 
-        return null;
+        return rtByte;
     }
 }
