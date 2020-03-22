@@ -21,6 +21,7 @@
 	<!-- common.js -->
 	<script type="text/javascript" src="/common/js/common.js?ver=<%=System.currentTimeMillis()%>"></script>
 	<!-- diary_search.js -->
+	<link rel="stylesheet" href="/foodiy/css/star-rating.css">
 	<script type="text/javascript" src="/foodiy/js/common.js?ver=<%=System.currentTimeMillis()%>"></script>
 	<script type="text/javascript" src="/foodiy/js/diary_search.js?ver=<%=System.currentTimeMillis()%>"></script>
 </head>
@@ -78,7 +79,36 @@
 						</button>
 					</div>
 					<div class="modal-body">
-						// 여기부터 시작... 디자인 아이디어!
+						<img src="/foodiy/img/foodiy_logo.png" class="card-img-top shadow-sm rounded" alt="사진 불러오기 실패!" onclick="onClickPicture()" id="">
+						<div class="custom-file mb-3 d-none">
+							<input type="file" class="custom-file-input" onchange="onChangePicture()" id="" accept="image/*">
+            				<label class="custom-file-label"></label>
+            			</div>
+						<div class="form-group">
+							<div class="d-flex align-content-end flex-wrap pt-1" id="">
+								<!-- 여기에 배지태그 추가... -->
+								<div class="pr-1 pb-1" id="div_menu_tag"><span class="badge badge-primary" value="" id="">#태그<i class="fas fa-times fa-sm fa-pull-right" onclick="onClickCloseMenuTag(this)"></i></span></div>
+								<div class="pr-1 pb-1" id="div_menu_tag"><span class="badge badge-primary" value="" id="">#태그<i class="fas fa-times fa-sm fa-pull-right" onclick="onClickCloseMenuTag(this)"></i></span></div>
+								<div class="pr-1 pb-1" id="div_menu_tag"><span class="badge badge-primary" value="" id="">#태그<i class="fas fa-times fa-sm fa-pull-right" onclick="onClickCloseMenuTag(this)"></i></span></div>
+								<div class="pr-1 pb-1" id="div_menu_tag"><span class="badge badge-primary" value="" id="">#태그<i class="fas fa-times fa-sm fa-pull-right" onclick="onClickCloseMenuTag(this)"></i></span></div>
+								<div class="pr-1 pb-1" id="div_menu_tag"><span class="badge badge-primary" value="" id="">#태그<i class="fas fa-times fa-sm fa-pull-right" onclick="onClickCloseMenuTag(this)"></i></span></div>
+								<div class="pr-1 pb-1" id="div_menu_tag"><span class="badge badge-primary" value="" id="">#태그<i class="fas fa-times fa-sm fa-pull-right" onclick="onClickCloseMenuTag(this)"></i></span></div>
+								<div class="pr-1 pb-1" id="div_menu_tag"><span class="badge badge-primary" value="" id="">#태그<i class="fas fa-times fa-sm fa-pull-right" onclick="onClickCloseMenuTag(this)"></i></span></div>
+								<div class="pr-1 pb-1" id="div_menu_tag"><span class="badge badge-primary" value="" id="">#태그<i class="fas fa-times fa-sm fa-pull-right" onclick="onClickCloseMenuTag(this)"></i></span></div>
+								<div class="pr-1 pb-1" id="div_menu_tag"><span class="badge badge-primary" value="" id="">#태그<i class="fas fa-times fa-sm fa-pull-right" onclick="onClickCloseMenuTag(this)"></i></span></div>
+								<div class="pr-1 pb-1" id="div_menu_tag"><span class="badge badge-primary" value="" id="">#태그<i class="fas fa-times fa-sm fa-pull-right" onclick="onClickCloseMenuTag(this)"></i></span></div>
+							</div>
+							<div class="starrating risingstar d-flex justify-content-center flex-row-reverse">
+								<input type="radio" id="input_star5_' + menuCardIdx + '" name="rating_' + menuCardIdx + '" value="5" />       <label for="input_star5_' + menuCardIdx + '"title="5Star">5&nbsp;&nbsp;&nbsp;</label>
+								<input type="radio" id="input_star4_' + menuCardIdx + '" name="rating_' + menuCardIdx + '" value="4" />       <label for="input_star4_' + menuCardIdx + '"title="4Star">4&nbsp;&nbsp;&nbsp;</label>
+								<input type="radio" id="input_star3_' + menuCardIdx + '" name="rating_' + menuCardIdx + '" value="3" checked/><label for="input_star3_' + menuCardIdx + '"title="3Star">3&nbsp;&nbsp;&nbsp;</label>
+								<input type="radio" id="input_star2_' + menuCardIdx + '" name="rating_' + menuCardIdx + '" value="2" />       <label for="input_star2_' + menuCardIdx + '"title="2Star">2&nbsp;&nbsp;&nbsp;</label>
+								<input type="radio" id="input_star1_' + menuCardIdx + '" name="rating_' + menuCardIdx + '" value="1" />       <label for="input_star1_' + menuCardIdx + '"title="1Star">1&nbsp;&nbsp;&nbsp;</label>
+							</div>
+							<div>
+								<span>10000￦</span>
+							</div>
+						</div>
 					</div>
 					<div class="modal-footer">
 						<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
