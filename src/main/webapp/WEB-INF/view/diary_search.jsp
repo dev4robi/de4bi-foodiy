@@ -73,46 +73,65 @@
 			<div class="modal-dialog" role="document">
 				<div class="modal-content">
 					<div class="modal-header">
-						<h5 class="modal-title" id="h5_modal_title">메뉴제목 </h5>
-						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-						<span aria-hidden="true">&times;</span>
-						</button>
+						<h5 class="modal-title" id="h5_modal_title">메뉴 제목</h5>
+						<div class="text-right">
+							<!-- 삭제 버튼 -->
+							<button type="button" class="btn" onclick="alert('del')"><i class="far fa-trash-alt"></i></button>
+							<!-- 수정 버튼 -->
+							<button type="button" class="btn" onclick="alert('mod')"><i class="fas fa-edit"></i></button>
+							<!-- 닫기 버튼 -->
+							<button type="button" class="close" data-dismiss="modal" aria-label=""><span aria-hidden="true">&times;</span></button>
+						</div>
 					</div>
 					<div class="modal-body">
-						<img src="/foodiy/img/foodiy_logo.png" class="card-img-top shadow-sm rounded" alt="사진 불러오기 실패!" onclick="onClickPicture()" id="">
-						<div class="custom-file mb-3 d-none">
-							<input type="file" class="custom-file-input" onchange="onChangePicture()" id="" accept="image/*">
-            				<label class="custom-file-label"></label>
-            			</div>
-						<div class="form-group">
-							<div class="d-flex align-content-end flex-wrap pt-1" id="">
-								<!-- 여기에 배지태그 추가... -->
-								<div class="pr-1 pb-1" id="div_menu_tag"><span class="badge badge-primary" value="" id="">#태그<i class="fas fa-times fa-sm fa-pull-right" onclick="onClickCloseMenuTag(this)"></i></span></div>
-								<div class="pr-1 pb-1" id="div_menu_tag"><span class="badge badge-primary" value="" id="">#태그<i class="fas fa-times fa-sm fa-pull-right" onclick="onClickCloseMenuTag(this)"></i></span></div>
-								<div class="pr-1 pb-1" id="div_menu_tag"><span class="badge badge-primary" value="" id="">#태그<i class="fas fa-times fa-sm fa-pull-right" onclick="onClickCloseMenuTag(this)"></i></span></div>
-								<div class="pr-1 pb-1" id="div_menu_tag"><span class="badge badge-primary" value="" id="">#태그<i class="fas fa-times fa-sm fa-pull-right" onclick="onClickCloseMenuTag(this)"></i></span></div>
-								<div class="pr-1 pb-1" id="div_menu_tag"><span class="badge badge-primary" value="" id="">#태그<i class="fas fa-times fa-sm fa-pull-right" onclick="onClickCloseMenuTag(this)"></i></span></div>
-								<div class="pr-1 pb-1" id="div_menu_tag"><span class="badge badge-primary" value="" id="">#태그<i class="fas fa-times fa-sm fa-pull-right" onclick="onClickCloseMenuTag(this)"></i></span></div>
-								<div class="pr-1 pb-1" id="div_menu_tag"><span class="badge badge-primary" value="" id="">#태그<i class="fas fa-times fa-sm fa-pull-right" onclick="onClickCloseMenuTag(this)"></i></span></div>
-								<div class="pr-1 pb-1" id="div_menu_tag"><span class="badge badge-primary" value="" id="">#태그<i class="fas fa-times fa-sm fa-pull-right" onclick="onClickCloseMenuTag(this)"></i></span></div>
-								<div class="pr-1 pb-1" id="div_menu_tag"><span class="badge badge-primary" value="" id="">#태그<i class="fas fa-times fa-sm fa-pull-right" onclick="onClickCloseMenuTag(this)"></i></span></div>
-								<div class="pr-1 pb-1" id="div_menu_tag"><span class="badge badge-primary" value="" id="">#태그<i class="fas fa-times fa-sm fa-pull-right" onclick="onClickCloseMenuTag(this)"></i></span></div>
+						<div class="row"><div class="col-12">
+							<img src="/foodiy/img/foodiy_logo.png" class="card-img-top shadow-sm rounded" alt="사진 불러오기 실패!" onclick="onClickPicture()" id="">
+							<div class="custom-file mb-3 d-none">
+								<input type="file" class="custom-file-input" onchange="onChangePicture()" id="" accept="image/*">
+								<label class="custom-file-label"></label>
 							</div>
-							<div class="starrating risingstar d-flex justify-content-center flex-row-reverse">
-								<input type="radio" id="input_star5_' + menuCardIdx + '" name="rating_' + menuCardIdx + '" value="5" />       <label for="input_star5_' + menuCardIdx + '"title="5Star">5&nbsp;&nbsp;&nbsp;</label>
-								<input type="radio" id="input_star4_' + menuCardIdx + '" name="rating_' + menuCardIdx + '" value="4" />       <label for="input_star4_' + menuCardIdx + '"title="4Star">4&nbsp;&nbsp;&nbsp;</label>
-								<input type="radio" id="input_star3_' + menuCardIdx + '" name="rating_' + menuCardIdx + '" value="3" checked/><label for="input_star3_' + menuCardIdx + '"title="3Star">3&nbsp;&nbsp;&nbsp;</label>
-								<input type="radio" id="input_star2_' + menuCardIdx + '" name="rating_' + menuCardIdx + '" value="2" />       <label for="input_star2_' + menuCardIdx + '"title="2Star">2&nbsp;&nbsp;&nbsp;</label>
-								<input type="radio" id="input_star1_' + menuCardIdx + '" name="rating_' + menuCardIdx + '" value="1" />       <label for="input_star1_' + menuCardIdx + '"title="1Star">1&nbsp;&nbsp;&nbsp;</label>
+						</div></div>
+						<div class="row pt-3"><div class="col-12">
+							<div class="form-group">
+								<div class="d-flex align-content-end flex-wrap pt-1" id="div_tag_list">
+									<!-- 여기에 배지태그 추가... -->
+									<div class="pr-1 pb-1" id="div_menu_tag"><span class="badge badge-primary" value="" id="">#태그<i class="fas fa-times fa-sm fa-pull-right d-none" onclick="onClickCloseMenuTag(this)"></i></span></div>
+									<div class="pr-1 pb-1" id="div_menu_tag"><span class="badge badge-primary" value="" id="">#태그<i class="fas fa-times fa-sm fa-pull-right d-none" onclick="onClickCloseMenuTag(this)"></i></span></div>
+									<div class="pr-1 pb-1" id="div_menu_tag"><span class="badge badge-primary" value="" id="">#태그<i class="fas fa-times fa-sm fa-pull-right d-none" onclick="onClickCloseMenuTag(this)"></i></span></div>
+									<div class="pr-1 pb-1" id="div_menu_tag"><span class="badge badge-primary" value="" id="">#태그<i class="fas fa-times fa-sm fa-pull-right d-none" onclick="onClickCloseMenuTag(this)"></i></span></div>
+									<div class="pr-1 pb-1" id="div_menu_tag"><span class="badge badge-primary" value="" id="">#태그<i class="fas fa-times fa-sm fa-pull-right d-none" onclick="onClickCloseMenuTag(this)"></i></span></div>
+									<div class="pr-1 pb-1" id="div_menu_tag"><span class="badge badge-primary" value="" id="">#태그<i class="fas fa-times fa-sm fa-pull-right d-none" onclick="onClickCloseMenuTag(this)"></i></span></div>
+									<div class="pr-1 pb-1" id="div_menu_tag"><span class="badge badge-primary" value="" id="">#태그<i class="fas fa-times fa-sm fa-pull-right d-none" onclick="onClickCloseMenuTag(this)"></i></span></div>
+									<div class="pr-1 pb-1" id="div_menu_tag"><span class="badge badge-primary" value="" id="">#태그<i class="fas fa-times fa-sm fa-pull-right d-none" onclick="onClickCloseMenuTag(this)"></i></span></div>
+									<div class="pr-1 pb-1" id="div_menu_tag"><span class="badge badge-primary" value="" id="">#태그<i class="fas fa-times fa-sm fa-pull-right d-none" onclick="onClickCloseMenuTag(this)"></i></span></div>
+									<div class="pr-1 pb-1" id="div_menu_tag"><span class="badge badge-primary" value="" id="">#태그<i class="fas fa-times fa-sm fa-pull-right d-none" onclick="onClickCloseMenuTag(this)"></i></span></div>
+								</div>
+								<div class="input-group pt-1 d-none" id="div_modify_tags">
+									<input type="text" class="form-control" id="input_who_with"/>
+									<button class="btn btn-outline-secondary" type="button" id="btn_add_person"">추가</button>
+								</div>
 							</div>
-							<div>
-								<span>10000￦</span>
+						</div></div>
+						<div class="row justify-content-around pt-1">
+							<div class="col-5 align-self-center text-center shadow-sm rounded">
+								<label style="font-size: 1rem; font-weight: bold">점수</label><br>
+								<div class="starrating risingstar d-flex justify-content-center flex-row-reverse" id="div_scores">
+									<input type="radio" id="input_star5" name="rating" value="5"/><label for="input_star5" title="5Star"></label>
+									<input type="radio" id="input_star4" name="rating" value="4"/><label for="input_star4" title="4Star"></label>
+									<input type="radio" id="input_star3" name="rating" value="3"/><label for="input_star3" title="3Star"></label>
+									<input type="radio" id="input_star2" name="rating" value="2"/><label for="input_star2" title="2Star"></label>
+									<input type="radio" id="input_star1" name="rating" value="1"/><label for="input_star1" title="1Star"></label>
+								</div>
+							</div>
+							<div class="col-5 align-self-center text-center shadow-sm rounded">
+								<label style="font-size: 1rem; font-weight: bold">금액</label><br>
+								<input type="number" class="form-control d-none" id="input_modify_price"/>
+								<span style="font-size: 1.5rem" id="span_price">10,000￦</span>
 							</div>
 						</div>
 					</div>
 					<div class="modal-footer">
-						<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-						<button type="button" class="btn btn-primary">Save changes</button>
+						<button type="button" class="btn btn-warning w-100" onclick="">기록 보기</button>
 					</div>
 				</div>
 			</div>
