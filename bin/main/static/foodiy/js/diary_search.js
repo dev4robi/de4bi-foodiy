@@ -1,5 +1,7 @@
 // 페이지 전역
 var g_search_page_idx = 0;
+var g_menu_map = new Map();
+var g_pic_map = new Map();
 
 // 페이지 초기화
 $(document).ready(function(){
@@ -104,6 +106,17 @@ function successSearchApi(data, textStatus, jqXHR) {
             var imgUrl = menuData.picUrl;
             var name = menuData.name;
             var score = menuData.score;
+            var tags = menuData.tags;
+            var price = menuData.price;
+            var menu = {
+                "img_url" : imgUrl,
+                "name" : name,
+                "score" : score,
+                "tags" : tags,
+                "price" : price
+            };
+
+            g_menu_map.set(menuId, menu);
             addMenuCard(menuId, imgUrl, name, score);
         }
 
@@ -143,7 +156,7 @@ function addMenuCard(menu_id, img, name, score) {
     var div_card_tag = $(
         '<div style="width:50%" class="embed-responsive embed-responsive-4by3 shadow-sm rounded p-1">' +
             '<input type="hidden" value="' + menu_id + '" id="input_menu_id">' +
-            '<img src="' + g_imgApiUrl + '/' + img + '" class="embed-responsive-item" alt="사진 불러오기 실패!" onclick="onClickMenu(this)">' +
+            '<img src="' + g_imgApiUrl + '/' + img + '" class="embed-responsive-item" alt="사진 불러오기 실패!" onclick="onClickMenuCard(' + menu_id + ')">' +
             '<span class="badge badge-' + score_color_ary[score] + ' sticky-top">' + name + '</span>' +
         '</div>');
 
@@ -160,4 +173,118 @@ function removeMenuCards() {
     }
 
     div_menu_list.empty();
+}
+
+// 메뉴카드 선택
+function onClickMenuCard(menuId) {
+    // UI 초기화
+    onClickModifyMenuCard(false);
+
+    // 캐싱데이터 획득
+    var menu = g_menu_map.get(menuId);
+
+    if (!menu) {
+        alert('메뉴 정보를 찾지 못했습니다.');
+        return;
+    }
+    
+    // 이미지
+    $('#img_menu').attr('src', g_imgApiUrl + '/' + menu.img_url); // 여기부터 시작.
+
+    // 제목
+    $('#h5_modal_title').html(menu.name);
+    
+    // 태그
+    var tags = menu.tags;
+    var tagSplit = tags.split('`');
+    var div_tag_list = $('#div_tag_list');
+    div_tag_list.empty();
+
+    for (i = 0; i < tagSplit.length; ++i) {
+        try {
+            var tag = '<div class="pr-1 pb-1" id="div_menu_tag"><span class="badge badge-primary" value="' + tagSplit[i] + '" id="">#'+ tagSplit[i] + '<i class="fas fa-times fa-sm fa-pull-right tags d-none" onclick="onClickCloseMenuTag(this)"></i></span></div>';
+            div_tag_list.append(tag);
+        }
+        catch (e) {
+            console.log(e);
+        }
+    }    
+    
+    // 점수
+    $('#input_star' + menu.score).attr('checked', true);
+
+    // 금액
+    $('#span_price').html(numberWithCommas(menu.price) + '￦');
+
+    // 모달 출력
+    $('#btn_show_modal_result').trigger('click');
+}
+
+// 메뉴카드 수정 선택
+function onClickModifyMenuCard(isModify) {
+    // 이미지 편집 활성화
+    if (isModify) {
+        $('#img_menu').attr('onclick', 'onClickPicture()');
+    }
+    else {
+        $('#img_menu').attr('onclick', '');
+    }
+
+    // 태그추가 인풋 표시
+    if (isModify) {
+        $('#input_who_with').removeClass('d-none');
+    }
+    else {
+        $('#input_who_with').addClass('d-none');
+    }
+
+    // 점수변경 활성화
+    var div_score_labels = $('#div_scores').find('label');
+
+    if (isModify) {
+        div_score_labels.each(function(idx, item){
+            $(item).attr('for', ('input_star' + (5 - idx)));
+        });
+    }
+    else {
+        div_score_labels.each(function(idx, item){
+            $(item).attr('for', ('input_starN'));
+        });
+    }
+
+    // 태그삭제 버튼들 표시
+    var div_tag_badges = $('#div_tag_list').find('.tags');
+
+    // 여기부터 시작... 왜 버튼들이 갑자기 jquery안먹지? @@
+
+    if (isModify) {
+        div_tag_badges.each(function(idx, item){
+            $(item).removeClass('d-none');
+        });
+    }
+    else {
+        div_tag_badges.each(function(idx, item){
+            $(item).addClass('d-none');
+        });
+    }
+
+    // 금액수정 버튼 표시, 금액 숨기기
+    if (isModify) {
+        $('#input_modify_price').removeClass('d-none');
+        $('#span_price').addClass('d-none');
+    }
+    else {
+        $('#input_modify_price').addClass('d-none');
+        $('#span_price').removeClass('d-none');
+    }
+
+    // 기록보기 버튼 숨기기, 수정내용 저장버튼 활성
+    if (isModify) {
+        $('#btn_search_record').addClass('d-none');
+        $('#btn_update_menu').removeClass('d-none');
+    }
+    else {
+        $('#btn_search_record').removeClass('d-none');
+        $('#btn_update_menu').addClass('d-none');
+    }
 }

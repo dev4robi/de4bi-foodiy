@@ -78,14 +78,14 @@
 							<!-- 삭제 버튼 -->
 							<button type="button" class="btn" onclick="alert('del')"><i class="far fa-trash-alt"></i></button>
 							<!-- 수정 버튼 -->
-							<button type="button" class="btn" onclick="alert('mod')"><i class="fas fa-edit"></i></button>
+							<button type="button" class="btn" onclick="onClickModifyMenuCard()"><i class="fas fa-edit"></i></button>
 							<!-- 닫기 버튼 -->
 							<button type="button" class="close" data-dismiss="modal" aria-label=""><span aria-hidden="true">&times;</span></button>
 						</div>
 					</div>
 					<div class="modal-body">
 						<div class="row"><div class="col-12">
-							<img src="/foodiy/img/foodiy_logo.png" class="card-img-top shadow-sm rounded" alt="사진 불러오기 실패!" onclick="onClickPicture()" id="">
+							<img src="/foodiy/img/foodiy_logo.png" class="card-img-top shadow-sm rounded" alt="사진 불러오기 실패!" onclick="onClickPicture()" id="img_menu">
 							<div class="custom-file mb-3 d-none">
 								<input type="file" class="custom-file-input" onchange="onChangePicture()" id="" accept="image/*">
 								<label class="custom-file-label"></label>
@@ -95,20 +95,10 @@
 							<div class="form-group">
 								<div class="d-flex align-content-end flex-wrap pt-1" id="div_tag_list">
 									<!-- 여기에 배지태그 추가... -->
-									<div class="pr-1 pb-1" id="div_menu_tag"><span class="badge badge-primary" value="" id="">#태그<i class="fas fa-times fa-sm fa-pull-right d-none" onclick="onClickCloseMenuTag(this)"></i></span></div>
-									<div class="pr-1 pb-1" id="div_menu_tag"><span class="badge badge-primary" value="" id="">#태그<i class="fas fa-times fa-sm fa-pull-right d-none" onclick="onClickCloseMenuTag(this)"></i></span></div>
-									<div class="pr-1 pb-1" id="div_menu_tag"><span class="badge badge-primary" value="" id="">#태그<i class="fas fa-times fa-sm fa-pull-right d-none" onclick="onClickCloseMenuTag(this)"></i></span></div>
-									<div class="pr-1 pb-1" id="div_menu_tag"><span class="badge badge-primary" value="" id="">#태그<i class="fas fa-times fa-sm fa-pull-right d-none" onclick="onClickCloseMenuTag(this)"></i></span></div>
-									<div class="pr-1 pb-1" id="div_menu_tag"><span class="badge badge-primary" value="" id="">#태그<i class="fas fa-times fa-sm fa-pull-right d-none" onclick="onClickCloseMenuTag(this)"></i></span></div>
-									<div class="pr-1 pb-1" id="div_menu_tag"><span class="badge badge-primary" value="" id="">#태그<i class="fas fa-times fa-sm fa-pull-right d-none" onclick="onClickCloseMenuTag(this)"></i></span></div>
-									<div class="pr-1 pb-1" id="div_menu_tag"><span class="badge badge-primary" value="" id="">#태그<i class="fas fa-times fa-sm fa-pull-right d-none" onclick="onClickCloseMenuTag(this)"></i></span></div>
-									<div class="pr-1 pb-1" id="div_menu_tag"><span class="badge badge-primary" value="" id="">#태그<i class="fas fa-times fa-sm fa-pull-right d-none" onclick="onClickCloseMenuTag(this)"></i></span></div>
-									<div class="pr-1 pb-1" id="div_menu_tag"><span class="badge badge-primary" value="" id="">#태그<i class="fas fa-times fa-sm fa-pull-right d-none" onclick="onClickCloseMenuTag(this)"></i></span></div>
-									<div class="pr-1 pb-1" id="div_menu_tag"><span class="badge badge-primary" value="" id="">#태그<i class="fas fa-times fa-sm fa-pull-right d-none" onclick="onClickCloseMenuTag(this)"></i></span></div>
 								</div>
 								<div class="input-group pt-1 d-none" id="div_modify_tags">
 									<input type="text" class="form-control" id="input_who_with"/>
-									<button class="btn btn-outline-secondary" type="button" id="btn_add_person"">추가</button>
+									<button class="btn btn-outline-secondary" type="button" id="btn_add_person">추가</button>
 								</div>
 							</div>
 						</div></div>
@@ -116,11 +106,11 @@
 							<div class="col-5 align-self-center text-center shadow-sm rounded">
 								<label style="font-size: 1rem; font-weight: bold">점수</label><br>
 								<div class="starrating risingstar d-flex justify-content-center flex-row-reverse" id="div_scores">
-									<input type="radio" id="input_star5" name="rating" value="5"/><label for="input_star5" title="5Star"></label>
-									<input type="radio" id="input_star4" name="rating" value="4"/><label for="input_star4" title="4Star"></label>
-									<input type="radio" id="input_star3" name="rating" value="3"/><label for="input_star3" title="3Star"></label>
-									<input type="radio" id="input_star2" name="rating" value="2"/><label for="input_star2" title="2Star"></label>
-									<input type="radio" id="input_star1" name="rating" value="1"/><label for="input_star1" title="1Star"></label>
+									<input type="radio" id="input_star5" name="rating" value="5"/><label for="input_starN" title="5Star"></label>
+									<input type="radio" id="input_star4" name="rating" value="4"/><label for="input_starN" title="4Star"></label>
+									<input type="radio" id="input_star3" name="rating" value="3"/><label for="input_starN" title="3Star"></label>
+									<input type="radio" id="input_star2" name="rating" value="2"/><label for="input_starN" title="2Star"></label>
+									<input type="radio" id="input_star1" name="rating" value="1"/><label for="input_starN" title="1Star"></label>
 								</div>
 							</div>
 							<div class="col-5 align-self-center text-center shadow-sm rounded">
@@ -131,14 +121,12 @@
 						</div>
 					</div>
 					<div class="modal-footer">
-						<button type="button" class="btn btn-warning w-100" onclick="">기록 보기</button>
+						<button type="button" class="btn btn-warning w-100" onclick="" id="btn_search_record">기록 보기</button>
+						<button type="button" class="btn btn-success w-100 d-none" onclick="" id="btn_update_menu">수정내용 저장</button>
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
 </body>
-<script>
-$('#btn_show_modal_result').trigger('click');
-</script>
 </html>
