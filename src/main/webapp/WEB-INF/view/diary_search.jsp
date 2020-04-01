@@ -30,7 +30,7 @@
 		<!-- 검색 -->
 		<div class="col-12 pt-4" id="div_search">
 			<span><i class="fas fa-check-square fa-sm fa-pull-left"></i><b>검색</b></span>
-			<div class="btn-group btn-group-toggle w-100" data-toggle="buttons" id="div_search_condtion">
+			<div class="btn-group btn-group-toggle w-100" data-toggle="buttons" id="div_search_condition">
 				<label class="btn btn-info active">
 					<input type="radio" name="options" value="page">최근
 				</label>	
@@ -74,11 +74,14 @@
 				<div class="modal-content">
 					<div class="modal-header">
 						<h5 class="modal-title" id="h5_modal_title">메뉴 제목</h5>
+						<input type="text" class="form-control modal-title w-50" id="input_title"/>
 						<div class="text-right">
 							<!-- 삭제 버튼 -->
 							<button type="button" class="btn" onclick="alert('del')"><i class="far fa-trash-alt"></i></button>
 							<!-- 수정 버튼 -->
-							<button type="button" class="btn" onclick="onClickModifyMenuCard()"><i class="fas fa-edit"></i></button>
+							<button type="button" class="btn" onclick="onClickModifyMenuCard(true)" id="btn_modify_menu_true"><i class="fas fa-edit"></i></button>
+							<!-- 수정취소 버튼 -->
+							<button type="button" class="btn d-none" onclick="onClickModifyMenuCard(false)" id="btn_modify_menu_false"><i class="fas fa-edit"></i></button>
 							<!-- 닫기 버튼 -->
 							<button type="button" class="close" data-dismiss="modal" aria-label=""><span aria-hidden="true">&times;</span></button>
 						</div>
@@ -87,7 +90,7 @@
 						<div class="row"><div class="col-12">
 							<img src="/foodiy/img/foodiy_logo.png" class="card-img-top shadow-sm rounded" alt="사진 불러오기 실패!" onclick="onClickPicture()" id="img_menu">
 							<div class="custom-file mb-3 d-none">
-								<input type="file" class="custom-file-input" onchange="onChangePicture()" id="" accept="image/*">
+								<input type="file" class="custom-file-input" onchange="onChangePicture()" id="input_pic" accept="image/*">
 								<label class="custom-file-label"></label>
 							</div>
 						</div></div>
@@ -97,8 +100,8 @@
 									<!-- 여기에 배지태그 추가... -->
 								</div>
 								<div class="input-group pt-1 d-none" id="div_modify_tags">
-									<input type="text" class="form-control" id="input_who_with"/>
-									<button class="btn btn-outline-secondary" type="button" id="btn_add_person">추가</button>
+									<input type="text" class="form-control" id="input_tag"/>
+									<button class="btn btn-outline-secondary" type="button" onclick="onClickAddMenuTag()" id="btn_add_tag">추가</button>
 								</div>
 							</div>
 						</div></div>

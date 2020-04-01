@@ -23,16 +23,29 @@
 </head>
 <body class="container-fluid">
 	<div id="div1">
-		<div id="div2">
-			<div id="div3">
-				<span id="span4" onclick="func(this)">click</span>
-			</div>
-		</div>
+		<p>hi</p>
 	</div>
 </body>
 <script>
-	function func(b) {
-		alert('!');
-		$(b).remove();
-	}
+var dv = $('#div1');
+for (i = 0; i < 50; ++i) {
+	$(dv).append('<p>hi(' + i + ')');
+}
+var previousScroll = 0;
+         $(function () {
+			 var $win = $(window);
+			
+             $win.scroll(function () {
+				console.log($win.height());
+			 	console.log($win.scrollTop());
+			 	console.log($(document).height());
+
+                 if ($win.scrollTop() == 0)
+                     alert('Scrolled to Page Top');
+                 else if ($win.height() + $win.scrollTop()
+                                == $(document).height()) {
+                     alert('Scrolled to Page Bottom');
+                 }
+             });
+         });
 </script>

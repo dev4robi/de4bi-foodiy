@@ -31,10 +31,6 @@
 			<img src="/foodiy/img/foodiy_logo.png" class="card-img-top" alt="Foodiy!">
 		</div>
 	</div>
-	<!-- 로그인 -->
-	<div class="row align-items-center justify-content-center" id="div_login">
-		<!--<iframe class="embed-responsive-item allowfullscreen" src="" id="iframe_record"></iframe>-->
-	</div>
 	<!-- 서비스 네이게이션 바 -->
 	<div class="row align-items-center justify-content-center pt-4 pb-4" id="div_main">
 		<div class="col">

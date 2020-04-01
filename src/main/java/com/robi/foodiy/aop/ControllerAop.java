@@ -62,15 +62,16 @@ public class ControllerAop {
         logger.info(" -> Headers: {" + reqSb.toString() + "}");
         reqSb.setLength(0);
 
-        Enumeration<String> bodyEnum = request.getParameterNames();
-        while (bodyEnum.hasMoreElements()) {
-            String bodyKey = headerEnum.nextElement();
-            reqSb.append("'").append(bodyKey).append("':'").append(request.getParameter(bodyKey)).append("', ");
-        }
+        // 이 방식으로 url파라미터의 바디를 체크하면 무한루프를 돌면서 힙으로 터져버린다
+        //Enumeration<String> bodyEnum = request.getParameterNames();
+        //while (bodyEnum.hasMoreElements()) {
+            //String bodyKey = headerEnum.nextElement();
+            //reqSb.append("'").append(bodyKey).append("':'").append(request.getParameter(bodyKey)).append("', ");
+        //}
         
-        if (reqSb.length() > 2) reqSb.setLength(reqSb.length() - 2);
-        logger.info(" -> Bodies: {" + reqSb.toString() + "}");
-        reqSb.setLength(0);
+        //if (reqSb.length() > 2) reqSb.setLength(reqSb.length() - 2);
+        //logger.info(" -> Bodies: {" + reqSb.toString() + "}");
+        //reqSb.setLength(0);
         
         // Controller works
         Object ctrRtnObj = null;

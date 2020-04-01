@@ -222,6 +222,28 @@ function onClickMenuCard(menuId) {
 
 // 메뉴카드 수정 선택
 function onClickModifyMenuCard(isModify) {
+    // 수정버튼 토글
+    if (isModify) {
+        $('#btn_modify_menu_true').addClass('d-none');
+        $('#btn_modify_menu_false').removeClass('d-none');
+    }
+    else {
+        $('#btn_modify_menu_true').removeClass('d-none');
+        $('#btn_modify_menu_false').addClass('d-none');
+    }
+
+    // 메뉴제목 인풋 표시
+    if (isModify) {
+        $('#input_title').val($('#h5_modal_title').html());
+        $('#h5_modal_title').addClass('d-none');
+        $('#input_title').removeClass('d-none');
+    }
+    else {
+        $('#input_title').val('');
+        $('#h5_modal_title').removeClass('d-none');
+        $('#input_title').addClass('d-none');
+    }
+
     // 이미지 편집 활성화
     if (isModify) {
         $('#img_menu').attr('onclick', 'onClickPicture()');
@@ -255,8 +277,6 @@ function onClickModifyMenuCard(isModify) {
     // 태그삭제 버튼들 표시
     var div_tag_badges = $('#div_tag_list').find('.tags');
 
-    // 여기부터 시작... 왜 버튼들이 갑자기 jquery안먹지? @@
-
     if (isModify) {
         div_tag_badges.each(function(idx, item){
             $(item).removeClass('d-none');
@@ -268,12 +288,24 @@ function onClickModifyMenuCard(isModify) {
         });
     }
 
+    // 태그추가 입력 표시
+    if (isModify) {
+        $('#div_modify_tags').removeClass('d-none');
+    }
+    else {
+        $('#input_tag').val('');
+        $('#div_modify_tags').addClass('d-none');
+    }
+
     // 금액수정 버튼 표시, 금액 숨기기
     if (isModify) {
+        var price = $('#span_price').html().replace(',', '').replace('￦', '')
+        $('#input_modify_price').val(price);
         $('#input_modify_price').removeClass('d-none');
         $('#span_price').addClass('d-none');
     }
     else {
+        $('#input_modify_price').val('');
         $('#input_modify_price').addClass('d-none');
         $('#span_price').removeClass('d-none');
     }
@@ -287,4 +319,78 @@ function onClickModifyMenuCard(isModify) {
         $('#btn_search_record').removeClass('d-none');
         $('#btn_update_menu').addClass('d-none');
     }
+}
+
+// 메뉴 사진 클릭 시
+function onClickPicture() {    
+    // 선택이벤트를 발생시켜서 숨겨진 input type="file" 태그를 실행시킴
+    $('#input_pic').trigger('click');
+}
+
+// 사진 촬영 혹은 저장소에서 선택 시
+function onChangePicture(idx) {
+    try {
+        if (!window.File || !window.FileReader) {
+            return alert('사진 업로드가 지원되지 않는 브라우저입니다!');
+        }
+
+        var files = event.target.files, file;
+        var img = null;
+
+        if (files && files.length > 0) {
+            img = files[0];
+        }
+
+        var imgReader = new FileReader();
+        imgReader.onload = function(e) {
+            $('#img_menu').attr('src', e.target.result);
+        }
+
+        if (img instanceof Blob) {
+            imgReader.readAsDataURL(img);
+        }
+    }
+    catch (e) {
+        alert(e);
+    }
+}
+
+// 메뉴 배지태그 추가
+function onClickAddMenuTag() {
+    var div_list = $('#div_tag_list');
+    var color = 'primary';
+    var value_tag = $('#input_tag');
+    var value = null;
+
+    if (div_list.length == 0) {
+        return;
+    }
+
+    if (value_tag.length == 0) {
+        return;
+    }
+    else {
+        value = value_tag.val();
+        value_tag.val('');
+    }
+
+    if (!value || value.length == 0) {
+        return;
+    }
+
+    var addedTag = '<div class="pr-1 pb-1" id="div_menu_tag"><span class="badge badge-' + color + '"value="' + value + '" id="span_menu_tag">#' + 
+        value + '<i class="fas fa-times fa-sm fa-pull-right tags" onclick="onClickCloseMenuTag(this)"></i></span></div>';
+    
+    div_list.append(addedTag);
+}
+
+// 메뉴 배지 제거버튼 클릭
+function onClickCloseMenuTag(btn) {
+    var div_menu_tag = $(btn).closest('#div_menu_tag');
+
+    if (div_menu_tag.length == 0) {
+        return;
+    }
+
+    div_menu_tag.remove();
 }
