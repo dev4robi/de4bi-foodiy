@@ -1,7 +1,7 @@
 // 페이지 전역
-var g_search_page_idx = 0;
-var g_menu_map = new Map();
-var g_pic_map = new Map();
+var g_searchPageIdx = 0;
+var g_menuMap = new Map();
+var g_picMap = new Map();
 
 // 페이지 초기화
 $(document).ready(function(){
@@ -54,14 +54,14 @@ function onClickSearchBtn() {
     }
 
     // 기존 검색결과 지움
-    removeMenuCards();
+    removeMenuCardAll();
 
     // 검색버튼 비활성화
     $('#btn_search').attr('disabled', true);
     $('#div_menu_loading').removeClass('d-none');
 
     // 검색버튼으로 검색 시 항상 0번 페이지부터 검색
-    g_search_page_idx = 0;
+    g_searchPageIdx = 0;
     callSearchApi();
 }
 
@@ -69,16 +69,16 @@ function onClickSearchBtn() {
 function callSearchApi() {
     var searchCondition = $('input[name="options"]:checked').val();
     var searchKeyword = $('#input_search_keyword').val();
-    var apiUrl = g_searchApiUrl;
+    var apiUrl = g_menuApiUrl;
 
     if (searchCondition == 'page') {
-        apiUrl += ('/page/' + g_search_page_idx);
+        apiUrl += ('/page/' + g_searchPageIdx);
     }
     else {
-        apiUrl += ('/' + searchCondition + '/' + searchKeyword + '/page/' + g_search_page_idx);
+        apiUrl += ('/' + searchCondition + '/' + searchKeyword + '/page/' + g_searchPageIdx);
     }
 
-    var reqHead = {'user_jwt' : g_user_jwt};
+    var reqHead = {'user_jwt' : g_userJwt};
 
     AJAX.apiCall('GET', apiUrl, reqHead, null, null, successSearchApi, failSearchApi);
 }
@@ -116,7 +116,7 @@ function successSearchApi(data, textStatus, jqXHR) {
                 "price" : price
             };
 
-            g_menu_map.set(menuId, menu);
+            g_menuMap.set(menuId, menu);
             addMenuCard(menuId, imgUrl, name, score);
         }
 
@@ -154,7 +154,7 @@ function addMenuCard(menu_id, img, name, score) {
     var score_color_ary = ['secondary', 'danger', 'warning', 'info', 'success', 'primary'];
 
     var div_card_tag = $(
-        '<div style="width:50%" class="embed-responsive embed-responsive-4by3 shadow-sm rounded p-1">' +
+        '<div style="width:50%" class="embed-responsive embed-responsive-4by3 shadow-sm rounded p-1" id="div_menu_card_' + menu_id + '">' +
             '<input type="hidden" value="' + menu_id + '" id="input_menu_id">' +
             '<img src="' + g_imgApiUrl + '/' + img + '" class="embed-responsive-item" alt="사진 불러오기 실패!" onclick="onClickMenuCard(' + menu_id + ')">' +
             '<span class="badge badge-' + score_color_ary[score] + ' sticky-top">' + name + '</span>' +
@@ -164,8 +164,14 @@ function addMenuCard(menu_id, img, name, score) {
     div_card_tag.fadeOut(1, function() {div_card_tag.fadeIn(1500);});
 }
 
+// 메뉴카드 하나 제거
+function removeMenuCard(menuId) {
+    var div_menu_list = $('#div_menu_list');
+    $(div_menu_list).find('#div_menu_card_' + menuId).remove();
+}
+
 // 메뉴카드 모두 제거
-function removeMenuCards() {
+function removeMenuCardAll() {
     var div_menu_list = $('#div_menu_list');
 
     if (div_menu_list.length == 0) {
@@ -181,12 +187,15 @@ function onClickMenuCard(menuId) {
     onClickModifyMenuCard(false);
 
     // 캐싱데이터 획득
-    var menu = g_menu_map.get(menuId);
+    var menu = g_menuMap.get(menuId);
 
     if (!menu) {
         alert('메뉴 정보를 찾지 못했습니다.');
         return;
     }
+
+    // 삭제버튼
+    $('#btn_delete_menu').attr('onclick', 'onClickDeleteMenu(' + menuId + ')');
     
     // 이미지
     $('#img_menu').attr('src', g_imgApiUrl + '/' + menu.img_url); // 여기부터 시작.
@@ -234,14 +243,14 @@ function onClickModifyMenuCard(isModify) {
 
     // 메뉴제목 인풋 표시
     if (isModify) {
-        $('#input_title').val($('#h5_modal_title').html());
+        $('#input_menu_name').val($('#h5_modal_title').html());
         $('#h5_modal_title').addClass('d-none');
-        $('#input_title').removeClass('d-none');
+        $('#input_menu_name').removeClass('d-none');
     }
     else {
-        $('#input_title').val('');
+        $('#input_menu_name').val('');
         $('#h5_modal_title').removeClass('d-none');
-        $('#input_title').addClass('d-none');
+        $('#input_menu_name').addClass('d-none');
     }
 
     // 이미지 편집 활성화
@@ -300,13 +309,13 @@ function onClickModifyMenuCard(isModify) {
     // 금액수정 버튼 표시, 금액 숨기기
     if (isModify) {
         var price = $('#span_price').html().replace(',', '').replace('￦', '')
-        $('#input_modify_price').val(price);
-        $('#input_modify_price').removeClass('d-none');
+        $('#input_menu_price').val(price);
+        $('#input_menu_price').removeClass('d-none');
         $('#span_price').addClass('d-none');
     }
     else {
-        $('#input_modify_price').val('');
-        $('#input_modify_price').addClass('d-none');
+        $('#input_menu_price').val('');
+        $('#input_menu_price').addClass('d-none');
         $('#span_price').removeClass('d-none');
     }
 
@@ -318,6 +327,162 @@ function onClickModifyMenuCard(isModify) {
     else {
         $('#btn_search_record').removeClass('d-none');
         $('#btn_update_menu').addClass('d-none');
+    }
+}
+
+// 메뉴 업데이트 버튼 클릭
+function onClickUpdateMenu(menuId) {
+    if (confirm('정말 메뉴를 수정하나요?')) {
+        // 버튼 비활성화
+        $('#btn_update_menu').attr('disabled', true);
+
+        // 메뉴 파라미터 획득
+        var mAry = new Array();
+        var menu_name = $('#input_menu_name');
+            
+        if (!menu_name) {
+            alert('메뉴명 입력칸을 찾을 수 없습니다.');
+            return;
+        }
+
+        menu_name = menu_name.val();
+        
+        var menu_score = $('input[name=rating]:checked').val();
+        
+        // 필수 파라미터 검사
+        if (!menu_name) {
+            alert('메뉴명은 필수 항목입니다.');
+            return;
+        }
+
+        if (!menu_score) {
+            alert('메뉴 점수가 빈 항목이 있습니다.');
+            return;
+        }
+
+        var menu_tags = null;
+        var div_menu_tag_ary = $('#div_tag_list').children('#div_menu_tag');
+    
+        if (div_menu_tag_ary.length > 0) {
+            menu_tags = '';
+
+            for (j = 0; j < div_menu_tag_ary.length; ++j) {
+                var menu_tag = $(div_menu_tag_ary[j]).find('#span_menu_tag').attr('value');
+                menu_tags += (menu_tag + '`');
+            }
+
+            if (menu_tags.length > 0) {
+                menu_tags = menu_tags.substring(0, menu_tags.length - 1);
+            }
+        }
+
+        var menu_cols = [
+            menu_name,
+            $('#input_menu_price').val(),
+            menu_tags,
+            menu_score,
+            (!!$('#input_pic').val() ? 1 : 0)
+        ];
+
+        console.log(menu_cols);
+        mAry.push(menu_cols);
+
+        // 멀티파트 폼 데이터 생성
+        var mpForm = new FormData();
+        mpForm.append('menus', JSON.stringify(mAry));
+
+        var m_img = $('#input_pic');
+
+        if (m_img.length != 0) {
+            m_img = m_img.prop('files');
+
+            if (m_img.length != 0) {
+                mpForm.append('menu_pics', m_img[0]);
+                console.log(m_img[0]);
+            }
+        }
+
+        // URL및 유저토큰 획득
+        var menuUpdateUrl = (g_menuApiUrl + '/' + menuId);
+        var header = {
+            'user_jwt' : g_userJwt
+        }
+
+        // 멀티파트 AJAX 전송
+        AJAX.mpApiCall('PUT', g_recordApiUrl, reqHeader, mpForm, null, 
+            // Success
+            function(data, textStatus, jqXHR){
+                if (AJAX.checkResultSuccess(data) == false) {
+                    alert('메뉴 수정에 실패했습니다!\n(' + data.result_msg + ')');
+                    return;
+                }
+
+                var menuData = data.updated_menu;
+                var menuId = menuData.id;
+                var imgUrl = menuData.picUrl;
+                var name = menuData.name;
+                var score = menuData.score;
+                var tags = menuData.tags;
+                var price = menuData.price;
+                var menu = {
+                    "img_url" : imgUrl,
+                    "name" : name,
+                    "score" : score,
+                    "tags" : tags,
+                    "price" : price
+                };
+
+                g_menuMap.set(menuId, menu);
+                $('#btn_close_menu').trigger('click');
+                onClickMenuCard(menuId);
+                alert('메뉴 수정이 완료되었습니다.');
+                $('#btn_update_menu').attr('disabled', false);
+            },
+            // Fail
+            function(){
+                alert('서버와 통신에 실패했습니다!');
+                $('#btn_update_menu').attr('disabled', false);
+                return;
+            }
+        );
+    }
+    else {
+        alert('메뉴 수정이 취소되었습니다.');
+        return;
+    }
+}
+
+// 메뉴 삭제버튼 클릭
+function onClickDeleteMenu(menuId) {
+    if (confirm('삭제 후 복원할 수 없습니다.\n정말로 삭제할까요?')) {
+        var menuDeleteUrl = (g_menuApiUrl + '/' + menuId);
+        var header = {
+            'user_jwt' : g_userJwt
+        }
+
+        AJAX.apiCall('DELETE', menuDeleteUrl, header, null, null,
+            // Success
+            function(data, textStatus, jqXHR){
+                if (AJAX.checkResultSuccess(data) == false) {
+                    alert('메뉴 삭제에 실패했습니다!\n(' + data.result_msg + ')');
+                    return;
+                }
+
+                removeMenuCard(menuId);
+                $('#btn_close_menu').trigger('click');
+                g_menuMap.delete(menuId);
+                alert('메뉴 삭제가 완료되었습니다.');
+            },
+            // Fail
+            function(){
+                alert('서버와 통신에 실패했습니다!');
+                return;
+            }
+        );
+    }
+    else {
+        alert('삭제가 취소되었습니다.');
+        return;
     }
 }
 

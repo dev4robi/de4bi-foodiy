@@ -74,16 +74,16 @@
 				<div class="modal-content">
 					<div class="modal-header">
 						<h5 class="modal-title" id="h5_modal_title">메뉴 제목</h5>
-						<input type="text" class="form-control modal-title w-50" id="input_title"/>
+						<input type="text" class="form-control modal-title w-50" id="input_menu_name"/>
 						<div class="text-right">
 							<!-- 삭제 버튼 -->
-							<button type="button" class="btn" onclick="alert('del')"><i class="far fa-trash-alt"></i></button>
+							<button type="button" class="btn" onclick="" id="btn_delete_menu"><i class="far fa-trash-alt"></i></button>
 							<!-- 수정 버튼 -->
 							<button type="button" class="btn" onclick="onClickModifyMenuCard(true)" id="btn_modify_menu_true"><i class="fas fa-edit"></i></button>
 							<!-- 수정취소 버튼 -->
 							<button type="button" class="btn d-none" onclick="onClickModifyMenuCard(false)" id="btn_modify_menu_false"><i class="fas fa-edit"></i></button>
 							<!-- 닫기 버튼 -->
-							<button type="button" class="close" data-dismiss="modal" aria-label=""><span aria-hidden="true">&times;</span></button>
+							<button type="button" class="close" data-dismiss="modal" aria-label="" id="btn_close_menu"><span aria-hidden="true">&times;</span></button>
 						</div>
 					</div>
 					<div class="modal-body">
@@ -118,7 +118,7 @@
 							</div>
 							<div class="col-5 align-self-center text-center shadow-sm rounded">
 								<label style="font-size: 1rem; font-weight: bold">금액</label><br>
-								<input type="number" class="form-control d-none" id="input_modify_price"/>
+								<input type="number" class="form-control d-none" id="input_menu_price"/>
 								<span style="font-size: 1.5rem" id="span_price">10,000￦</span>
 							</div>
 						</div>
