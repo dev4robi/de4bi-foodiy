@@ -41,7 +41,7 @@ public class StorageUtil {
             }
 
             if (storedFile.exists()) {
-                throw new IOException("File '" + mpFilePath + "'already exist!");
+                logger.warn("File '{}' already exist! Origin file will be overwritten.", mpFilePath);
             }
 
             mpFile.transferTo(storedFile);

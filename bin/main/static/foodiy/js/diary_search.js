@@ -157,7 +157,7 @@ function addMenuCard(menu_id, img, name, score) {
         '<div style="width:50%" class="embed-responsive embed-responsive-4by3 shadow-sm rounded p-1" id="div_menu_card_' + menu_id + '">' +
             '<input type="hidden" value="' + menu_id + '" id="input_menu_id">' +
             '<img src="' + g_imgApiUrl + '/' + img + '" class="embed-responsive-item" alt="사진 불러오기 실패!" onclick="onClickMenuCard(' + menu_id + ')">' +
-            '<span class="badge badge-' + score_color_ary[score] + ' sticky-top">' + name + '</span>' +
+            '<span class="badge badge-' + score_color_ary[score] + ' sticky-top">' + name + ' (★' + score + ')</span>' +
         '</div>');
 
     div_menu_list.append(div_card_tag);
@@ -198,7 +198,7 @@ function onClickMenuCard(menuId) {
     $('#btn_delete_menu').attr('onclick', 'onClickDeleteMenu(' + menuId + ')');
     
     // 이미지
-    $('#img_menu').attr('src', g_imgApiUrl + '/' + menu.img_url); // 여기부터 시작.
+    $('#img_menu').attr('src', g_imgApiUrl + '/' + menu.img_url);
 
     // 제목
     $('#h5_modal_title').html(menu.name);
@@ -211,19 +211,22 @@ function onClickMenuCard(menuId) {
 
     for (i = 0; i < tagSplit.length; ++i) {
         try {
-            var tag = '<div class="pr-1 pb-1" id="div_menu_tag"><span class="badge badge-primary" value="' + tagSplit[i] + '" id="">#'+ tagSplit[i] + '<i class="fas fa-times fa-sm fa-pull-right tags d-none" onclick="onClickCloseMenuTag(this)"></i></span></div>';
+            var tag = '<div class="pr-1 pb-1" id="div_menu_tag"><span class="badge badge-primary" value="' + tagSplit[i] + '" id="span_menu_tag">#'+ tagSplit[i] + '<i class="fas fa-times fa-sm fa-pull-right tags d-none" onclick="onClickCloseMenuTag(this)"></i></span></div>';
             div_tag_list.append(tag);
         }
         catch (e) {
             console.log(e);
         }
-    }    
+    }    // 태그랑 사진 불러오기 이상한것부터 수정... @@
     
     // 점수
     $('#input_star' + menu.score).attr('checked', true);
 
     // 금액
     $('#span_price').html(numberWithCommas(menu.price) + '￦');
+
+    // 수정내용 저장 버튼 메서드 등록
+    $('#btn_update_menu').attr('onclick', 'onClickUpdateMenu(' + menuId + ')');
 
     // 모달 출력
     $('#btn_show_modal_result').trigger('click');
@@ -404,12 +407,12 @@ function onClickUpdateMenu(menuId) {
 
         // URL및 유저토큰 획득
         var menuUpdateUrl = (g_menuApiUrl + '/' + menuId);
-        var header = {
+        var reqHeader = {
             'user_jwt' : g_userJwt
         }
 
         // 멀티파트 AJAX 전송
-        AJAX.mpApiCall('PUT', g_recordApiUrl, reqHeader, mpForm, null, 
+        AJAX.mpApiCall('PUT', menuUpdateUrl, reqHeader, mpForm, null, 
             // Success
             function(data, textStatus, jqXHR){
                 if (AJAX.checkResultSuccess(data) == false) {
@@ -417,7 +420,7 @@ function onClickUpdateMenu(menuId) {
                     return;
                 }
 
-                var menuData = data.updated_menu;
+                var menuData = data.result_data.updatedMenus;
                 var menuId = menuData.id;
                 var imgUrl = menuData.picUrl;
                 var name = menuData.name;

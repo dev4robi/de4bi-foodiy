@@ -1,6 +1,8 @@
 package com.robi.foodiy.service;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.List;
 
 import com.robi.data.ApiResult;
@@ -8,9 +10,11 @@ import com.robi.foodiy.data.dao.MenusDao;
 import com.robi.foodiy.data.dto.PostMenusDto;
 import com.robi.foodiy.mapper.MenusMapper;
 import com.robi.util.MapUtil;
+import com.robi.util.MdUtil;
 import com.robi.util.StorageUtil;
 import com.robi.util.ValidatorUtil;
 
+import org.apache.commons.codec.binary.Hex;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.PropertySource;
@@ -300,8 +304,27 @@ public class MenusService {
                 final MultipartFile mMpFile = menusPic[mPicIdx];
                 final String mOriName = mMpFile.getOriginalFilename();
                 final String fileExt = mOriName.substring(mOriName.lastIndexOf("."), mOriName.length());
-                final String fileName = selMenus.getPicUrl();
-                final String fileUrl =  StorageUtil.storeMultipartAsFile(menusPic[mPicIdx], mFileDir, fileName);
+                String fileName = selMenus.getPicUrl();
+
+                if (fileName == null) {
+                    // 기존 파일명 없으면 새로 생성
+                    Calendar todayCal = Calendar.getInstance();
+                    final String filePrefix = new SimpleDateFormat("yyyyMMdd").format(todayCal.getTime());
+                    fileName = filePrefix + "-" + Hex.encodeHexString(MdUtil.sha128((mOriName + System.currentTimeMillis()).getBytes()), true) + fileExt;
+                }
+                else {
+                    // 기존 파일명 있으면 확장자만 교체
+                    int extIdx = fileName.lastIndexOf(".");
+
+                    if (extIdx == -1) {
+                        fileName = fileName + fileExt;
+                    }
+                    else {
+                        fileName = fileName.substring(0, extIdx) + fileExt;
+                    }
+                }
+
+                StorageUtil.storeMultipartAsFile(menusPic[mPicIdx], mFileDir, fileName);
                 fileUrlSb.append(fileName != null ? fileName : "").append("`");
             }
             catch (NullPointerException | IndexOutOfBoundsException | IllegalArgumentException | IOException e) {
@@ -322,7 +345,7 @@ public class MenusService {
         menusDao.setName(menusDto.getMenuName());
         menusDao.setPicUrl(fileUrlSb.toString());
         menusDao.setPrice(Integer.valueOf(menusDto.getMenuPrice()));
-        menusDao.setScore(Integer.valueOf(menusDto.getMenuPrice()));
+        menusDao.setScore(Integer.valueOf(menusDto.getMenuScore()));
         menusDao.setTags(menusDto.getMenuTag());
 
         // DB 업데이트 (MenusMapper.xml)
@@ -331,13 +354,12 @@ public class MenusService {
         }
         catch (final Exception e) {
             logger.error("Menus DB Select Exception!", e);
+            return ApiResult.make(false, "DB 업데이트에 실패했습니다!");
         }
 
         // 로깅 및 응답
         logger.info("Menus update success! (menusDao: " + menusDao.toString() + ")");
         return ApiResult.make(true, MapUtil.toMap("updatedMenus", menusDao));
-
-        // 이거 테스트부터 수행 @@
     }
 
     @Transactional
