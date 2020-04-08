@@ -164,6 +164,30 @@ function addMenuCard(menu_id, img, name, score) {
     div_card_tag.fadeOut(1, function() {div_card_tag.fadeIn(1500);});
 }
 
+// 메뉴카드 수정
+function updateMenuCard(menu_id, img, name, score) {
+    var div_menu_list = $('#div_menu_list');
+
+    if (div_menu_list.length == 0) {
+        return;
+    }
+
+    var div_card_tag = $(div_menu_list).find('#div_menu_card_' + menu_id);
+
+    if (div_card_tag.length == 0) {
+        return;
+    }
+
+    var score_color_ary = ['secondary', 'danger', 'warning', 'info', 'success', 'primary'];
+
+    $(div_card_tag).find('img').attr('src', g_imgApiUrl + '/' + img + '?time=' + new Date().getTime());
+    $(div_card_tag).find('span').remove();
+
+    var new_span_tag = ('<span class="badge badge-' + score_color_ary[score] + ' sticky-top">' + name + ' (★' + score + ')</span>');
+    
+    $(div_card_tag).append(new_span_tag);
+}
+
 // 메뉴카드 하나 제거
 function removeMenuCard(menuId) {
     var div_menu_list = $('#div_menu_list');
@@ -198,7 +222,7 @@ function onClickMenuCard(menuId) {
     $('#btn_delete_menu').attr('onclick', 'onClickDeleteMenu(' + menuId + ')');
     
     // 이미지
-    $('#img_menu').attr('src', g_imgApiUrl + '/' + menu.img_url);
+    $('#img_menu').attr('src', g_imgApiUrl + '/' + menu.img_url + '?time=' + new Date().getTime());
 
     // 제목
     $('#h5_modal_title').html(menu.name);
@@ -217,7 +241,7 @@ function onClickMenuCard(menuId) {
         catch (e) {
             console.log(e);
         }
-    }    // 태그랑 사진 불러오기 이상한것부터 수정... @@
+    }
     
     // 점수
     $('#input_star' + menu.score).attr('checked', true);
@@ -436,6 +460,7 @@ function onClickUpdateMenu(menuId) {
                 };
 
                 g_menuMap.set(menuId, menu);
+                updateMenuCard(menuId, imgUrl, name, score);
                 $('#btn_close_menu').trigger('click');
                 onClickMenuCard(menuId);
                 alert('메뉴 수정이 완료되었습니다.');
@@ -562,3 +587,9 @@ function onClickCloseMenuTag(btn) {
 
     div_menu_tag.remove();
 }
+
+// 메뉴 수정까지 완료했음 앞으로 해야할것...
+// 1) 2번페이지 조회버튼 추가
+// 2) 기록수정 추가
+// 3) 기록추가 시 컴포넌트들 초기화... (새로고침?)
+// @@ 여기부터 시작

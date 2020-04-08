@@ -515,7 +515,7 @@ function onClickUploadRecord() {
 
             // AJAX 업로드 호출
             var reqHeader = {
-                'user_jwt' : g_user_jwt
+                'user_jwt' : g_userJwt
             };
             
             AJAX.mpApiCall('POST', g_recordApiUrl, reqHeader, mpForm, null, recordSuccess, recordFail);

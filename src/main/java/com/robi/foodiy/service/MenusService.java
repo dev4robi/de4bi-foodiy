@@ -298,13 +298,13 @@ public class MenusService {
         final PostMenusDto menusDto = postMenusDtoAry[0];
         final MultipartFile[] menusPic = menusDto.getMenuPics();
         final String mFileDir = env.getProperty("foodiy.records.img.basedir");
+        String fileName = selMenus.getPicUrl();
         
         for (int mPicIdx = 0; mPicIdx < menusPic.length; ++mPicIdx) {
             try {
                 final MultipartFile mMpFile = menusPic[mPicIdx];
                 final String mOriName = mMpFile.getOriginalFilename();
                 final String fileExt = mOriName.substring(mOriName.lastIndexOf("."), mOriName.length());
-                String fileName = selMenus.getPicUrl();
 
                 if (fileName == null) {
                     // 기존 파일명 없으면 새로 생성
@@ -335,6 +335,7 @@ public class MenusService {
 
         if (fileUrlSb.length() > 0) {
             fileUrlSb.setLength(fileUrlSb.length() - 1);
+            fileName = fileUrlSb.toString();
         }
 
         // DTO -> DAO 변환
@@ -343,7 +344,7 @@ public class MenusService {
         menusDao.setWriteUserId(selMenus.getWriteUserId());
         menusDao.setRecordId(selMenus.getRecordId());
         menusDao.setName(menusDto.getMenuName());
-        menusDao.setPicUrl(fileUrlSb.toString());
+        menusDao.setPicUrl(fileName);
         menusDao.setPrice(Integer.valueOf(menusDto.getMenuPrice()));
         menusDao.setScore(Integer.valueOf(menusDto.getMenuScore()));
         menusDao.setTags(menusDto.getMenuTag());
