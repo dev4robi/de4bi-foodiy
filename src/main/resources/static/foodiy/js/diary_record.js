@@ -533,6 +533,7 @@ function onClickUploadRecord() {
 function recordSuccess(rst) {
     if (AJAX.checkResultSuccess(rst)) {
         alert('기록이 완료되었습니다.');
+        location.reload();
     }
     else {
         recordFail(rst);

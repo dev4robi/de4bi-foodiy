@@ -1,5 +1,8 @@
 // 페이지 전역
+var g_searchCnt = 0;
 var g_searchPageIdx = 0;
+var g_lastSearchCondition = '';
+var g_lastSearchKeyword = '';
 var g_menuMap = new Map();
 var g_picMap = new Map();
 
@@ -24,7 +27,10 @@ $(document).ready(function(){
         onChangeSearchCondition();
     });
     $('#btn_search').on('click', function(){
-        onClickSearchBtn();
+        onClickSearchBtn(false);
+    });
+    $('#btn_search_continue').on('click', function(){
+        onClickSearchBtn(true);
     });
 
     // UI 초기화
@@ -44,7 +50,7 @@ function onChangeSearchCondition(radioBtn) {
 }
 
 // 검색버튼 클릭 시
-function onClickSearchBtn() {
+function onClickSearchBtn(isContinue) {
     var searchCondition = $('input[name="options"]:checked').val();
     var searchKeyword = $('#input_search_keyword').val();
 
@@ -53,23 +59,36 @@ function onClickSearchBtn() {
         return;
     }
 
-    // 기존 검색결과 지움
-    removeMenuCardAll();
-
     // 검색버튼 비활성화
     $('#btn_search').attr('disabled', true);
+    $('#btn_search_continue').attr('disabled', true);
+    $('#btn_search_continue').addClass('d-none');
     $('#div_menu_loading').removeClass('d-none');
 
-    // 검색버튼으로 검색 시 항상 0번 페이지부터 검색
-    g_searchPageIdx = 0;
-    callSearchApi();
+    if (isContinue == false) {
+        // 검색버튼으로 검색 시 항상 0번 페이지부터 검색
+        g_searchPageIdx = 0;
+        g_searchCnt = 0;
+
+        // 기존 검색결과 지움
+        removeMenuCardAll();
+    }
+    else {
+        // 페이지 증가
+        ++g_searchPageIdx;
+    }
+
+    callSearchApi(isContinue);
 }
 
 // 검색
-function callSearchApi() {
-    var searchCondition = $('input[name="options"]:checked').val();
-    var searchKeyword = $('#input_search_keyword').val();
+function callSearchApi(isContinue) {
+    var searchCondition = isContinue ? g_lastSearchCondition : $('input[name="options"]:checked').val();
+    var searchKeyword = isContinue ? g_lastSearchKeyword : $('#input_search_keyword').val()
     var apiUrl = g_menuApiUrl;
+
+    g_lastSearchCondition = searchCondition;
+    g_lastSearchKeyword = searchKeyword;
 
     if (searchCondition == 'page') {
         apiUrl += ('/page/' + g_searchPageIdx);
@@ -89,38 +108,44 @@ function successSearchApi(data, textStatus, jqXHR) {
         var resultDatas = data.result_data;
 
         if (!resultDatas) {
-            alert('비정상 응답!(' + data.result_msg + ')');
             activeSearchBtn();
+            alert('비정상 응답!(' + data.result_msg + ')');
         }
 
         var menuDataAry = resultDatas.selectedMenusList;
 
         if (!menuDataAry || menuDataAry.length == 0) {
-            alert('조회 결과가 없습니다.');
             activeSearchBtn();
+            alert('조회 결과가 없습니다.');
+        }
+        else {
+            for (i = 0; i < menuDataAry.length; ++i) {
+                var menuData = menuDataAry[i];
+                var menuId = menuData.id;
+                var imgUrl = menuData.picUrl;
+                var name = menuData.name;
+                var score = menuData.score;
+                var tags = menuData.tags;
+                var price = menuData.price;
+                var menu = {
+                    "img_url" : imgUrl,
+                    "name" : name,
+                    "score" : score,
+                    "tags" : tags,
+                    "price" : price
+                };
+
+                g_menuMap.set(menuId, menu);
+                addMenuCard(menuId, imgUrl, name, score);
+            }
+
+            if (menuDataAry.length >= 8) {
+                // 한 번에 8개 이상 표현할 수 있어야 계속 검색할게 있음
+                $('#btn_search_continue').removeClass('d-none');
+            }
         }
 
-        for (i = 0; i < menuDataAry.length; ++i) {
-            var menuData = menuDataAry[i];
-            var menuId = menuData.id;
-            var imgUrl = menuData.picUrl;
-            var name = menuData.name;
-            var score = menuData.score;
-            var tags = menuData.tags;
-            var price = menuData.price;
-            var menu = {
-                "img_url" : imgUrl,
-                "name" : name,
-                "score" : score,
-                "tags" : tags,
-                "price" : price
-            };
-
-            g_menuMap.set(menuId, menu);
-            addMenuCard(menuId, imgUrl, name, score);
-        }
-
-        $('#b_title_menu_result').html('결과(' + menuDataAry.length + ')');
+        $('#b_title_menu_result').html('결과(' + (g_searchCnt += menuDataAry.length) + ')');
         $('#div_menu_list').removeClass('d-none');
         activeSearchBtn();
     }
@@ -141,6 +166,7 @@ function failSearchApi(data) {
 function activeSearchBtn() {
     $('#div_menu_loading').addClass('d-none');
     $('#btn_search').attr('disabled', false);
+    $('#btn_search_continue').attr('disabled', false);
 }
 
 // 메뉴카드 추가
@@ -587,9 +613,3 @@ function onClickCloseMenuTag(btn) {
 
     div_menu_tag.remove();
 }
-
-// 메뉴 수정까지 완료했음 앞으로 해야할것...
-// 1) 2번페이지 조회버튼 추가
-// 2) 기록수정 추가
-// 3) 기록추가 시 컴포넌트들 초기화... (새로고침?)
-// @@ 여기부터 시작

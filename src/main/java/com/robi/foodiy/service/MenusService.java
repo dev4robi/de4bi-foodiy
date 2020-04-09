@@ -65,7 +65,7 @@ public class MenusService {
         List<MenusDao> selMenusList = null;
 
         try {
-            selMenusList = menusMapper.selectAllByWriterIdToPage(writerId, pageIdx, 10);
+            selMenusList = menusMapper.selectAllByWriterIdToPage(writerId, pageIdx * 8, 8);
         }
         catch (final Exception e) {
             logger.error("Menus DB Exception!", e);
@@ -107,7 +107,7 @@ public class MenusService {
         List<MenusDao> selMenusList = null;
 
         try {
-            selMenusList = menusMapper.selectAllByWriterIdAndMenuNameToPage(writerId, menuName, pageIdx, 10);
+            selMenusList = menusMapper.selectAllByWriterIdAndMenuNameToPage(writerId, menuName, pageIdx * 8, 8);
         }
         catch (final Exception e) {
             logger.error("Menus DB Exception!", e);
@@ -149,7 +149,7 @@ public class MenusService {
         List<MenusDao> selMenusList = null;
 
         try {
-            selMenusList = menusMapper.selectAllByWriterIdAndTagToPage(writerId, tag, pageIdx, 10);
+            selMenusList = menusMapper.selectAllByWriterIdAndTagToPage(writerId, tag, pageIdx * 8, 8);
         }
         catch (final Exception e) {
             logger.error("Menus DB Exception!", e);
@@ -191,7 +191,7 @@ public class MenusService {
         List<MenusDao> selMenusList = null;
 
         try {
-            selMenusList = menusMapper.selectAllByWriterIdAndPlaceToPage(writerId, place, pageIdx, 10);
+            selMenusList = menusMapper.selectAllByWriterIdAndPlaceToPage(writerId, place, pageIdx * 8, 8);
         }
         catch (final Exception e) {
             logger.error("Menus DB Exception!", e);
@@ -233,7 +233,7 @@ public class MenusService {
         List<MenusDao> selMenusList = null;
 
         try {
-            selMenusList = menusMapper.selectAllByWriterIdAndWhoToPage(writerId, who, pageIdx, 10);
+            selMenusList = menusMapper.selectAllByWriterIdAndWhoToPage(writerId, who, pageIdx * 8, 8);
         }
         catch (final Exception e) {
             logger.error("Menus DB Exception!", e);

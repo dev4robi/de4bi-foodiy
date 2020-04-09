@@ -58,14 +58,18 @@
 		<!-- 결과(메뉴) -->
 		<div class="col-12 pt-4" id="div_search_result">
 			<span><i class="fas fa-list fa-sm fa-pull-left"></i><b id="b_title_menu_result">결과(0)</b></span>
-			<div class="text-center pt-3 d-none" id="div_menu_loading">
+			<div class="d-flex flex-wrap d-none" id="div_menu_list">
+				<!-- 여기에 검색결과 추가... -->
+			</div>
+			<div class="text-center pt-5 d-none" id="div_menu_loading">
 				<div class="spinner-border text-primary" role="status" style="width:5rem;height:5rem;">
   					<span class="sr-only">Loading...</span>
 				</div>
 			</div>
-			<div class="d-flex flex-wrap d-none" id="div_menu_list">
-				<!-- 여기에 검색결과 추가... -->
-			</div>
+		</div>
+		<!-- 검색(계속) -->
+		<div class="col-12 pt-4" id="div_search_continue">
+			<button class="btn btn-outline-secondary w-100 d-none" type="button" id="btn_search_continue"">계속 검색</button>
 		</div>
 		<!-- 결과 모달(기록) -->
 		<button type="button" class="btn btn-primary d-none" data-toggle="modal" data-target="#div_modal_result" id="btn_show_modal_result"></button>
@@ -119,7 +123,7 @@
 							<div class="col-5 align-self-center text-center shadow-sm rounded">
 								<label style="font-size: 1rem; font-weight: bold">금액</label><br>
 								<input type="number" class="form-control d-none" id="input_menu_price"/>
-								<span style="font-size: 1.5rem" id="span_price">10,000￦</span>
+								<span style="font-size: 1.5rem" id="span_price">0￦</span>
 							</div>
 						</div>
 					</div>
