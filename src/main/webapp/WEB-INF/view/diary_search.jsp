@@ -71,7 +71,7 @@
 		<div class="col-12 pt-4" id="div_search_continue">
 			<button class="btn btn-outline-secondary w-100 d-none" type="button" id="btn_search_continue"">계속 검색</button>
 		</div>
-		<!-- 결과 모달(기록) -->
+		<!-- 결과 모달(메뉴)) -->
 		<button type="button" class="btn btn-primary d-none" data-toggle="modal" data-target="#div_modal_result" id="btn_show_modal_result"></button>
 		<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="h5_modal_title" aria-hidden="true" id="div_modal_result">
 			<div class="modal-dialog" role="document">
@@ -134,6 +134,97 @@
 				</div>
 			</div>
 		</div>
+		<!-- 결과 모달(기록) -->
+		<button type="button" class="btn btn-primary d-none" data-toggle="modal" data-target="#div_modal_record_result" id="btn_show_modal_record_result"></button>
+		<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="h5_modal_title" aria-hidden="true" id="div_modal_record_result">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="h5_modal_title">기록 제목</h5>
+						<input type="text" class="form-control modal-title w-50 d-none" id="input_record_name"/>
+						<div class="text-right">
+							<!-- 삭제 버튼 -->
+							<button type="button" class="btn" onclick="" id="btn_delete_record"><i class="far fa-trash-alt"></i></button>
+							<!-- 수정 버튼 -->
+							<button type="button" class="btn" onclick="onClickModifyMenuCard(true)" id="btn_modify_record_true"><i class="fas fa-edit"></i></button>
+							<!-- 닫기 버튼 -->
+							<button type="button" class="close" data-dismiss="modal" aria-label="" id="btn_close_record"><span aria-hidden="true">&times;</span></button>
+						</div>
+					</div>
+					<div class="modal-body">
+						<!-- 가게 사진 -->
+						<div class="row pt-3">
+							<div class="col">
+								<span><i class="fas fa-camera fa-sm fa-pull-left"></i><b>사진</b></span>
+								<div class="d-flex justify-content-around" id="div_record_pics">
+									<div style="width:32%" class="embed-responsive embed-responsive-1by1 shadow-sm rounded">
+										<img src="/foodiy/img/foodiy_logo.png" class="embed-responsive-item" alt="사진 불러오기 실패!" id="img_records_img1">
+									</div>
+									<div style="width:32%" class="embed-responsive embed-responsive-1by1 shadow-sm rounded">
+										<img src="/foodiy/img/foodiy_logo.png" class="embed-responsive-item" alt="사진 불러오기 실패!" id="img_records_img2">
+									</div>
+									<div style="width:32%" class="embed-responsive embed-responsive-1by1 shadow-sm rounded">
+										<img src="/foodiy/img/foodiy_logo.png" class="embed-responsive-item" alt="사진 불러오기 실패!" id="img_records_img3">
+									</div>
+								</div>
+							</div>
+						</div>
+						<!-- 일자 및 시간 -->
+						<div class="row justify-content-center pt-3">
+							<div class="col-11 align-self-center text-center shadow-sm rounded">
+								<div class="form-group">
+									<br>
+									<span><i class="fas fa-calendar-check fa-sm"></i> <b>일자 및 시간</b></span><br>
+									<span id="span_record_when">2020년 11월 21일 - 22시 30분</span>
+								</div>
+							</div>
+						</div>
+						<!-- 장소 -->
+						<div class="row justify-content-center">
+							<div class="col-11 align-self-center text-center shadow-sm rounded">
+								<div class="form-group">
+									<br>
+									<span><i class="fas fa-map-marked-alt fa-sm"></i> <b>장소</b></span><br>
+									<span id="span_record_where">서울시 동대문구 휘경2동 답십리</span>
+								</div>
+							</div>
+						</div>
+						<!-- 누구랑 -->
+						<div class="row pt-1">
+							<div class="col">
+								<div class="form-group">
+									<br>
+									<span><i class="fas fa-user-alt fa-sm"></i> <b>누구랑</b></span><br>
+									<span id="span_record_when"></span>
+									<div class="d-flex align-content-end flex-wrap pt-1" id="div_whowith_list">
+										<!-- 여기에 인물태그 추가... -->
+										<!--<div class="pr-1 pb-1" id="div_menu_tag"><span class="badge badge-primary">태훈</span></div> -->
+									</div>
+								</div>
+							</div>
+						</div>
+						<!-- 메뉴와 가격 -->
+						<div class="row pt-3">
+							<div class="col-12">
+								<span><i class="fas fa-utensils fa-sm fa-pull-left"></i><b>메뉴</b></span>
+								<div class="d-flex flex-wrap d-none" id="div_record_menulist">
+									<!-- 여기에 검색결과 추가... -->
+									여기부터 시작...
+									레코드 수정은 기록하기 페이지를 변경하여 개발!
+									일단은 프론트 작업 마무리 하고 불러오기부터 해 보자...
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-warning w-100" onclick="" id="btn_backto_menu">메뉴로 돌아가기</button>
+					</div>
+				</div>
+			</div>
+		</div>
 	</div>
 </body>
+		<script>
+			$('#btn_show_modal_record_result').trigger('click');
+		</script>
 </html>
