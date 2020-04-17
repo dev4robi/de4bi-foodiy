@@ -122,12 +122,14 @@ function successSearchApi(data, textStatus, jqXHR) {
             for (i = 0; i < menuDataAry.length; ++i) {
                 var menuData = menuDataAry[i];
                 var menuId = menuData.id;
+                var recordId = menuData.recordId;
                 var imgUrl = menuData.picUrl;
                 var name = menuData.name;
                 var score = menuData.score;
                 var tags = menuData.tags;
                 var price = menuData.price;
                 var menu = {
+                    "record_id" : recordId,
                     "img_url" : imgUrl,
                     "name" : name,
                     "score" : score,
@@ -136,7 +138,7 @@ function successSearchApi(data, textStatus, jqXHR) {
                 };
 
                 g_menuMap.set(menuId, menu);
-                addMenuCard(menuId, imgUrl, name, score);
+                addMenuCard(menuId, imgUrl, name, score, 'div_menu_list');
             }
 
             if (menuDataAry.length >= 8) {
@@ -170,8 +172,8 @@ function activeSearchBtn() {
 }
 
 // 메뉴카드 추가
-function addMenuCard(menu_id, img, name, score) {
-    var div_menu_list = $('#div_menu_list');
+function addMenuCard(menu_id, img, name, score, targetDivId) {
+    var div_menu_list = $('#' + targetDivId);
 
     if (div_menu_list.length == 0) {
         return;
@@ -277,6 +279,9 @@ function onClickMenuCard(menuId) {
 
     // 수정내용 저장 버튼 메서드 등록
     $('#btn_update_menu').attr('onclick', 'onClickUpdateMenu(' + menuId + ')');
+
+    // 기록보기 버튼 이벤트 변경
+    $('#btn_search_record').attr('onclick', 'onClickShowRecords(' + menu.record_id + ')');
 
     // 모달 출력
     $('#btn_show_modal_result').trigger('click');
@@ -612,4 +617,96 @@ function onClickCloseMenuTag(btn) {
     }
 
     div_menu_tag.remove();
+}
+
+// 기록조회버튼 클릭
+function onClickShowRecords(recordId) {
+
+    $('#btn_search_record').attr('disabled', true);
+
+    $('#div_record_pics').empty();
+    $('#span_record_when').html('?');
+    $('#span_record_where').html('?');
+    $('#div_whowith_list').empty();
+
+    var apiUrl = g_recordApiUrl + '/' + recordId;
+    var reqHead = {'user_jwt' : g_userJwt};
+
+    AJAX.apiCall('GET', apiUrl, reqHead, null, null,
+        // 통신 성공
+        function(data, textStatus, jqXHR) {
+            if (AJAX.checkResultSuccess(data)) {
+                // 조회결과 성공
+                // 사진
+                var recordData = data.reseult_data;
+                var picUrls = recordData.picUrl.split('`');
+                var picCnt = picUrls.length;
+
+                for (i = 0; i < picCnt; ++i) {
+                    var picUrl = picUrls[i];
+                    var picTag = (
+                        '<div style="width:32%" class="embed-responsive embed-responsive-1by1 shadow-sm rounded">' +
+                            '<img src="/foodiy/img/' + picUrl + '" class="embed-responsive-item" alt="사진 불러오기 실패!" id="img_records_img' + (i + 1) + '">' +
+                        '</div>'
+                    );
+
+                    $('#div_record_pics').append(picTag);
+                }
+
+                // 일자 및 시간
+                var whenDate = recordData.when_date;
+                var whenTime = recordData.when_time;
+                var dateWithTime = '?';
+
+                if (!!whenDate && !!whenTime) {
+                    dateWithTime = (whenDate + whenTime.substring(0, 4));
+                }
+
+                $('#span_record_when').html(dateWithTime);
+
+                // 장소
+                $('#span_record_where').html(recordData.where_place);
+
+                // 누구랑
+                var whoWith = recordData.who_with;
+
+                if (!whoWith) {
+                    var whoWithAry = whoWith.split('`');
+                    var whoWithCnt = whoWith.length;
+
+                    for (i = 0; i < whoWithCnt; ++i) {
+                        var whoName = whoWithAry[i];
+                        var whoWithTag = (
+                            '<div class="pr-1 pb-1" id="div_menu_tag"><span class="badge badge-primary">' + whoName + '</span></div>'
+                        );
+
+                        $('#div_whowith_list').append(whoWithTag);
+                    }
+                }
+
+                // 메뉴
+                for (i = 0; i < ; ++i) {
+                     메뉴카드 불러와서 추가하자
+                     내가 왜 table을 나눠서 작업량에 부하를 줬을까....
+                     이론상 설계 vs 현실의 벽을 또 한번 체감
+                     여기부터 시작... @@ 
+                    addMenuCard(menu_id, img, name, score, 'div_record_menulist');
+                }
+             
+                // 모달 표시
+                $('#btn_show_modal_record_result').trigger('click');
+            }
+            else {
+                // 조회결과 실패
+                alert('기록 조회에 실패했습니다.\n(' + data.result_msg + ')');
+            }
+
+            $('#btn_search_record').attr('disabled', false);
+        },
+        // 통신 실패
+        function() {
+            alert('서버와 통신에 실패했습니다!');
+            $('#btn_search_record').attr('disabled', false);
+        }
+    );
 }

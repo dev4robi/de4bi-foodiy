@@ -175,7 +175,7 @@
 								<div class="form-group">
 									<br>
 									<span><i class="fas fa-calendar-check fa-sm"></i> <b>일자 및 시간</b></span><br>
-									<span id="span_record_when">2020년 11월 21일 - 22시 30분</span>
+									<span id="span_record_when">????-??-?? ??:??</span>
 								</div>
 							</div>
 						</div>
@@ -185,7 +185,7 @@
 								<div class="form-group">
 									<br>
 									<span><i class="fas fa-map-marked-alt fa-sm"></i> <b>장소</b></span><br>
-									<span id="span_record_where">서울시 동대문구 휘경2동 답십리</span>
+									<span id="span_record_where">?</span>
 								</div>
 							</div>
 						</div>
@@ -198,20 +198,16 @@
 									<span id="span_record_when"></span>
 									<div class="d-flex align-content-end flex-wrap pt-1" id="div_whowith_list">
 										<!-- 여기에 인물태그 추가... -->
-										<!--<div class="pr-1 pb-1" id="div_menu_tag"><span class="badge badge-primary">태훈</span></div> -->
 									</div>
 								</div>
 							</div>
 						</div>
-						<!-- 메뉴와 가격 -->
+						<!-- 메뉴 -->
 						<div class="row pt-3">
 							<div class="col-12">
 								<span><i class="fas fa-utensils fa-sm fa-pull-left"></i><b>메뉴</b></span>
 								<div class="d-flex flex-wrap d-none" id="div_record_menulist">
 									<!-- 여기에 검색결과 추가... -->
-									여기부터 시작...
-									레코드 수정은 기록하기 페이지를 변경하여 개발!
-									일단은 프론트 작업 마무리 하고 불러오기부터 해 보자...
 								</div>
 							</div>
 						</div>
@@ -224,7 +220,4 @@
 		</div>
 	</div>
 </body>
-		<script>
-			$('#btn_show_modal_record_result').trigger('click');
-		</script>
 </html>
