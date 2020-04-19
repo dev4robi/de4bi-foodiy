@@ -11,7 +11,9 @@ import org.apache.ibatis.annotations.Param;
 public interface MenusMapper {
 
     public MenusDao selectById(long id);
-    public List<MenusDao> selectAllByRecordId(long recordId);
+    public List<MenusDao> selectAllByRecordId(
+        @Param("writerId")      long writerId,
+        @Param("recordId")      long recordId);
     public List<MenusDao> selectAllByWriterIdToPage(
         @Param("writerId")      long writerId,
         @Param("menuBgnIdx")    int menuBgnIdx,

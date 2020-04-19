@@ -9,10 +9,10 @@
         FROM menus
         WHERE id = #{id};
     </select>
-    <select id="selectAllByRecordId" parameterType="Long" resultType="com.robi.foodiy.data.dao.MenusDao">
+    <select id="selectAllByRecordId" resultType="com.robi.foodiy.data.dao.MenusDao">
         SELECT *
         FROM menus
-        WHERE record_id = #{recordId};
+        WHERE record_id = #{recordId} AND write_user_id = #{writerId};
     </select>
     <select id="selectAllByWriterIdToPage" resultType="com.robi.foodiy.data.dao.MenusDao">
         SELECT *

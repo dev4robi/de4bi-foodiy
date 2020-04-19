@@ -75,6 +75,38 @@ public class MenusService {
         return ApiResult.make(true, MapUtil.toMap("selectedMenusList", selMenusList));
     }
 
+    public ApiResult getMenusByRecordId(final String userJwt, final long recordId) {
+        // 파라미터 검사
+        ApiResult validResult = null;
+
+        if (!(validResult = ValidatorUtil.nullOrZeroLen("user_jwt", userJwt)).getResult()) {
+            logger.error(validResult.getResultMsg());
+            return validResult;
+        }
+
+        // 사용자 인증
+        final ApiResult userAuthResult = usersService.checkUserStatus(userJwt);
+
+        if (userAuthResult == null || userAuthResult.getResult() == false) {
+            logger.error("Fail to auth user! (userJwt: " + userJwt + ")");
+            return userAuthResult;
+        }
+
+        // DB 조회 (MenusMapper.xml)
+        final long writerId = Long.valueOf(userAuthResult.getDataAsStr("id"));
+        List<MenusDao> selMenusList = null;
+
+        try {
+            selMenusList = menusMapper.selectAllByRecordId(writerId, recordId);
+        }
+        catch (final Exception e) {
+            logger.error("Menus DB Exception!", e);
+        }
+
+        // 성공응답
+        return ApiResult.make(true, MapUtil.toMap("selectedMenusList", selMenusList));
+    }
+
     public ApiResult getMenusByMenuName(final String userJwt, final String menuName, final int pageIdx) {
         // 파라미터 검사
         ApiResult validResult = null;

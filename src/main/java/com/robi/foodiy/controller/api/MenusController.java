@@ -39,6 +39,14 @@ public class MenusController {
     {
         return menusSvc.getMenusByPageIdx(userJwt, pageIdx);
     }
+
+    @GetMapping("/menus/record-id/{record_id}")
+    public ApiResult getMenusByRecordId(
+        @RequestHeader ("user_jwt") String userJwt,
+        @PathVariable ("record_id") long recordId)
+    {
+        return menusSvc.getMenusByRecordId(userJwt, recordId);
+    }
     
     @GetMapping("/menus/name/{menuName}/page/{page_idx}")
     public ApiResult getMenusByName(

@@ -210,6 +210,13 @@
 									<!-- 여기에 검색결과 추가... -->
 								</div>
 							</div>
+							<div class="col-12" id="div_records_menulist_loading">
+							<div class="text-center pt-5">
+								<div class="spinner-border text-primary" role="status" style="width:5rem;height:5rem;">
+									<span class="sr-only">Loading...</span>
+								</div>
+							</div>
+						</div>
 						</div>
 					</div>
 					<div class="modal-footer">

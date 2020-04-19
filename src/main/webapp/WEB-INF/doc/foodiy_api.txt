@@ -103,6 +103,18 @@
 +------------------------------------------------------------------------------------------------+
 | Access    : Public                                                                             |
 | Service   : 메뉴 조회 (제목)                                                                   |
+| URL       : /api/menus/record-id/{record_id}                                                   |
+| Method    : GET                                                                                |
+| Cont-Type : application/json                                                                   |
+| ReqHeader : "user_jwt"(R)                                                                      |
+| ReqBody   : -                                                                                  |
+| ResHeader : -                                                                                  |
+| ResBody   : "result_data":                                                                     |
+|               "selectedMenusList":[{id,record_id,name,pic_url,price,tags,score},...]           |
+| Comment   : {record_id}이 일치하고 write_user_id가 일치한 메뉴 리스트 반환.                    |
++------------------------------------------------------------------------------------------------+
+| Access    : Public                                                                             |
+| Service   : 메뉴 조회 (제목)                                                                   |
 | URL       : /api/menus/name/{menuName}/page/{pageIdx}                                          |
 | Method    : GET                                                                                |
 | Cont-Type : application/json                                                                   |

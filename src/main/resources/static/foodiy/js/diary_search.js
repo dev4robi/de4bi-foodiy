@@ -238,6 +238,12 @@ function onClickMenuCard(menuId) {
     // UI 초기화
     onClickModifyMenuCard(false);
 
+    멀티모달 못 닫는 문제부터 시작...
+    부트스트렙 한계라서 다른 아이디어를 내야 할듯 하다...
+    // addClass('d-none')으로 그냥 숨겨버리면 어떨까??
+    여기부터 시작 @@
+
+
     // 캐싱데이터 획득
     var menu = g_menuMap.get(menuId);
 
@@ -621,14 +627,17 @@ function onClickCloseMenuTag(btn) {
 
 // 기록조회버튼 클릭
 function onClickShowRecords(recordId) {
-
+    // 버튼 비활성화
     $('#btn_search_record').attr('disabled', true);
 
+    // UI 초기화
     $('#div_record_pics').empty();
     $('#span_record_when').html('?');
     $('#span_record_where').html('?');
     $('#div_whowith_list').empty();
+    $('#div_record_menulist').empty();
 
+    // API 호출
     var apiUrl = g_recordApiUrl + '/' + recordId;
     var reqHead = {'user_jwt' : g_userJwt};
 
@@ -638,39 +647,46 @@ function onClickShowRecords(recordId) {
             if (AJAX.checkResultSuccess(data)) {
                 // 조회결과 성공
                 // 사진
-                var recordData = data.reseult_data;
-                var picUrls = recordData.picUrl.split('`');
-                var picCnt = picUrls.length;
+                var recordData = data.result_data.selectedRecord;
+                var picUrls = recordData.picUrls;
+                
+                if (!!picUrls) {
+                    var picUrlAry = picUrls.split('`');
+                    var picCnt = picUrlAry.length;
 
-                for (i = 0; i < picCnt; ++i) {
-                    var picUrl = picUrls[i];
-                    var picTag = (
-                        '<div style="width:32%" class="embed-responsive embed-responsive-1by1 shadow-sm rounded">' +
-                            '<img src="/foodiy/img/' + picUrl + '" class="embed-responsive-item" alt="사진 불러오기 실패!" id="img_records_img' + (i + 1) + '">' +
-                        '</div>'
-                    );
+                    for (i = 0; i < picCnt; ++i) {
+                        var picUrl = picUrlAry[i];
+                        var picTag = (
+                            '<div style="width:100%" class="embed-responsive embed-responsive-4by3 shadow-sm rounded">' +
+                                '<img src="/foodiy/img/' + picUrl + '" class="embed-responsive-item" alt="사진 불러오기 실패!" id="img_records_img' + (i + 1) + '">' +
+                            '</div>'
+                        );
 
-                    $('#div_record_pics').append(picTag);
+                        $('#div_record_pics').append(picTag);
+                    }
+                }
+                else {
+                    // 사진없음
                 }
 
                 // 일자 및 시간
-                var whenDate = recordData.when_date;
-                var whenTime = recordData.when_time;
+                var whenDate = recordData.whenDate;
+                var whenTime = recordData.whenTime;
                 var dateWithTime = '?';
 
                 if (!!whenDate && !!whenTime) {
-                    dateWithTime = (whenDate + whenTime.substring(0, 4));
+                    dateWithTime = (whenDate + ' ' + whenTime.substring(0, 5));
                 }
 
                 $('#span_record_when').html(dateWithTime);
 
                 // 장소
-                $('#span_record_where').html(recordData.where_place);
+                $('#span_record_where').html(recordData.wherePlace);
 
                 // 누구랑
-                var whoWith = recordData.who_with;
+                var whoWith = recordData.whoWith;
 
-                if (!whoWith) {
+                if (!!whoWith) {
                     var whoWithAry = whoWith.split('`');
                     var whoWithCnt = whoWith.length;
 
@@ -684,14 +700,48 @@ function onClickShowRecords(recordId) {
                     }
                 }
 
-                // 메뉴
-                for (i = 0; i < ; ++i) {
-                     메뉴카드 불러와서 추가하자
-                     내가 왜 table을 나눠서 작업량에 부하를 줬을까....
-                     이론상 설계 vs 현실의 벽을 또 한번 체감
-                     여기부터 시작... @@ 
-                    addMenuCard(menu_id, img, name, score, 'div_record_menulist');
-                }
+                // 메뉴데이터 획득을 위해 추가 API호출
+                var menuApiUrl = (g_menuApiUrl + '/record-id/' + recordId);
+                AJAX.apiCall('GET', menuApiUrl, reqHead, null, 
+                    // 항상
+                    function() {
+                        $('#div_records_menulist_loading').removeClass("d-none");
+                    },
+                    // 통신 성공
+                    function(data, textStatus, jqXHR) {
+                        if (AJAX.checkResultSuccess(data)) {
+                            var menuDataAry = data.result_data.selectedMenusList;
+
+                            for (i = 0; i < menuDataAry.length; ++i) {
+                                var menuData = menuDataAry[i];
+                                var menuId = menuData.id;
+                                var recordId = menuData.recordId;
+                                var imgUrl = menuData.picUrl;
+                                var name = menuData.name;
+                                var score = menuData.score;
+                                var tags = menuData.tags;
+                                var price = menuData.price;
+                                var menu = {
+                                    "record_id" : recordId,
+                                    "img_url" : imgUrl,
+                                    "name" : name,
+                                    "score" : score,
+                                    "tags" : tags,
+                                    "price" : price
+                                };
+
+                                g_menuMap.set(menuId, menu);
+                                addMenuCard(menuId, imgUrl, name, score, 'div_record_menulist');
+                            }
+                        }
+
+                        $('#div_records_menulist_loading').addClass("d-none");
+                    },
+                    // 통신 실패
+                    function() {
+                        $('#div_records_menulist_loading').addClass("d-none");
+                    }
+                );
              
                 // 모달 표시
                 $('#btn_show_modal_record_result').trigger('click');
