@@ -238,12 +238,6 @@ function onClickMenuCard(menuId) {
     // UI 초기화
     onClickModifyMenuCard(false);
 
-    멀티모달 못 닫는 문제부터 시작...
-    부트스트렙 한계라서 다른 아이디어를 내야 할듯 하다...
-    // addClass('d-none')으로 그냥 숨겨버리면 어떨까??
-    여기부터 시작 @@
-
-
     // 캐싱데이터 획득
     var menu = g_menuMap.get(menuId);
 

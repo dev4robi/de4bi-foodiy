@@ -72,8 +72,8 @@
 			<button class="btn btn-outline-secondary w-100 d-none" type="button" id="btn_search_continue"">계속 검색</button>
 		</div>
 		<!-- 결과 모달(메뉴)) -->
-		<button type="button" class="btn btn-primary d-none" data-toggle="modal" data-target="#div_modal_result" id="btn_show_modal_result"></button>
-		<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="h5_modal_title" aria-hidden="true" id="div_modal_result">
+		<button type="button" class="btn btn-primary d-none" data-toggle="modal" data-target="#div_modal_menu" id="btn_show_modal_result"></button>
+		<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="h5_modal_title" aria-hidden="true" id="div_modal_menu">
 			<div class="modal-dialog" role="document">
 				<div class="modal-content">
 					<div class="modal-header">
@@ -135,8 +135,8 @@
 			</div>
 		</div>
 		<!-- 결과 모달(기록) -->
-		<button type="button" class="btn btn-primary d-none" data-toggle="modal" data-target="#div_modal_record_result" id="btn_show_modal_record_result"></button>
-		<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="h5_modal_title" aria-hidden="true" id="div_modal_record_result">
+		<button type="button" class="btn btn-primary d-none" data-toggle="modal" data-target="#div_modal_record" id="btn_show_modal_record_result"></button>
+		<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="h5_modal_title" aria-hidden="true" id="div_modal_record">
 			<div class="modal-dialog" role="document">
 				<div class="modal-content">
 					<div class="modal-header">
@@ -144,9 +144,9 @@
 						<input type="text" class="form-control modal-title w-50 d-none" id="input_record_name"/>
 						<div class="text-right">
 							<!-- 삭제 버튼 -->
-							<button type="button" class="btn" onclick="" id="btn_delete_record"><i class="far fa-trash-alt"></i></button>
+							<button type="button" class="btn" onclick="alert('미구현!')" id="btn_delete_record"><i class="far fa-trash-alt"></i></button>
 							<!-- 수정 버튼 -->
-							<button type="button" class="btn" onclick="onClickModifyMenuCard(true)" id="btn_modify_record_true"><i class="fas fa-edit"></i></button>
+							<button type="button" class="btn" onclick="alert('미구현!')" id="btn_modify_record_true"><i class="fas fa-edit"></i></button>
 							<!-- 닫기 버튼 -->
 							<button type="button" class="close" data-dismiss="modal" aria-label="" id="btn_close_record"><span aria-hidden="true">&times;</span></button>
 						</div>
