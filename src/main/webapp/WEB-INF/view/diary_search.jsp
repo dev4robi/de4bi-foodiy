@@ -71,10 +71,11 @@
 		<div class="col-12 pt-4" id="div_search_continue">
 			<button class="btn btn-outline-secondary w-100 d-none" type="button" id="btn_search_continue"">계속 검색</button>
 		</div>
-		<!-- 결과 모달(메뉴)) -->
-		<button type="button" class="btn btn-primary d-none" data-toggle="modal" data-target="#div_modal_menu" id="btn_show_modal_result"></button>
-		<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="h5_modal_title" aria-hidden="true" id="div_modal_menu">
-			<div class="modal-dialog" role="document">
+		<!-- 결과 모달 -->
+		<button type="button" class="btn btn-primary d-none" data-toggle="modal" data-target="#div_modal" id="btn_show_modal_result"></button>
+		<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="h5_modal_title" aria-hidden="true" id="div_modal">
+			<!-- 메뉴모달 -->
+			<div class="modal-dialog" role="document" id ="div_modal_menu">
 				<div class="modal-content">
 					<div class="modal-header">
 						<h5 class="modal-title" id="h5_modal_title">메뉴 제목</h5>
@@ -133,11 +134,8 @@
 					</div>
 				</div>
 			</div>
-		</div>
-		<!-- 결과 모달(기록) -->
-		<button type="button" class="btn btn-primary d-none" data-toggle="modal" data-target="#div_modal_record" id="btn_show_modal_record_result"></button>
-		<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="h5_modal_title" aria-hidden="true" id="div_modal_record">
-			<div class="modal-dialog" role="document">
+			<!-- 기록모달 -->
+			<div class="modal-dialog d-none" role="document" id="div_modal_record">
 				<div class="modal-content">
 					<div class="modal-header">
 						<h5 class="modal-title" id="h5_modal_title">기록 제목</h5>
@@ -220,7 +218,7 @@
 						</div>
 					</div>
 					<div class="modal-footer">
-						<button type="button" class="btn btn-warning w-100" onclick="" id="btn_backto_menu">메뉴로 돌아가기</button>
+						<button type="button" class="btn btn-warning w-100" id="btn_backto_menu">메뉴로 돌아가기</button>
 					</div>
 				</div>
 			</div>

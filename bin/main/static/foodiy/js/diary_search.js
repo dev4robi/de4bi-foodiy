@@ -281,10 +281,16 @@ function onClickMenuCard(menuId) {
     $('#btn_update_menu').attr('onclick', 'onClickUpdateMenu(' + menuId + ')');
 
     // 기록보기 버튼 이벤트 변경
-    $('#btn_search_record').attr('onclick', 'onClickShowRecords(' + menu.record_id + ')');
+    $('#btn_search_record').attr('onclick', 'onClickShowRecords(' + menu.record_id + ', ' + menuId + ')');
 
     // 모달 출력
-    $('#btn_show_modal_result').trigger('click');
+    if ($('#div_modal').hasClass('show') == false) {
+        $('#btn_show_modal_result').trigger('click');
+    }
+
+    // 모달 전환
+    $('#div_modal_record').addClass('d-none');
+    $('#div_modal_menu').removeClass('d-none');
 }
 
 // 메뉴카드 수정 선택
@@ -620,7 +626,7 @@ function onClickCloseMenuTag(btn) {
 }
 
 // 기록조회버튼 클릭
-function onClickShowRecords(recordId) {
+function onClickShowRecords(recordId, menuId) {
     // 버튼 비활성화
     $('#btn_search_record').attr('disabled', true);
 
@@ -736,9 +742,13 @@ function onClickShowRecords(recordId) {
                         $('#div_records_menulist_loading').addClass("d-none");
                     }
                 );
+
+                // 메뉴로 돌아가기 버튼 업데이트
+                $('#btn_backto_menu').attr('onclick', ('onClickMenuCard(' + menuId + ')'));
              
-                // 모달 표시
-                $('#btn_show_modal_record_result').trigger('click');
+                // 모달 전환
+                $('#div_modal_menu').addClass('d-none');
+                $('#div_modal_record').removeClass('d-none');
             }
             else {
                 // 조회결과 실패
