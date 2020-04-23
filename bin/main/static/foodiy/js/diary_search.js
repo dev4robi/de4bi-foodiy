@@ -23,7 +23,7 @@ $(document).ready(function(){
     }
 
     // 버튼 이벤트 부착
-    $('#div_search_condtion').change(function(){
+    $('#div_search_condition').change(function(){
         onChangeSearchCondition();
     });
     $('#btn_search').on('click', function(){
@@ -42,10 +42,10 @@ function onChangeSearchCondition(radioBtn) {
     var checked = $('input[name="options"]:checked').val();
 
     if (checked == 'page') {
-        $('#input_search_keyword').attr('disabled', true);
+        $('#input_search_keyword').attr('readonly', true);
     }
     else {
-        $('#input_search_keyword').attr('disabled', false);
+        $('#input_search_keyword').attr('readonly', false);
     }
 }
 
@@ -65,6 +65,18 @@ function onClickSearchBtn(isContinue) {
     $('#btn_search_continue').addClass('d-none');
     $('#div_menu_loading').removeClass('d-none');
 
+    callSearchApi(isContinue);
+}
+
+// 검색
+function callSearchApi(isContinue) {
+    var searchCondition = isContinue ? g_lastSearchCondition : $('input[name="options"]:checked').val();
+    var searchKeyword = isContinue ? g_lastSearchKeyword : $('#input_search_keyword').val()
+    var apiUrl = g_menuApiUrl;
+
+    g_lastSearchCondition = searchCondition;
+    g_lastSearchKeyword = searchKeyword;
+
     if (isContinue == false) {
         // 검색버튼으로 검색 시 항상 0번 페이지부터 검색
         g_searchPageIdx = 0;
@@ -77,18 +89,6 @@ function onClickSearchBtn(isContinue) {
         // 페이지 증가
         ++g_searchPageIdx;
     }
-
-    callSearchApi(isContinue);
-}
-
-// 검색
-function callSearchApi(isContinue) {
-    var searchCondition = isContinue ? g_lastSearchCondition : $('input[name="options"]:checked').val();
-    var searchKeyword = isContinue ? g_lastSearchKeyword : $('#input_search_keyword').val()
-    var apiUrl = g_menuApiUrl;
-
-    g_lastSearchCondition = searchCondition;
-    g_lastSearchKeyword = searchKeyword;
 
     if (searchCondition == 'page') {
         apiUrl += ('/page/' + g_searchPageIdx);
@@ -116,7 +116,17 @@ function successSearchApi(data, textStatus, jqXHR) {
 
         if (!menuDataAry || menuDataAry.length == 0) {
             activeSearchBtn();
-            alert('조회 결과가 없습니다.');
+
+            var tgt = $('#input_search_keyword').val();
+
+            if ($('input[name="options"]:checked').val() != 'page' && !!tgt) {
+                tgt = ('\'' + tgt + '\' ');
+            }
+            else {
+                tgt = '';
+            }
+            
+            alert(tgt + '조회 결과가 없습니다.');
         }
         else {
             for (i = 0; i < menuDataAry.length; ++i) {
@@ -588,7 +598,7 @@ function onChangePicture(idx) {
 // 메뉴 배지태그 추가
 function onClickAddMenuTag() {
     var div_list = $('#div_tag_list');
-    var color = 'primary';
+    var color = 'success';
     var value_tag = $('#input_tag');
     var value = null;
 
@@ -630,6 +640,9 @@ function onClickShowRecords(recordId, menuId) {
     // 버튼 비활성화
     $('#btn_search_record').attr('disabled', true);
 
+    // 삭제버튼 갱신
+    $('#btn_delete_record').attr('onclick', 'onClickDeleteRecord(' + recordId + ')');
+
     // UI 초기화
     $('#div_record_pics').empty();
     $('#span_record_when').html('?');
@@ -658,7 +671,7 @@ function onClickShowRecords(recordId, menuId) {
                         var picUrl = picUrlAry[i];
                         var picTag = (
                             '<div style="width:100%" class="embed-responsive embed-responsive-4by3 shadow-sm rounded">' +
-                                '<img src="/foodiy/img/' + picUrl + '" class="embed-responsive-item" alt="사진 불러오기 실패!" id="img_records_img' + (i + 1) + '">' +
+                                '<img src="' + g_imgApiUrl + '/' + picUrl + '" class="embed-responsive-item" alt="사진 불러오기 실패!" id="img_records_img' + (i + 1) + '">' +
                             '</div>'
                         );
 
@@ -688,7 +701,7 @@ function onClickShowRecords(recordId, menuId) {
 
                 if (!!whoWith) {
                     var whoWithAry = whoWith.split('`');
-                    var whoWithCnt = whoWith.length;
+                    var whoWithCnt = whoWithAry.length;
 
                     for (i = 0; i < whoWithCnt; ++i) {
                         var whoName = whoWithAry[i];
@@ -763,4 +776,50 @@ function onClickShowRecords(recordId, menuId) {
             $('#btn_search_record').attr('disabled', false);
         }
     );
+}
+
+// 기록수정 클릭
+function onClickModifyRecord(isModify) {
+    // 수정취소 버튼 스왑
+    if (isModify) {
+        $('#btn_modify_record_true').addClass('d-none');
+        $('#btn_modify_record_false').removeClass('d-none');
+    }
+    else {
+        $('#btn_modify_record_false').addClass('d-none');
+        $('#btn_modify_record_true').removeClass('d-none');
+    }
+
+    // ... 계속
+}
+
+// 기록삭제 클릭
+function onClickDeleteRecord(recordId) {
+    if (confirm('기록을 삭제하면 등록된 메뉴들 또한 삭제됩니다.\n정말 삭제하나요? 기록과 메뉴 모두 복원할 수 없습니다!')) {
+        var apiUrl = (g_recordApiUrl + '/' + recordId);
+        var reqHead = {'user_jwt' : g_userJwt};
+
+        AJAX.apiCall('DELETE', apiUrl, reqHead, null, null,
+            // Success
+            function(data, textStatus, jqXHR){
+                if (AJAX.checkResultSuccess(data) == false) {
+                    alert('기록 삭제에 실패했습니다!\n(' + data.result_msg + ')');
+                    return;
+                }
+
+                $('#btn_close_record').trigger('click');
+                alert('기록 삭제가 완료되었습니다.');
+                callSearchApi(false);
+            },
+            // Fail
+            function(){
+                alert('서버와 통신에 실패했습니다!');
+                return;
+            }
+        );
+    }
+    else {
+        alert('기록 삭제가 취소되었습니다.');
+        return;
+    }
 }

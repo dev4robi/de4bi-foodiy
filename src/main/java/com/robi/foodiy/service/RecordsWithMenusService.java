@@ -167,6 +167,8 @@ public class RecordsWithMenusService {
             return userAuthResult;
         }
 
+        final long writeUserId = Long.valueOf(userAuthResult.getDataAsStr("id"));
+
         // Google Geocoding API (추후 작업)
         String googleRpyStr = null;
         
@@ -188,7 +190,7 @@ public class RecordsWithMenusService {
         MultipartFile[] recordsPic = recordsDto.getPics();
         String rFileDir = env.getProperty("foodiy.records.img.basedir");
         Calendar todayCal = Calendar.getInstance();
-        final String filePrefix = new SimpleDateFormat("yyyyMMdd").format(todayCal.getTime());
+        final String filePrefix = new SimpleDateFormat("yyyyMMddHHmmss").format(todayCal.getTime()) + "-" + writeUserId;
         
         for (int mPicIdx = 0; mPicIdx < recordsPic.length; ++mPicIdx) {
             try {
@@ -223,7 +225,6 @@ public class RecordsWithMenusService {
         );
         
         final long dateTimeMs = dateTimeCal.getTime().getTime();
-        final long writeUserId = Long.valueOf(userAuthResult.getDataAsStr("id"));
         
         RecordsDao recordsDao = new RecordsDao();
         recordsDao.setWriteUserId(writeUserId);
@@ -359,7 +360,15 @@ public class RecordsWithMenusService {
             return ApiResult.make(false, ApiResult.DEFAULT_API_RESULT_CODE_NEGATIVE, validResult.getResultMsg());
         }
 
-        // 사용자 인증및 기록 조회
+        // 사용자 인증
+        ApiResult userAuthResult = usersService.checkUserStatus(userJwt);
+
+        if (userAuthResult == null || userAuthResult.getResult() == false) {
+            logger.error("Fail to auth user! (userJwt: " + userJwt + ")");
+            return userAuthResult;
+        }
+
+        // 기록 조회
         ApiResult selectResult = selectRecordById(userJwt, id);
 
         if (selectResult == null || !selectResult.getResult()) {
@@ -370,6 +379,22 @@ public class RecordsWithMenusService {
 
         if (selectedDao == null) {
             return ApiResult.make(false, ApiResult.DEFAULT_API_RESULT_CODE_NEGATIVE, "원본 기록 찾기 실패! 삭제에 실패했습니다.");
+        }
+
+        // 기록 작성자와 사용자 일치 확인
+        long writeUserId = Long.valueOf(userAuthResult.getDataAsStr("id"));
+
+        if (selectedDao != null && selectedDao.getWriteUserId() != writeUserId) {
+            // 작성자가 아닌 경우 조회실패
+            logger.error("write_user_id != writerId (writer_user_id: " + selectedDao.getWriteUserId() +
+                         ", writerId: " + writeUserId + ")");
+            selectedDao = null;
+        }
+
+        // 결과 반환
+        if (selectedDao == null) {
+            logger.error("저장된 기록 찾기에 실패했습니다.");
+            return ApiResult.make(false, ApiResult.DEFAULT_API_RESULT_CODE_NEGATIVE, "저장된 기록 찾기에 실패했습니다.");
         }
 
         // DB데이터 삭제 (RecordsMapper.xml)

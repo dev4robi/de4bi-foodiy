@@ -142,9 +142,11 @@
 						<input type="text" class="form-control modal-title w-50 d-none" id="input_record_name"/>
 						<div class="text-right">
 							<!-- 삭제 버튼 -->
-							<button type="button" class="btn" onclick="alert('미구현!')" id="btn_delete_record"><i class="far fa-trash-alt"></i></button>
+							<button type="button" class="btn" onclick="" id="btn_delete_record"><i class="far fa-trash-alt"></i></button>
 							<!-- 수정 버튼 -->
-							<button type="button" class="btn" onclick="alert('미구현!')" id="btn_modify_record_true"><i class="fas fa-edit"></i></button>
+							<button type="button" class="btn" onclick="onClickModifyRecord(true)" id="btn_modify_record_true"><i class="fas fa-edit"></i></button>
+							<!-- 수정취소 버튼 -->
+							<button type="button" class="btn d-none" onclick="onClickModifyRecord(false)" id="btn_modify_record_false"><i class="fas fa-edit"></i></button>
 							<!-- 닫기 버튼 -->
 							<button type="button" class="close" data-dismiss="modal" aria-label="" id="btn_close_record"><span aria-hidden="true">&times;</span></button>
 						</div>
@@ -154,7 +156,7 @@
 						<div class="row pt-3">
 							<div class="col">
 								<span><i class="fas fa-camera fa-sm fa-pull-left"></i><b>사진</b></span>
-								<div class="d-flex justify-content-around" id="div_record_pics">
+								<div class="d-flex flex-wrap justify-content-around" id="div_record_pics">
 									<div style="width:32%" class="embed-responsive embed-responsive-1by1 shadow-sm rounded">
 										<img src="/foodiy/img/foodiy_logo.png" class="embed-responsive-item" alt="사진 불러오기 실패!" id="img_records_img1">
 									</div>

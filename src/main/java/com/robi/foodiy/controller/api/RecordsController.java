@@ -12,9 +12,11 @@ import org.json.JSONArray;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.lang.Nullable;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
@@ -109,5 +111,18 @@ public class RecordsController {
         }
 
         return recordsWithMenusSvc.insertRecordsWithMenus(userJwt, postRecordsDto, postMenusDtoAry);
+    }
+
+    @PutMapping("/records/{id}")
+    public ApiResult postRecordsWithMenus() {
+        return null;
+    }
+
+    @DeleteMapping("records/{id}")
+    public ApiResult deleteRecords(
+        @RequestHeader("user_jwt") String userJwt,
+        @PathVariable("id") long id
+    ) {
+        return recordsWithMenusSvc.deleteRecordsById(userJwt, id);
     }
 }

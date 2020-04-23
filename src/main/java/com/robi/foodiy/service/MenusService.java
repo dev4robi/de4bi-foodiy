@@ -306,7 +306,7 @@ public class MenusService {
         }
 
         // DB 조회 (MenusMapper.xml) 
-        final long writerId = Long.valueOf(userAuthResult.getDataAsStr("id"));
+        final long writeUserId = Long.valueOf(userAuthResult.getDataAsStr("id"));
         MenusDao selMenus = null;
 
         try {
@@ -321,7 +321,7 @@ public class MenusService {
         }
 
         // 작성자와 삭제 요청자가 일치하는지 비교
-        if (writerId != selMenus.getWriteUserId()) {
+        if (writeUserId != selMenus.getWriteUserId()) {
             return ApiResult.make(false, "메뉴 작성자와 삭제 요청자가 일치하지 않습니다.");
         }
 
@@ -341,7 +341,7 @@ public class MenusService {
                 if (fileName == null) {
                     // 기존 파일명 없으면 새로 생성
                     Calendar todayCal = Calendar.getInstance();
-                    final String filePrefix = new SimpleDateFormat("yyyyMMdd").format(todayCal.getTime());
+                    final String filePrefix = new SimpleDateFormat("yyyyMMddHHmmss").format(todayCal.getTime()) + "-" + writeUserId;
                     fileName = filePrefix + "-" + Hex.encodeHexString(MdUtil.sha128((mOriName + System.currentTimeMillis()).getBytes()), true) + fileExt;
                 }
                 else {

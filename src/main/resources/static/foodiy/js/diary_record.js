@@ -114,8 +114,8 @@ function onClickGps() {
 // 누구랑 배지태그 추가
 function onClickAddWhoWith() {
     var div_list = $('#div_who_with_list');
-    var color_list = [ 'primary', 'info', 'success' ];
-    var color = color_list[new Date().getTime() % 3];
+    var color_list = [ 'primary' ];
+    var color = color_list[new Date().getTime() % color_list.length];
     var value_tag = $('#input_who_with');
     var value = null;
 
