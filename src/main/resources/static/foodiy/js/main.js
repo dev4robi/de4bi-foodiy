@@ -24,7 +24,13 @@ $(document).ready(function(){
     var newUserJwt = getUrlParameter('userJwt');
     if (!!newUserJwt) {
         g_userJwt = newUserJwt;
-        $.cookie('user_jwt', newUserJwt);
+
+        if (!!getUrlParameter('keepLoggedIn')) {
+            $.cookie('user_jwt', newUserJwt, { expires: 15 }); // 15days
+        }
+        else {
+            $.cookie('user_jwt', newUserJwt, { expires: 1 }); // 1day
+        }
     }
 
     // 로그인 확인

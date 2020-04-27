@@ -84,7 +84,7 @@
 							<!-- 삭제 버튼 -->
 							<button type="button" class="btn" onclick="" id="btn_delete_menu"><i class="far fa-trash-alt"></i></button>
 							<!-- 수정 버튼 -->
-							<button type="button" class="btn" onclick="onClickModifyMenuCard(true)" id="btn_modify_menu_true"><i class="fas fa-edit"></i></button>
+							<button type="button" class="btn" onclick="onClickModifyMenuCard(true)" id="btn_modify_menu_true"><i class="far fa-edit"></i></button>
 							<!-- 수정취소 버튼 -->
 							<button type="button" class="btn d-none" onclick="onClickModifyMenuCard(false)" id="btn_modify_menu_false"><i class="fas fa-edit"></i></button>
 							<!-- 닫기 버튼 -->
@@ -95,7 +95,7 @@
 						<div class="row"><div class="col-12">
 							<img src="/foodiy/img/foodiy_logo.png" class="card-img-top shadow-sm rounded" alt="사진 불러오기 실패!" onclick="onClickPicture()" id="img_menu">
 							<div class="custom-file mb-3 d-none">
-								<input type="file" class="custom-file-input" onchange="onChangePicture()" id="input_pic" accept="image/*">
+								<input type="file" class="custom-file-input" onchange="onChangePicture(null)" id="input_pic" accept="image/*">
 								<label class="custom-file-label"></label>
 							</div>
 						</div></div>
@@ -138,15 +138,15 @@
 			<div class="modal-dialog d-none" role="document" id="div_modal_record">
 				<div class="modal-content">
 					<div class="modal-header">
-						<h5 class="modal-title" id="h5_modal_title">기록 제목</h5>
-						<input type="text" class="form-control modal-title w-50 d-none" id="input_record_name"/>
+						<h5 class="modal-title" id="h5_modal_record_title">기록 제목</h5>
+						<input type="text" class="form-control modal-title w-50 d-none" id="input_modify_record_name"/>
 						<div class="text-right">
 							<!-- 삭제 버튼 -->
 							<button type="button" class="btn" onclick="" id="btn_delete_record"><i class="far fa-trash-alt"></i></button>
 							<!-- 수정 버튼 -->
-							<button type="button" class="btn" onclick="onClickModifyRecord(true)" id="btn_modify_record_true"><i class="fas fa-edit"></i></button>
+							<button type="button" class="btn" onclick="onClickModifyRecordCard(true)" id="btn_modify_record_true"><i class="far fa-edit"></i></button>
 							<!-- 수정취소 버튼 -->
-							<button type="button" class="btn d-none" onclick="onClickModifyRecord(false)" id="btn_modify_record_false"><i class="fas fa-edit"></i></button>
+							<button type="button" class="btn d-none" onclick="onClickModifyRecordCard(false)" id="btn_modify_record_false"><i class="fas fa-edit"></i></button>
 							<!-- 닫기 버튼 -->
 							<button type="button" class="close" data-dismiss="modal" aria-label="" id="btn_close_record"><span aria-hidden="true">&times;</span></button>
 						</div>
@@ -158,12 +158,15 @@
 								<span><i class="fas fa-camera fa-sm fa-pull-left"></i><b>사진</b></span>
 								<div class="d-flex flex-wrap justify-content-around" id="div_record_pics">
 									<div style="width:32%" class="embed-responsive embed-responsive-1by1 shadow-sm rounded">
+										<input type="file" class="custom-file-input" onchange="onChangePicture(1)" id="input_record_pic1" accept="image/*">	
 										<img src="/foodiy/img/foodiy_logo.png" class="embed-responsive-item" alt="사진 불러오기 실패!" id="img_records_img1">
 									</div>
 									<div style="width:32%" class="embed-responsive embed-responsive-1by1 shadow-sm rounded">
+										<input type="file" class="custom-file-input" onchange="onChangePicture(2)" id="input_record_pic2" accept="image/*">
 										<img src="/foodiy/img/foodiy_logo.png" class="embed-responsive-item" alt="사진 불러오기 실패!" id="img_records_img2">
 									</div>
 									<div style="width:32%" class="embed-responsive embed-responsive-1by1 shadow-sm rounded">
+										<input type="file" class="custom-file-input" onchange="onChangePicture(3)" id="input_record_pic3" accept="image/*">
 										<img src="/foodiy/img/foodiy_logo.png" class="embed-responsive-item" alt="사진 불러오기 실패!" id="img_records_img3">
 									</div>
 								</div>
@@ -176,6 +179,19 @@
 									<br>
 									<span><i class="fas fa-calendar-check fa-sm"></i> <b>일자 및 시간</b></span><br>
 									<span id="span_record_when">????-??-?? ??:??</span>
+									<div class="input-group date d-none" id="div_modify_datepicker">
+										<input type="text" class="form-control" id="input_datepicker"/>
+										<span class="input-group-addon">
+											<i class="fas fa-calendar-check fa-2x fa-pull-right"></i>
+										</span>
+									</div>
+									<hr class="d-none" id="hr_modify_datetime_divider">
+									<div class="input-group time d-none" id="div_modify_timepicker">
+										<input type="text" class="form-control" id="input_timepicker"/>
+										<span class="input-group-addon">
+											<i class="fas fa-clock fa-2x fa-pull-right"></i>
+										</span>
+									</div>
 								</div>
 							</div>
 						</div>
@@ -186,6 +202,14 @@
 									<br>
 									<span><i class="fas fa-map-marked-alt fa-sm"></i> <b>장소</b></span><br>
 									<span id="span_record_where">?</span>
+									<div class="input-group d-none" id="div_modify_where">
+										<input type="hidden" class="form-control" id="input_where_lati"/>
+										<input type="hidden" class="form-control" id="input_where_longi"/>
+										<input type="text" class="form-control" id="input_where_place"/>
+										<span class="input-group-addon">
+											<i class="fas fa-map-marked-alt fa-2x fa-pull-right" id="btn_gps"></i>
+										</span>
+									</div>
 								</div>
 							</div>
 						</div>
@@ -193,11 +217,14 @@
 						<div class="row pt-1">
 							<div class="col">
 								<div class="form-group">
-									<br>
+									<hr>
 									<span><i class="fas fa-user-alt fa-sm"></i> <b>누구랑</b></span><br>
-									<span id="span_record_when"></span>
 									<div class="d-flex align-content-end flex-wrap pt-1" id="div_whowith_list">
 										<!-- 여기에 인물태그 추가... -->
+									</div>
+									<div class="input-group pt-3 d-none" id="div_modify_whowith">
+										<input type="text" class="form-control" id="input_who_with"/>
+										<button class="btn btn-outline-secondary" type="button" id="btn_add_person"">추가</button>
 									</div>
 								</div>
 							</div>
@@ -205,6 +232,7 @@
 						<!-- 메뉴 -->
 						<div class="row pt-3">
 							<div class="col-12">
+								<hr>
 								<span><i class="fas fa-utensils fa-sm fa-pull-left"></i><b>메뉴</b></span>
 								<div class="d-flex flex-wrap d-none" id="div_record_menulist">
 									<!-- 여기에 검색결과 추가... -->
@@ -221,6 +249,7 @@
 					</div>
 					<div class="modal-footer">
 						<button type="button" class="btn btn-warning w-100" id="btn_backto_menu">메뉴로 돌아가기</button>
+						<button type="button" class="btn btn-success w-100 d-none" id="btn_update_record">수정내용 저장</button>
 					</div>
 				</div>
 			</div>

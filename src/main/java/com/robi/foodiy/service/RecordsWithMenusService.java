@@ -276,26 +276,36 @@ public class RecordsWithMenusService {
             }
 
             // MenusDao 생성
-            menusDao = new MenusDao();
-            menusDao.setName(menusDto.getMenuName());
-            menusDao.setWriteUserId(writeUserId);
-            menusDao.setRecordId(recordsDao.getId());
-            menusDao.setPicUrl(fileUrlSb.toString());
-            menusDao.setPrice(Integer.valueOf(menusDto.getMenuPrice()));
-            menusDao.setTags(menusDto.getMenuTag());
-            menusDao.setScore(Integer.valueOf(menusDto.getMenuScore()));
+            String menuName = menusDto.getMenuName();
 
-            // DB에 추가 (MenusMapper.xml)
-            try {
-                menusMapper.insert(menusDao);
-            }
-            catch (Exception e) {
-                logger.error("MenusDB insert Exception!", e);
-                return ApiResult.make(false, ApiResult.DEFAULT_API_RESULT_CODE_NEGATIVE, "메뉴 추가에 실패했습니다.");
+            if (menuName != null && menuName.length() > 0) {
+                menusDao = new MenusDao();
+                menusDao.setName(menuName);
+                menusDao.setWriteUserId(writeUserId);
+                menusDao.setRecordId(recordsDao.getId());
+                menusDao.setPicUrl(fileUrlSb.toString());
+                menusDao.setPrice(Integer.valueOf(menusDto.getMenuPrice()));
+                menusDao.setTags(menusDto.getMenuTag());
+                menusDao.setScore(Integer.valueOf(menusDto.getMenuScore()));
+
+                // DB에 추가 (MenusMapper.xml)
+                try {
+                    menusMapper.insert(menusDao);
+                }
+                catch (Exception e) {
+                    logger.error("MenusDB insert Exception!", e);
+                    return ApiResult.make(false, ApiResult.DEFAULT_API_RESULT_CODE_NEGATIVE, "메뉴 추가에 실패했습니다.");
+                }
             }
         }
 
-        logger.info("Records & MenusDB insert success! (recordsDao: " + recordsDao.toString() + " / " + menusDao.toString() + ")");
+        String paramStr = ("recordsDao: " + recordsDao.toString());
+        
+        if (menusDao != null) {
+            paramStr += (" / " + menusDao.toString() + ")");
+        }
+
+        logger.info("Records & MenusDB insert success! " + paramStr);
         return ApiResult.make(true);
     }
 
