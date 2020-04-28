@@ -18,6 +18,11 @@
 	<!-- fontawesome 5.8.1 -->
 	<link rel="stylesheet" href="/common/lib/fontawesome-5.8.1/css/fontawesome-5.8.1.css">
 	<script type="text/javascript" src="/common/lib/fontawesome-5.8.1/js/fontawesome-5.8.1.js"></script>
+	<!-- bootstrap4-datetimepicker -->
+	<script type="text/javascript" src="/common/lib/moment-2.24.0/js/moment.min.js"></script>
+	<script type="text/javascript" src="/common/lib/moment-2.24.0/locale/ko.js"></script>
+	<link rel="stylesheet" href="/common/lib/bootstrap4-datetimepicker/css/bootstrap-datetimepicker.min.css">
+	<script type="text/javascript" src="/common/lib/bootstrap4-datetimepicker/js/bootstrap-datetimepicker.min.js"></script>
 	<!-- common.js -->
 	<script type="text/javascript" src="/common/js/common.js?ver=<%=System.currentTimeMillis()%>"></script>
 	<!-- diary_search.js -->
@@ -106,7 +111,7 @@
 								</div>
 								<div class="input-group pt-1 d-none" id="div_modify_tags">
 									<input type="text" class="form-control" id="input_tag"/>
-									<button class="btn btn-outline-secondary" type="button" onclick="onClickAddMenuTag()" id="btn_add_tag">추가</button>
+									<button class="btn btn-outline-secondary" type="button" id="btn_add_tag">추가</button>
 								</div>
 							</div>
 						</div></div>
@@ -207,7 +212,7 @@
 										<input type="hidden" class="form-control" id="input_where_longi"/>
 										<input type="text" class="form-control" id="input_where_place"/>
 										<span class="input-group-addon">
-											<i class="fas fa-map-marked-alt fa-2x fa-pull-right" id="btn_gps"></i>
+											<i class="fas fa-map-marked-alt fa-2x fa-pull-right" onclick="onClickGps()" id="btn_gps"></i>
 										</span>
 									</div>
 								</div>
@@ -223,14 +228,14 @@
 										<!-- 여기에 인물태그 추가... -->
 									</div>
 									<div class="input-group pt-3 d-none" id="div_modify_whowith">
-										<input type="text" class="form-control" id="input_who_with"/>
+										<input type="text" class="form-control" id="input_who_with_tag"/>
 										<button class="btn btn-outline-secondary" type="button" id="btn_add_person"">추가</button>
 									</div>
 								</div>
 							</div>
 						</div>
 						<!-- 메뉴 -->
-						<div class="row pt-3">
+						<div class="row pt-3" id="div_record_menus">
 							<div class="col-12">
 								<hr>
 								<span><i class="fas fa-utensils fa-sm fa-pull-left"></i><b>메뉴</b></span>

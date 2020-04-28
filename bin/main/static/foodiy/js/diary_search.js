@@ -33,6 +33,12 @@ $(document).ready(function(){
     $('#btn_search_continue').on('click', function(){
         onClickSearchBtn(true);
     });
+    $('#btn_add_tag').on('click', function(){
+        onClickAddMenuTag('div_tag_list', $('#input_tag').val());
+    });
+    $('#btn_add_person').on('click', function(){
+        onClickAddMenuTag('div_whowith_list', $('#input_who_with_tag').val());
+    });
 
     // UI 초기화
     $('input[value="page"]').trigger('click');
@@ -267,13 +273,14 @@ function onClickMenuCard(menuId) {
     $('#h5_modal_title').html(menu.name);
     
     // 태그
+    var div_tag_list = $('#div_tag_list');
+    
+    div_tag_list.empty();
+
     var tags = menu.tags;
     
-    if (tags != "null") {
+    if (tags != null && tags != "null") {
         var tagSplit = tags.split('`');
-        var div_tag_list = $('#div_tag_list');
-
-        div_tag_list.empty();
 
         for (i = 0; i < tagSplit.length; ++i) {
             try {
@@ -608,25 +615,15 @@ function onChangePicture(idx) {
 }
 
 // 메뉴 배지태그 추가
-function onClickAddMenuTag() {
-    var div_list = $('#div_tag_list');
+function onClickAddMenuTag(divId, value) {
+    var div_list = $('#' + divId);
     var color = 'success';
-    var value_tag = $('#input_tag');
-    var value = null;
 
-    if (div_list.length == 0) {
+    if ($(div_list).length == 0) {
         return;
     }
 
-    if (value_tag.length == 0) {
-        return;
-    }
-    else {
-        value = value_tag.val();
-        value_tag.val('');
-    }
-
-    if (!value || value.length == 0) {
+    if (!value || value == "null") {
         return;
     }
 
@@ -733,14 +730,16 @@ function onClickShowRecords(recordId, menuId) {
                 // 누구랑
                 var whoWith = recordData.whoWith;
 
-                if (!!whoWith) {
+                if (whoWith != null && whoWith != "null") {
                     var whoWithAry = whoWith.split('`');
                     var whoWithCnt = whoWithAry.length;
 
                     for (i = 0; i < whoWithCnt; ++i) {
                         var whoName = whoWithAry[i];
                         var whoWithTag = (
-                            '<div class="pr-1 pb-1" id="div_menu_tag"><span class="badge badge-primary">' + whoName + '</span></div>'
+                            '<div class="pr-1 pb-1" id="div_menu_tag"><span class="badge badge-primary" value="' + whoName +
+                            '" id="span_menu_tag">#'+ whoName +
+                            '<i class="fas fa-times fa-sm fa-pull-right tags d-none" onclick="onClickCloseMenuTag(this)"></i></span></div>'
                         );
 
                         $('#div_whowith_list').append(whoWithTag);
@@ -826,8 +825,13 @@ function onClickModifyRecordCard(isModify) {
 
     // 제목
     if (isModify) {
-        $('#h5_modal_record_title').addClass('d-none');
-        $('#input_modify_record_name').removeClass('d-none');
+        var h5_title = $('#h5_modal_record_title');
+        h5_title.addClass('d-none');
+        
+        var input_title = $('#input_modify_record_name');
+        input_title.removeClass('d-none');
+
+        input_title.val(h5_title.html());
     }
     else {
         $('#input_modify_record_name').addClass('d-none');
@@ -848,9 +852,60 @@ function onClickModifyRecordCard(isModify) {
 
     // 일자 및 시간
     if (isModify) {
-        $('#span_record_when').addClass('d-none');
-        $('#div_modify_datepicker').removeClass('d-none');
-        $('#div_modify_timepicker').removeClass('d-none');
+        var div_datepicker = $('#div_modify_datepicker');
+        div_datepicker.addClass('d-none');
+
+        var div_timepicker = $('#div_modify_timepicker');
+        div_timepicker.addClass('d-none');
+
+        var span_record_when = $('#span_record_when');
+        span_record_when.addClass('d-none');
+
+        // Datepicker
+        var dateStr = span_record_when.html().substring(0, 10); // yyyy-MM-dd
+        div_datepicker.datetimepicker({
+            format : 'YYYY-MM-DD',
+            locale : 'ko',
+            showTodayButton : true,
+            showClose : false,
+            icons: {
+                time: 'far fa-clock',
+                date: 'far fa-calendar',
+                up: 'fas fa-chevron-up',
+                down: 'fas fa-chevron-down',
+                previous: 'fas fa-chevron-left',
+                next: 'fas fa-chevron-right',
+                today: 'fas fa-history',
+                clear: 'far fa-trash',
+                close: 'fas fa-times'
+            }
+        });
+        
+        $('#input_datepicker').val(dateStr);
+
+        // Timepicker
+        var timeStr = span_record_when.html().substring(11, 16); // HH:mm
+        div_timepicker.datetimepicker({
+            format : 'HH:mm',
+            locale : 'ko',
+            showTodayButton : true,
+            showClose : false,
+            icons: {
+                time: 'far fa-clock',
+                date: 'far fa-calendar',
+                up: 'fas fa-chevron-up',
+                down: 'fas fa-chevron-down',
+                previous: 'fas fa-chevron-left',
+                next: 'fas fa-chevron-right',
+                today: 'fas fa-history',
+                clear: 'far fa-trash',
+                close: 'fas fa-times'
+            }
+        });
+        $('#input_timepicker').val(timeStr);
+
+        div_datepicker.removeClass('d-none');
+        div_timepicker.removeClass('d-none');
         $('#hr_modify_datetime_divider').removeClass('d-none');
     }
     else {
@@ -862,12 +917,31 @@ function onClickModifyRecordCard(isModify) {
 
     // 장소
     if (isModify) {
-        $('#span_record_where').addClass('d-none');
-        $('#div_modify_where').removeClass('d-none');
+        var span_record_where = $('#span_record_where');
+        span_record_where.addClass('d-none');
+
+        var div_modify_where = $('#div_modify_where');
+        div_modify_where.removeClass('d-none');
+
+        $('#input_where_place').val(span_record_where.html());
     }
     else {
         $('#div_modify_where').addClass('d-none');
         $('#span_record_where').removeClass('d-none');
+    }
+
+    // 누구랑 태그삭제 버튼들 표시
+    var div_tag_badges = $('#div_whowith_list').find('.tags');
+
+    if (isModify) {
+        div_tag_badges.each(function(idx, item){
+            $(item).removeClass('d-none');
+        });
+    }
+    else {
+        div_tag_badges.each(function(idx, item){
+            $(item).addClass('d-none');
+        });
     }
 
     // 누구랑
@@ -875,7 +949,16 @@ function onClickModifyRecordCard(isModify) {
         $('#div_modify_whowith').removeClass('d-none');
     }
     else {
+        $('#input_who_with_tag').val('');
         $('#div_modify_whowith').addClass('d-none');
+    }
+
+    // 메뉴
+    if (isModify) {
+        $('#div_record_menus').addClass('d-none');
+    }
+    else {
+        $('#div_record_menus').removeClass('d-none');
     }
 
     // 버튼
@@ -906,7 +989,7 @@ function onClickDeleteRecord(recordId) {
                 $('#btn_close_record').trigger('click');
                 alert('기록 삭제가 완료되었습니다.');
 
-                g_recordMap.delete(data.result_data.id);
+                g_recordMap.delete(recordId);
                 callSearchApi(false);
             },
             // Fail
@@ -922,7 +1005,6 @@ function onClickDeleteRecord(recordId) {
     }
 }
 
-// 기록 삭제후 메뉴카드 삭제부터 시작
-// 이후 modify 기록카드에서 기존 데이터를 modify 폼에 복사하는부분 추가
 // 이후 update records api 추가
+// google geocoding 추가
 // 여기부터 시작... @@

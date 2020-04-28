@@ -72,45 +72,6 @@ $(document).ready(function(){
     $('#input_timepicker').val(timeStr);
 });
 
-// GPS 버튼 클릭 시
-function onClickGps() {
-    try {
-        var navi = navigator;
-
-        if (!navi) {
-            alert('GPS가 지원되지 않는 브라우저 혹은 기기입니다.');
-            return;
-        }
-
-        var geo = navi.geolocation;
-
-        if (!geo) {
-            alert('GPS가 지원되지 않는 기기입니다.');
-            return;
-        }
-        
-        geo.getCurrentPosition(function(pos){ 
-            var coords = pos.coords;
-
-            if (!coords) {
-                alert('현위치 획득에 실패했습니다.');
-                return;
-            }
-
-            var lati = coords.latitude.toFixed(6);
-            var longi = coords.longitude.toFixed(6);
-
-            $('#input_where_lati').val(lati);
-            $('#input_where_longi').val(longi);
-            // 추후 API(geocoding)로 현재 위치 이름 가져와서 적용
-            $('#input_where_place').val('Lat:' + lati + ', Lng: ' + longi);
-        });
-    }
-    catch (e) {
-        alert(e);
-    }
-}
-
 // 누구랑 배지태그 추가
 function onClickAddWhoWith() {
     var div_list = $('#div_who_with_list');
