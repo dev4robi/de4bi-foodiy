@@ -198,7 +198,7 @@ public class RecordsWithMenusService {
                 String rOriName = rMpFile.getOriginalFilename();
                 String fileExt = rOriName.substring(rOriName.lastIndexOf("."), rOriName.length());
                 String fileName = filePrefix + "-" +Hex.encodeHexString(MdUtil.sha128((rOriName + System.currentTimeMillis()).getBytes()), true) + fileExt;
-                String fileUrl =  StorageUtil.storeMultipartAsFile(recordsPic[mPicIdx], rFileDir, fileName);
+                StorageUtil.storeMultipartAsFile(recordsPic[mPicIdx], rFileDir, fileName);
                 fileUrlSb.append(fileName != null ? fileName : "").append("`");
             }
             catch (NullPointerException | IndexOutOfBoundsException | IllegalArgumentException | IOException e) {
@@ -216,12 +216,12 @@ public class RecordsWithMenusService {
         String whenTime = recordsDto.getWhenTime();
         Calendar dateTimeCal = Calendar.getInstance();
         dateTimeCal.set(
-            Integer.valueOf(whenDate.substring(0, 4)),  // year
-            Integer.valueOf(whenDate.substring(4, 6)),  // month
-            Integer.valueOf(whenDate.substring(6, 8)),  // date
-            Integer.valueOf(whenTime.substring(0, 2)),  // hoursOfDay
-            Integer.valueOf(whenTime.substring(2, 4)),  // minute
-            Integer.valueOf(whenTime.substring(4, 6))   // second
+            Integer.valueOf(whenDate.substring(0, 4)),      // year
+            Integer.valueOf(whenDate.substring(4, 6)) - 1,  // month
+            Integer.valueOf(whenDate.substring(6, 8)),      // date
+            Integer.valueOf(whenTime.substring(0, 2)),      // hoursOfDay
+            Integer.valueOf(whenTime.substring(2, 4)),      // minute
+            Integer.valueOf(whenTime.substring(4, 6))       // second
         );
         
         final long dateTimeMs = dateTimeCal.getTime().getTime();
@@ -259,10 +259,10 @@ public class RecordsWithMenusService {
             for (int mPicIdx = 0; mPicIdx < menusPic.length; ++mPicIdx) {
                 try {
                     MultipartFile mMpFile = menusPic[mPicIdx];
-                    String mOriName = mMpFile.getOriginalFilename();
-                    String fileExt = mOriName.substring(mOriName.lastIndexOf("."), mOriName.length());
-                    String fileName = filePrefix + "-" + Hex.encodeHexString(MdUtil.sha128((mOriName + System.currentTimeMillis()).getBytes()), true) + fileExt;
-                    String fileUrl =  StorageUtil.storeMultipartAsFile(menusPic[mPicIdx], mFileDir, fileName);
+                    String rOriName = mMpFile.getOriginalFilename();
+                    String fileExt = rOriName.substring(rOriName.lastIndexOf("."), rOriName.length());
+                    String fileName = filePrefix + "-" + Hex.encodeHexString(MdUtil.sha128((rOriName + System.currentTimeMillis()).getBytes()), true) + fileExt;
+                    StorageUtil.storeMultipartAsFile(menusPic[mPicIdx], mFileDir, fileName);
                     fileUrlSb.append(fileName != null ? fileName : "").append("`");
                 }
                 catch (NullPointerException | IndexOutOfBoundsException | IllegalArgumentException | IOException e) {
@@ -315,7 +315,7 @@ public class RecordsWithMenusService {
      * @param recordsDao : 갱신할 record데이터
      * @return ApiResult
      */
-    public ApiResult updateRecordsById(String userJwt, RecordsDao recordsDao) {
+    public ApiResult updateRecordsById(String userJwt, PostRecordsDto postRecordsDto) {
         // 파라미터 검사
         ApiResult validResult = null;
 
@@ -324,9 +324,9 @@ public class RecordsWithMenusService {
             return ApiResult.make(false, ApiResult.DEFAULT_API_RESULT_CODE_NEGATIVE, validResult.getResultMsg());
         }
 
-        if (recordsDao == null) {
-            logger.error("recordsDao == null");
-            return ApiResult.make(false, ApiResult.DEFAULT_API_RESULT_CODE_NEGATIVE, "recordsDao == null");
+        if (postRecordsDto == null) {
+            logger.error("postRecordsDto == null");
+            return ApiResult.make(false, ApiResult.DEFAULT_API_RESULT_CODE_NEGATIVE, "postRecordsDto == null");
         }
 
         // 사용자 인증
@@ -337,9 +337,104 @@ public class RecordsWithMenusService {
             return userAuthResult;
         }
 
-        // RecordsDao 수정
         long writeUserId = Long.valueOf(userAuthResult.getDataAsStr("id"));
+
+        // DB데이터 조회 (RecordsMapper.xml)
+        RecordsDao selectedRecordsDao = null;
+
+        try {
+            selectedRecordsDao = recordsMapper.selectById(postRecordsDto.getId());
+        }
+        catch (Exception e) {
+            logger.error("RecordsDB update Exception!", e);
+            return ApiResult.make(false, ApiResult.DEFAULT_API_RESULT_CODE_NEGATIVE, "기록 수정에 실패했습니다.");
+        }
+
+        if (selectedRecordsDao != null && selectedRecordsDao.getWriteUserId() != writeUserId) {
+            // 작성자가 아닌 경우 조회실패
+            logger.error("write_user_id != writerId (writer_user_id: " + selectedRecordsDao.getWriteUserId() +
+                         ", writerId: " + writeUserId + ")");
+                         selectedRecordsDao = null;
+        }
+
+        // 결과 반환
+        if (selectedRecordsDao == null) {
+            logger.error("저장된 기록 찾기에 실패했습니다.");
+            return ApiResult.make(false, ApiResult.DEFAULT_API_RESULT_CODE_NEGATIVE, "저장된 기록 찾기에 실패했습니다.");
+        }
+
+        // RecordsDao 수정
+        RecordsDao recordsDao = new RecordsDao();
+        String whenDate = postRecordsDto.getWhenDate();
+        String whenTime = postRecordsDto.getWhenTime();
+        Calendar dateTimeCal = Calendar.getInstance();
+        dateTimeCal.set(
+            Integer.valueOf(whenDate.substring(0, 4)),      // year
+            Integer.valueOf(whenDate.substring(4, 6)) - 1,  // month
+            Integer.valueOf(whenDate.substring(6, 8)),      // date
+            Integer.valueOf(whenTime.substring(0, 2)),      // hoursOfDay
+            Integer.valueOf(whenTime.substring(2, 4)),      // minute
+            Integer.valueOf(whenTime.substring(4, 6))       // second
+        );
+        
+        final long dateTimeMs = dateTimeCal.getTime().getTime();
+
+        // 기록 이미지 저장
+        final StringBuilder fileUrlSb = new StringBuilder(256);
+        final MultipartFile[] recordsPic = postRecordsDto.getPics();
+        final String mFileDir = env.getProperty("foodiy.records.img.basedir");
+        String fileName = selectedRecordsDao.getPicUrls();
+        String[] fileNameAry = (fileName != null ? fileName.split("`") : null);
+        
+        for (int rPicIdx = 0; rPicIdx < recordsPic.length; ++rPicIdx) {
+            try {
+                final MultipartFile mMpFile = recordsPic[rPicIdx];
+                final String mOriName = mMpFile.getOriginalFilename();
+                final String fileExt = mOriName.substring(mOriName.lastIndexOf("."), mOriName.length());
+
+                fileName = (fileNameAry == null ? null : fileNameAry[rPicIdx]);
+
+                if (fileName == null) {
+                    // 기존 파일명 없으면 새로 생성
+                    Calendar todayCal = Calendar.getInstance();
+                    final String filePrefix = new SimpleDateFormat("yyyyMMddHHmmss").format(todayCal.getTime()) + "-" + writeUserId;
+                    fileName = filePrefix + "-" + Hex.encodeHexString(MdUtil.sha128((mOriName + System.currentTimeMillis()).getBytes()), true) + fileExt;
+                }
+                else {
+                    // 기존 파일명 있으면 확장자만 교체
+                    int extIdx = fileName.lastIndexOf(".");
+
+                    if (extIdx == -1) {
+                        fileName = fileName + fileExt;
+                    }
+                    else {
+                        fileName = fileName.substring(0, extIdx) + fileExt;
+                    }
+                }
+
+                StorageUtil.storeMultipartAsFile(recordsPic[rPicIdx], mFileDir, fileName);
+                fileUrlSb.append(fileName != null ? fileName : "").append("`");
+            }
+            catch (NullPointerException | IndexOutOfBoundsException | IllegalArgumentException | IOException e) {
+                logger.warn("Exception while storing menus img!", e);
+                continue;
+            }
+        }
+
+        if (fileUrlSb.length() > 0) {
+            fileUrlSb.setLength(fileUrlSb.length() - 1);
+            fileName = fileUrlSb.toString();
+        }
+
         recordsDao.setWriteUserId(writeUserId);
+        recordsDao.setTitle(postRecordsDto.getTitle());
+        recordsDao.setWhenDate(new Date(dateTimeMs));
+        recordsDao.setWhenTime(new Time(dateTimeMs));
+        recordsDao.setWhereLati(postRecordsDto.getWhereLati());
+        recordsDao.setWhereLongi(postRecordsDto.getWhereLongi());
+        recordsDao.setWherePlace(postRecordsDto.getWherePlace());
+        recordsDao.setWhoWith(postRecordsDto.getWhoWith());
+        recordsDao.setPicUrls(fileName);
 
         // DB데이터 수정 (RecordsMapper.xml)
         try {
@@ -351,7 +446,12 @@ public class RecordsWithMenusService {
         }
 
         logger.info("RecordsDB update success! (recordsDao: " + recordsDao.toString() + ")");
-        return ApiResult.make(true);
+        return ApiResult.make(true, MapUtil.toMap("updatedRecords", recordsDao));
+
+        // @@ 여기부터 시작
+        // DB 업뎃이 안된다?? 다시한번 확인해 보자...
+        // 이후 GOOGLE GEO CODING 연동
+        // 이후 서버에 올리기
     }
 
     /**

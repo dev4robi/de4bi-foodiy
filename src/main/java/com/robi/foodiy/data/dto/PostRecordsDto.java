@@ -9,6 +9,9 @@ import lombok.Data;
 @Data
 public class PostRecordsDto {
     // 레코드 데이터
+    @JsonProperty("id")
+    long id;
+
     @JsonProperty("title")
     String title;
     

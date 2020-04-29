@@ -65,13 +65,11 @@
 | Method    : PUT                                                                                |
 | Cont-Type : multipart/file                                                                     |
 | ReqHeader : "user_jwt"(R)                                                                      |
-| ReqBody   : "title", "when_date", "when_time",                                                 |
-|             ("where_lati"), ("where_longi"), "where_place", ("who_with"), ("pics":[x0~3]),     |
-|             ("menus:[{"menu_name",("menu_price"),("menu_tag"),"menu_score",},...]"),           |
-|             (menu_pics"[x0~6])                                                                 |
+| ReqBody   : "id", "title", "when_date", "when_time",                                           |
+|             ("where_lati"), ("where_longi"), "where_place", ("who_with"), ("pics":[x0~3])      |
 | ResHeader : -                                                                                  |
 | ResBody   : -                                                                                  |
-| Comment   : 기록 수정 시, 링크된 메뉴까지 같이 수정됨.                                         |
+| Comment   : -                                                                                  |
 |                                                                                                |
 +------------------------------------------------------------------------------------------------+
 | Access    : Public                                                                             |

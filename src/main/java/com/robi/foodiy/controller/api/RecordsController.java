@@ -114,8 +114,41 @@ public class RecordsController {
     }
 
     @PutMapping("/records/{id}")
-    public ApiResult postRecordsWithMenus() {
-        return null;
+    public ApiResult postRecords(
+        // path
+        @PathVariable("id") long id,
+        // header
+        @RequestHeader("user_jwt") String userJwt,
+        // records
+        @RequestPart("title")                 String title,
+        @RequestPart("when_date")             String whenDate,
+        @RequestPart("when_time")             String whenTime,
+        @Nullable @RequestPart("where_lati")  String whereLati,
+        @Nullable @RequestPart("where_longi") String whereLongi,
+        @RequestPart("where_place")           String wherePlace,
+        @Nullable @RequestPart("who_with")    String whoWith,
+        @Nullable @RequestPart("pics")        MultipartFile[] pics
+    ) {
+        PostRecordsDto postRecordsDto = new PostRecordsDto();
+
+        try {
+            // Records
+            postRecordsDto.setId(id);
+            postRecordsDto.setTitle(title);
+            postRecordsDto.setWhenDate(whenDate);
+            postRecordsDto.setWhenTime(whenTime);
+            postRecordsDto.setWhereLati(whereLati != null ? Float.valueOf(whereLati) : null);
+            postRecordsDto.setWhereLongi(whereLongi != null ? Float.valueOf(whereLongi) : null);
+            postRecordsDto.setWherePlace(wherePlace);
+            postRecordsDto.setWhoWith(whoWith);
+            postRecordsDto.setPics(pics);
+        }
+        catch (Exception e) {
+            logger.error("Exception! {}", e);
+            throw new ApiException("레코드/메뉴 파라미터 오류!");
+        }
+
+        return recordsWithMenusSvc.updateRecordsById(userJwt, postRecordsDto);
     }
 
     @DeleteMapping("records/{id}")

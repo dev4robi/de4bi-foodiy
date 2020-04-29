@@ -19,9 +19,8 @@
         VALUES (#{writeUserId},#{title},#{whenDate},#{whenTime},#{wherePlace},#{whereLati},#{whereLongi},#{whoWith},#{picUrls});
     </insert>
     <update id="update" parameterType="com.robi.foodiy.data.dao.RecordsDao">
-        UPDATE records
-        SET (
-            writeUserId=#{writeUserId},
+        UPDATE records SET
+            write_user_id=#{writeUserId},
             title=#{title},
             when_date=#{whenDate},
             when_time=#{whenTime},
@@ -29,9 +28,7 @@
             where_lati=#{whereLati},
             where_longi=#{whereLongi},
             who_with=#{whoWith},
-            pic_urls=#{picUrls},
-            menu_ids=#{menuIds}
-        )
+            pic_urls=#{picUrls}
         WHERE id = #{id};
     </update>
     <delete id="deleteById" parameterType="Long">

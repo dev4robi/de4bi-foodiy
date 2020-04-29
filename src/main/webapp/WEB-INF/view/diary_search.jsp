@@ -163,7 +163,7 @@
 								<span><i class="fas fa-camera fa-sm fa-pull-left"></i><b>사진</b></span>
 								<div class="d-flex flex-wrap justify-content-around" id="div_record_pics">
 									<div style="width:32%" class="embed-responsive embed-responsive-1by1 shadow-sm rounded">
-										<input type="file" class="custom-file-input" onchange="onChangePicture(1)" id="input_record_pic1" accept="image/*">	
+										<input type="file" class="custom-file-input" onchange="onChangePicture(1)" id="input_record_pic1" accept="image/*">
 										<img src="/foodiy/img/foodiy_logo.png" class="embed-responsive-item" alt="사진 불러오기 실패!" id="img_records_img1">
 									</div>
 									<div style="width:32%" class="embed-responsive embed-responsive-1by1 shadow-sm rounded">
@@ -224,7 +224,7 @@
 								<div class="form-group">
 									<hr>
 									<span><i class="fas fa-user-alt fa-sm"></i> <b>누구랑</b></span><br>
-									<div class="d-flex align-content-end flex-wrap pt-1" id="div_whowith_list">
+									<div class="d-flex align-content-end flex-wrap pt-1" id="div_who_with_list">
 										<!-- 여기에 인물태그 추가... -->
 									</div>
 									<div class="input-group pt-3 d-none" id="div_modify_whowith">

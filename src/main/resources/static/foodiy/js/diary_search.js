@@ -37,7 +37,7 @@ $(document).ready(function(){
         onClickAddMenuTag('div_tag_list', $('#input_tag').val());
     });
     $('#btn_add_person').on('click', function(){
-        onClickAddMenuTag('div_whowith_list', $('#input_who_with_tag').val());
+        onClickAddMenuTag('div_who_with_list', $('#input_who_with_tag').val());
     });
 
     // UI 초기화
@@ -660,8 +660,11 @@ function onClickShowRecords(recordId, menuId) {
     $('#div_record_pics').empty();
     $('#span_record_when').html('?');
     $('#span_record_where').html('?');
-    $('#div_whowith_list').empty();
+    $('#div_who_with_list').empty();
     $('#div_record_menulist').empty();
+
+    // 기록수정 버튼 이벤트 수정
+    $('#btn_update_record').attr('onclick', 'onClickUpdateRecord(' + recordId + ')');
 
     // API 호출
     var apiUrl = g_recordApiUrl + '/' + recordId;
@@ -677,9 +680,12 @@ function onClickShowRecords(recordId, menuId) {
                 // 기록결과 캐싱
                 var record = {
                     "id" : recordData.id,
+                    "title" : recordData.title,
                     "pic_urls" : recordData.picUrls,
                     "when_date" : recordData.whenDate,
                     "when_time" : recordData.whenTime,
+                    "where_lati" : recordData.whereLati,
+                    "where_longi" : recordData.whereLongi,
                     "where_place" : recordData.wherePlace,
                     "who_with" : recordData.whoWith
                 }
@@ -742,7 +748,7 @@ function onClickShowRecords(recordId, menuId) {
                             '<i class="fas fa-times fa-sm fa-pull-right tags d-none" onclick="onClickCloseMenuTag(this)"></i></span></div>'
                         );
 
-                        $('#div_whowith_list').append(whoWithTag);
+                        $('#div_who_with_list').append(whoWithTag);
                     }
                 }
 
@@ -931,7 +937,7 @@ function onClickModifyRecordCard(isModify) {
     }
 
     // 누구랑 태그삭제 버튼들 표시
-    var div_tag_badges = $('#div_whowith_list').find('.tags');
+    var div_tag_badges = $('#div_who_with_list').find('.tags');
 
     if (isModify) {
         div_tag_badges.each(function(idx, item){
@@ -972,6 +978,136 @@ function onClickModifyRecordCard(isModify) {
     }
 }
 
+// 기록 수정
+function onClickUpdateRecord(recordId) {
+    if (confirm('정말 기록을 수정하나요?')) {
+        // 버튼 비활성화
+        $('#btn_update_record').attr('disabled', true);
+
+        // 기록 파라미터 획득
+        var r_title  = $('#input_modify_record_name').val();
+        var r_when_date = $('#input_datepicker').val();
+        var r_when_time = $('#input_timepicker').val();
+        var r_where_lati = $('#input_where_lati').val();
+        var r_where_longi = $('#input_where_longi').val();
+        var r_where_place = $('#input_where_place').val();
+        var r_who_with = null;
+
+        var div_who_with_ary = $('#div_who_with_list').children('#div_menu_tag');
+        
+        if (div_who_with_ary.length > 0) {
+            r_who_with = '';
+
+            for (i = 0; i < div_who_with_ary.length; ++i) {
+                var who_with = $(div_who_with_ary[i]).find('#span_menu_tag').attr('value');
+                r_who_with += (who_with + '`');
+            }
+
+            if (r_who_with.length > 0) {
+                r_who_with = r_who_with.substring(0, r_who_with.length - 1);
+            }
+        }
+        
+        // 기록 필수 파라미터 검사
+        // 제목
+        if (!r_title) {
+            alert('제목을 입력해 주세요!');
+            return;
+        }
+        // 일자
+        if (!r_when_date) {
+            alert('일자를 선택해 주세요!');
+            return;
+        }
+        else {
+            r_when_date = r_when_date.replace(/-/gi, '');
+        }
+        // 일시
+        if (!r_when_time) {
+            alert('시간을 선택해 주세요!');
+            return;
+        }
+        else {
+            r_when_time = r_when_time.replace(/:/gi, '');
+            r_when_time += '00';
+        }
+
+        // 멀티파트 폼 데이터 생성
+        var mpForm = new FormData();
+
+        // 레코드
+        mpForm.append('title', r_title);
+        mpForm.append('when_date', r_when_date);
+        mpForm.append('when_time', r_when_time);
+        mpForm.append('where_lati', r_where_lati);
+        mpForm.append('where_longi', r_where_longi);
+        mpForm.append('where_place', r_where_place);
+        mpForm.append('who_with', r_who_with);
+
+        for (i = 1; i < 4; ++i) {
+            var r_img = $('#input_record_pic' + i);
+
+            if (r_img.length == 0) {
+                continue;
+            }
+
+            r_img = r_img.prop('files');
+
+            if (r_img.length == 0) {
+                continue;
+            }
+
+            mpForm.append('pics', r_img[0]);
+        }
+
+        // URL및 유저토큰 획득
+        var recordUpdateUrl = (g_recordApiUrl + '/' + recordId);
+        var reqHeader = {
+            'user_jwt' : g_userJwt
+        }
+
+        // 멀티파트 AJAX 전송
+        AJAX.mpApiCall('PUT', recordUpdateUrl, reqHeader, mpForm, null, 
+            // Success
+            function(data, textStatus, jqXHR){
+                if (AJAX.checkResultSuccess(data) == false) {
+                    alert('기록 수정에 실패했습니다!\n(' + data.result_msg + ')');
+                    $('#btn_update_record').attr('disabled', false);
+                    return;
+                }
+
+                var recordData = data.result_data.updatedRecords;
+
+                var record = {
+                    "id" : recordData.id,
+                    "title" : recordData.title,
+                    "pic_urls" : recordData.picUrls,
+                    "when_date" : recordData.whenDate,
+                    "when_time" : recordData.whenTime,
+                    "where_lati" : recordData.whereLati,
+                    "where_longi" : recordData.whereLongi,
+                    "where_place" : recordData.wherePlace,
+                    "who_with" : recordData.whoWith
+                };
+
+                g_recordMap.set(recordId, record);
+                alert('메뉴 수정이 완료되었습니다.');
+                $('#btn_update_record').attr('disabled', false);
+            },
+            // Fail
+            function(){
+                alert('서버와 통신에 실패했습니다!');
+                $('#btn_update_record').attr('disabled', false);
+                return;
+            }
+        );
+    }
+    else {
+        alert('메뉴 수정이 취소되었습니다.');
+        return;
+    }
+}
+
 // 기록삭제 클릭
 function onClickDeleteRecord(recordId) {
     if (confirm('기록을 삭제하면 등록된 메뉴들 또한 삭제됩니다.\n정말 삭제하나요? 기록과 메뉴 모두 복원할 수 없습니다!')) {
@@ -1004,7 +1140,3 @@ function onClickDeleteRecord(recordId) {
         return;
     }
 }
-
-// 이후 update records api 추가
-// google geocoding 추가
-// 여기부터 시작... @@
