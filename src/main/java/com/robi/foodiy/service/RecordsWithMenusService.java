@@ -426,6 +426,7 @@ public class RecordsWithMenusService {
             fileName = fileUrlSb.toString();
         }
 
+        recordsDao.setId(selectedRecordsDao.getId());
         recordsDao.setWriteUserId(writeUserId);
         recordsDao.setTitle(postRecordsDto.getTitle());
         recordsDao.setWhenDate(new Date(dateTimeMs));
@@ -447,11 +448,6 @@ public class RecordsWithMenusService {
 
         logger.info("RecordsDB update success! (recordsDao: " + recordsDao.toString() + ")");
         return ApiResult.make(true, MapUtil.toMap("updatedRecords", recordsDao));
-
-        // @@ 여기부터 시작
-        // DB 업뎃이 안된다?? 다시한번 확인해 보자...
-        // 이후 GOOGLE GEO CODING 연동
-        // 이후 서버에 올리기
     }
 
     /**

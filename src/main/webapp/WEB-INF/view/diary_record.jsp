@@ -72,10 +72,13 @@
 		</div>
 	</div>
 	<!-- 장소 -->
-	<div class="row">
+	<div class="row" style="height: 50%;">
 		<div class="col">
 			<div class="form-group">
 				<span><i class="fas fa-map-marked-alt fa-sm fa-pull-left"></i><b>어디서?</b></span>
+				<div id="map" style="height: 100%;"></div>
+				<!-- 여기부터 시작 @@ UI 표시가 빡시다... 부트스트랩 -->
+				<script async defer src="https://maps.googleapis.com/maps/api/js?key=secret&callback=initMap"></script>
 				<div class="input-group" id="div_map">
 					<input type="hidden" class="form-control" id="input_where_lati"/>
 					<input type="hidden" class="form-control" id="input_where_longi"/>

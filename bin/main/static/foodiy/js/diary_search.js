@@ -732,6 +732,8 @@ function onClickShowRecords(recordId, menuId) {
 
                 // 장소
                 $('#span_record_where').html(recordData.wherePlace);
+                $('#input_where_lati').val(recordData.whereLati);
+                $('#input_where_longi').val(recordData.whereLongi);
 
                 // 누구랑
                 var whoWith = recordData.whoWith;

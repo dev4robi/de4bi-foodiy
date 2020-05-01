@@ -14,13 +14,14 @@
         FROM records
         WHERE id = #{writeUserId};
     </select>
+
     <insert id="insert" parameterType="com.robi.foodiy.data.dao.RecordsDao" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO records (write_user_id,title,when_date,when_time,where_place,where_lati,where_longi,who_with,pic_urls)
         VALUES (#{writeUserId},#{title},#{whenDate},#{whenTime},#{wherePlace},#{whereLati},#{whereLongi},#{whoWith},#{picUrls});
     </insert>
+
     <update id="update" parameterType="com.robi.foodiy.data.dao.RecordsDao">
         UPDATE records SET
-            write_user_id=#{writeUserId},
             title=#{title},
             when_date=#{whenDate},
             when_time=#{whenTime},
@@ -31,6 +32,7 @@
             pic_urls=#{picUrls}
         WHERE id = #{id};
     </update>
+    
     <delete id="deleteById" parameterType="Long">
         DELETE FROM records
         WHERE id = #{id};
