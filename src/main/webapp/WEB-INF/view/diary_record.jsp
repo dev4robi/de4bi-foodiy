@@ -29,6 +29,7 @@
 	<link rel="stylesheet" href="/foodiy/css/star-rating.css">
 	<script type="text/javascript" src="/foodiy/js/common.js?ver=<%=System.currentTimeMillis()%>"></script>
 	<script type="text/javascript" src="/foodiy/js/diary_record.js?ver=<%=System.currentTimeMillis()%>"></script>
+	<script type="text/javascript" src="/foodiy/js/google_map.js?ver=<%=System.currentTimeMillis()%>"></script>
 </head>
 <body class="container-fluid" id="body_record">
 <div class="container">
@@ -72,21 +73,15 @@
 		</div>
 	</div>
 	<!-- 장소 -->
-	<div class="row" style="height: 50%;">
+	<div class="row pb-5" style="height: 50%;">
 		<div class="col">
 			<div class="form-group">
 				<span><i class="fas fa-map-marked-alt fa-sm fa-pull-left"></i><b>어디서?</b></span>
 				<div id="map" style="height: 100%;"></div>
-				<!-- 여기부터 시작 @@ UI 표시가 빡시다... 부트스트랩 -->
-				<script async defer src="https://maps.googleapis.com/maps/api/js?key=secret&callback=initMap"></script>
-				<div class="input-group" id="div_map">
-					<input type="hidden" class="form-control" id="input_where_lati"/>
-					<input type="hidden" class="form-control" id="input_where_longi"/>
-					<input type="text" class="form-control" id="input_where_place"/>
-					<span class="input-group-addon">
-						<i class="fas fa-map-marked-alt fa-2x fa-pull-right" id="btn_gps"></i>
-					</span>
-				</div>
+				<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDTxpWl_A8b_V9e2lktHYgJg1HYmfyzLhM&callback=initMap"></script>
+				<input type="hidden" class="form-control" id="input_where_lati"/>
+				<input type="hidden" class="form-control" id="input_where_longi"/>
+				<input type="hidden" class="form-control" id="input_where_place"/>
 			</div>
 		</div>
 	</div>

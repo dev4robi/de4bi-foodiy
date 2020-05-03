@@ -19,7 +19,6 @@ $(document).ready(function(){
     }
 
     // 버튼 이벤트 초기화
-    $('#btn_gps').on('click', onClickGps);                      // GPS 버튼
     $('#btn_add_person').on('click', onClickAddWhoWith);        // 누구랑 인물추가 버튼
     $('#btn_add_menu').on('click', onClickAddMenu);             // 메뉴추가 버튼
     $('#btn_init_record').on('click', onClickInitRecord);       // 초기화 버튼

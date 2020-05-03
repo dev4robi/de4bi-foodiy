@@ -139,7 +139,7 @@ public class RecordsWithMenusService {
 
     /**
      * <p>userJwt내의 user_id를 write_user_id로 하여 record추가합니다.</p>
-     * <p>(※순서: 파라미터 검사 -> 사용자 인증 -> Google Geocoding API -> 이미지 저장 -> RecordsDao생성 ->
+     * <p>(※순서: 파라미터 검사 -> 사용자 인증 -> 이미지 저장 -> RecordsDao생성 ->
      * Records DB Insert -> MenusDao생성 -> MenusDao DB Insert -> 결과 반환)</p>
      * @param userJwt : auth서버로부터 발급된 JWT
      * @param recordsDto : 추가할 record데이터
@@ -168,21 +168,6 @@ public class RecordsWithMenusService {
         }
 
         final long writeUserId = Long.valueOf(userAuthResult.getDataAsStr("id"));
-
-        // Google Geocoding API (추후 작업)
-        String googleRpyStr = null;
-        
-        try {
-            googleRpyStr = RestHttpUtil.urlConnection("https://maps.googleapis.com/maps/api/geocode/json?latlng=" + 
-                recordsDto.getWhereLati() + "," + recordsDto.getWhereLongi() + 
-                "&key=AIzaSyDTxpWl_A8b_V9e2lktHYgJg1HYmfyzLhM", 
-                RestHttpUtil.METHOD_GET, null, null);
-        }
-        catch (RestClientException e) {
-            logger.warn("Exception while geocoding API!", e);
-        }
-
-        String wherePlaceName = "GOOGLE-API-RESULT-HERE"; // <-- 여기 작업
 
         // 레코드
         // 기록 이미지 저장
@@ -231,7 +216,7 @@ public class RecordsWithMenusService {
         recordsDao.setTitle(recordsDto.getTitle());
         recordsDao.setWhenDate(new Date(dateTimeMs));
         recordsDao.setWhenTime(new Time(dateTimeMs));
-        recordsDao.setWherePlace(wherePlaceName);
+        recordsDao.setWherePlace(recordsDto.getWherePlace());
         recordsDao.setWhereLati(recordsDto.getWhereLati());
         recordsDao.setWhereLongi(recordsDto.getWhereLongi());
         recordsDao.setWhoWith(recordsDto.getWhoWith());

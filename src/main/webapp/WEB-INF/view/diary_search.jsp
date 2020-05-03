@@ -25,6 +25,7 @@
 	<script type="text/javascript" src="/common/lib/bootstrap4-datetimepicker/js/bootstrap-datetimepicker.min.js"></script>
 	<!-- common.js -->
 	<script type="text/javascript" src="/common/js/common.js?ver=<%=System.currentTimeMillis()%>"></script>
+	<script type="text/javascript" src="/common/js/google_map.js?ver=<%=System.currentTimeMillis()%>"></script>
 	<!-- diary_search.js -->
 	<link rel="stylesheet" href="/foodiy/css/star-rating.css">
 	<script type="text/javascript" src="/foodiy/js/common.js?ver=<%=System.currentTimeMillis()%>"></script>
