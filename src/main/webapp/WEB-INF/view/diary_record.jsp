@@ -27,6 +27,7 @@
 	<script type="text/javascript" src="/common/js/common.js?ver=<%=System.currentTimeMillis()%>"></script>
 	<!-- diary_record.css/js -->
 	<link rel="stylesheet" href="/foodiy/css/star-rating.css">
+	<link rel="stylesheet" href="/foodiy/css/google_map.css">
 	<script type="text/javascript" src="/foodiy/js/common.js?ver=<%=System.currentTimeMillis()%>"></script>
 	<script type="text/javascript" src="/foodiy/js/diary_record.js?ver=<%=System.currentTimeMillis()%>"></script>
 	<script type="text/javascript" src="/foodiy/js/google_map.js?ver=<%=System.currentTimeMillis()%>"></script>
@@ -78,7 +79,7 @@
 			<div class="form-group">
 				<span><i class="fas fa-map-marked-alt fa-sm fa-pull-left"></i><b>어디서?</b></span>
 				<div id="map" style="height: 100%;"></div>
-				<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDTxpWl_A8b_V9e2lktHYgJg1HYmfyzLhM&callback=initMap"></script>
+				<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDTxpWl_A8b_V9e2lktHYgJg1HYmfyzLhM&callback=initMapOnRecord"></script>
 				<input type="hidden" class="form-control" id="input_where_lati"/>
 				<input type="hidden" class="form-control" id="input_where_longi"/>
 				<input type="hidden" class="form-control" id="input_where_place"/>

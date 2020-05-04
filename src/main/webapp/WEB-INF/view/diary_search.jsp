@@ -26,10 +26,12 @@
 	<!-- common.js -->
 	<script type="text/javascript" src="/common/js/common.js?ver=<%=System.currentTimeMillis()%>"></script>
 	<script type="text/javascript" src="/common/js/google_map.js?ver=<%=System.currentTimeMillis()%>"></script>
-	<!-- diary_search.js -->
+	<!-- diary_search.css/js -->
 	<link rel="stylesheet" href="/foodiy/css/star-rating.css">
+	<link rel="stylesheet" href="/foodiy/css/google_map.css">
 	<script type="text/javascript" src="/foodiy/js/common.js?ver=<%=System.currentTimeMillis()%>"></script>
 	<script type="text/javascript" src="/foodiy/js/diary_search.js?ver=<%=System.currentTimeMillis()%>"></script>
+	<script type="text/javascript" src="/foodiy/js/google_map.js?ver=<%=System.currentTimeMillis()%>"></script>
 </head>
 <body class="container-fluid">
 	<div class="row">
@@ -202,20 +204,18 @@
 							</div>
 						</div>
 						<!-- 장소 -->
-						<div class="row justify-content-center">
+						<div class="row justify-content-center pb-5" style="height: 25rem;">
 							<div class="col-11 align-self-center text-center shadow-sm rounded">
 								<div class="form-group">
 									<br>
 									<span><i class="fas fa-map-marked-alt fa-sm"></i> <b>장소</b></span><br>
-									<span id="span_record_where">?</span>
-									<div class="input-group d-none" id="div_modify_where">
-										<input type="hidden" class="form-control" id="input_where_lati"/>
-										<input type="hidden" class="form-control" id="input_where_longi"/>
-										<input type="text" class="form-control" id="input_where_place"/>
-										<span class="input-group-addon">
-											<i class="fas fa-map-marked-alt fa-2x fa-pull-right" onclick="onClickGps()" id="btn_gps"></i>
-										</span>
-									</div>
+									<!--<span id="span_record_where">?</span>-->
+									<div id="map" style="height: 100%;"></div>
+									<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDTxpWl_A8b_V9e2lktHYgJg1HYmfyzLhM&callback=initMapOnSearch"></script>
+									<input type="hidden" class="form-control" id="input_where_lati"/>
+									<input type="hidden" class="form-control" id="input_where_longi"/>
+									<input type="hidden" class="form-control" id="input_where_place"/>
+									<input type="hidden" class="form-control" id="input_check_modifying" value="false"/>
 								</div>
 							</div>
 						</div>

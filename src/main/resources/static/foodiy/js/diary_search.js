@@ -730,10 +730,11 @@ function onClickShowRecords(recordId, menuId) {
 
                 $('#span_record_when').html(dateWithTime);
 
-                // 장소
+                // 장소 및 지도
                 $('#span_record_where').html(recordData.wherePlace);
                 $('#input_where_lati').val(recordData.whereLati);
                 $('#input_where_longi').val(recordData.whereLongi);
+                initMapOnSearch();
 
                 // 누구랑
                 var whoWith = recordData.whoWith;
@@ -977,6 +978,14 @@ function onClickModifyRecordCard(isModify) {
     else {
         $('#btn_update_record').addClass('d-none');
         $('#btn_backto_menu').removeClass('d-none');
+    }
+
+    // 변수 스위칭
+    if (isModify) {
+        $('#input_check_modifying').val('true');
+    }
+    else {
+        $('#input_check_modifying').val('false');
     }
 }
 
