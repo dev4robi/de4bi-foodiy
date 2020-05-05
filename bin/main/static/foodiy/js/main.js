@@ -22,6 +22,7 @@ $(document).ready(function(){
 
     // 유저토큰 획득
     var newUserJwt = getUrlParameter('userJwt');
+    
     if (!!newUserJwt) {
         g_userJwt = newUserJwt;
 
@@ -35,7 +36,7 @@ $(document).ready(function(){
 
     // 로그인 확인
     {
-        if (!!g_userJwt == false) {
+        if (!g_userJwt) {
             alert('로그인이 필요한 서비스입니다.');
             replaceToAuthPage();
             return;

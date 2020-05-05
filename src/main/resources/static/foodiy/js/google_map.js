@@ -17,18 +17,23 @@ function initMapOnRecord() {
 		});
 
 		g_map.addListener('click', function(e) {
-			if (!!g_marker) {
-				var lat = e.latLng.lat();
-				var lng = e.latLng.lng();
-
-				g_marker.setPosition(e.latLng);
-				g_infoWindow.setPosition(e.latLng);
-				g_infoWindow.open(g_map);
-				g_map.panTo(e.latLng);
-				$('#input_where_lati').val(lat);
-				$('#input_where_longi').val(lng);
-				geocodeLatLng(lat, lng);
+			if (!g_marker) {
+				g_marker = new google.maps.Marker({
+					position: e.latLng,
+					map: g_map
+				});
 			}
+			
+			var lat = e.latLng.lat();
+			var lng = e.latLng.lng();
+
+			g_marker.setPosition(e.latLng);
+			g_infoWindow.setPosition(e.latLng);
+			g_infoWindow.open(g_map);
+			g_map.panTo(e.latLng);
+			$('#input_where_lati').val(lat);
+			$('#input_where_longi').val(lng);
+			geocodeLatLng(lat, lng);
 		});
 
 		addGpsButton();
@@ -57,7 +62,14 @@ function initMapOnSearch() {
 		});
 
 		g_map.addListener('click', function(e){
-			if (!!g_marker && $('#input_check_modifying').val()  == "true") {
+			if (!g_marker) {
+				g_marker = new google.maps.Marker({
+					position: e.latLng,
+					map: g_map
+				});
+			}
+
+			if ($('#input_check_modifying').val()  == "true") {
 				var lat = e.latLng.lat();
 				var lng = e.latLng.lng();
 
@@ -125,22 +137,25 @@ function addGpsButton() {
 // HTML5 Geolocation
 function updateGeoLocation(latLng) {
 	if (!latLng) {
-		// 위도경도 없는 경우
-		var navi = navigator;
+		// [Note] 브라우저 내장 geolocaiton 기능은 https 프로토콜에서만 동작한다.
+		// 현재 서버는 http로 동작하므로 해당 부분을 사용할수 없다.
+		if (location.protocol == 'https:') {
+			// 위도경도 없는 경우
+			var navi = navigator;
 
-		if (!navi) {
-				alert('GPS가 지원되지 않는 브라우저 혹은 기기입니다.');
-				return;
-		}
+			if (!navi) {
+					alert('GPS가 지원되지 않는 브라우저 혹은 기기입니다.');
+					return;
+			}
 
-		var geo = navi.geolocation;
+			var geo = navi.geolocation;
 
-		if (!geo) {
-				alert('GPS가 지원되지 않는 기기입니다.');
-				return;
-		}
-		
-		geo.getCurrentPosition(function(pos){ 
+			if (!geo) {
+					alert('GPS가 지원되지 않는 기기입니다.');
+					return;
+			}
+			
+			geo.getCurrentPosition(function(pos){ 
 				var coords = pos.coords;
 
 				if (!coords) {
@@ -158,7 +173,11 @@ function updateGeoLocation(latLng) {
 				g_infoWindow.open(g_map);
 				g_map.panTo(geoLoc);
 				geocodeLatLng(lati, longi);
-		});
+			});
+		}
+		else {
+			alert('브라우저에서 보안 문제로 GPS를 사용할 수 없습니다.');
+		}
 	}
 	else {
 		// 위도경도 있는 경우
