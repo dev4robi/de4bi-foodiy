@@ -1,9 +1,14 @@
 package com.robi.util;
 
+import java.awt.Graphics;
+import java.awt.Image;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+
+import javax.imageio.ImageIO;
 
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.slf4j.Logger;
@@ -39,12 +44,45 @@ public class StorageUtil {
                     throw new IOException("Fail to make directory '" + fileDir + "'!");
                 }
             }
-
+            
             if (storedFile.exists()) {
                 logger.warn("File '{}' already exist! Origin file will be overwritten.", mpFilePath);
             }
+        }
 
-            mpFile.transferTo(storedFile);
+        mpFile.transferTo(storedFile);
+
+        // 이미지파일의 경우 크기 조정
+        try {
+            int extIdx = fileName.lastIndexOf(".");
+            
+            if (extIdx != -1) {
+                String fileExt = fileName.substring(extIdx + 1);
+                BufferedImage img = ImageIO.read(storedFile);
+
+                if (img != null) {
+                    int imgWidth = img.getWidth();
+                    int imgHeight = img.getHeight();
+                    int imgNewWidth = Math.min(imgWidth, 800);
+                    float imgNewRatio = (imgWidth / (float) imgNewWidth);
+                    int imgNewHeight = Math.min((int) (imgHeight * imgNewRatio), 600);
+
+                    // Image.SCALE_DEFAULT : 기본 이미지 스케일링 알고리즘 사용
+                    // Image.SCALE_FAST    : 이미지 부드러움보다 속도 우선
+                    // Image.SCALE_REPLICATE : ReplicateScaleFilter 클래스로 구체화 된 이미지 크기 조절 알고리즘
+                    // Image.SCALE_SMOOTH  : 속도보다 이미지 부드러움을 우선
+                    // Image.SCALE_AREA_AVERAGING  : 평균 알고리즘 사용
+                    Image resizedImg = img.getScaledInstance(imgNewWidth, imgNewHeight, Image.SCALE_SMOOTH);
+                    img = new BufferedImage(imgNewWidth, imgNewHeight, BufferedImage.TYPE_INT_RGB);
+                    Graphics g = img.getGraphics();
+                    g.drawImage(resizedImg, 0, 0, null);
+                    g.dispose();
+                    ImageIO.write(img, fileExt, storedFile);
+                }
+            }
+        }
+        catch (Exception e) {
+            logger.error("Exception while ImageIO!", e);
         }
 
         return mpFilePath;

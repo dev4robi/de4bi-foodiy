@@ -100,6 +100,7 @@ function addGpsButton() {
 	controlUI.style.margin = '11px';
 	controlUI.style.textAlign = 'center';
 	controlUI.title = '현위치를 갱신합니다.';
+	controlDiv.id = 'div_map_btn_gps';
 	controlDiv.appendChild(controlUI);
 
 	// Set CSS for the control interior.
@@ -114,9 +115,7 @@ function addGpsButton() {
 	controlUI.appendChild(controlText);
 
 	controlUI.addEventListener('click', function(){
-		if (($('#input_check_modifying').val() == "true")) {
-			updateGeoLocation(null);
-		}
+		updateGeoLocation(null);
 	});
 
 	controlDiv.index = 1;

@@ -924,7 +924,7 @@ function onClickModifyRecordCard(isModify) {
         $('#span_record_when').removeClass('d-none');
     }
 
-    // 장소
+    // 장소및 지도
     if (isModify) {
         var span_record_where = $('#span_record_where');
         span_record_where.addClass('d-none');
@@ -933,8 +933,10 @@ function onClickModifyRecordCard(isModify) {
         div_modify_where.removeClass('d-none');
 
         $('#input_where_place').val(span_record_where.html());
+        $('#div_map_btn_gps').removeClass('d-none');
     }
     else {
+        $('#div_map_btn_gps').addClass('d-none');
         $('#div_modify_where').addClass('d-none');
         $('#span_record_where').removeClass('d-none');
     }
@@ -970,7 +972,7 @@ function onClickModifyRecordCard(isModify) {
         $('#div_record_menus').removeClass('d-none');
     }
 
-    // 버튼
+    // 하단 버튼
     if (isModify) {
         $('#btn_backto_menu').addClass('d-none');
         $('#btn_update_record').removeClass('d-none');
@@ -1102,7 +1104,7 @@ function onClickUpdateRecord(recordId) {
                 };
 
                 g_recordMap.set(recordId, record);
-                alert('메뉴 수정이 완료되었습니다.');
+                alert('기록 수정이 완료되었습니다.');
                 $('#btn_update_record').attr('disabled', false);
             },
             // Fail
