@@ -43,7 +43,9 @@ function initMapOnRecord() {
 		g_infoWindow = new google.maps.InfoWindow;
 	}
 	
-	updateGeoLocation(null);
+	if (location.protocol == 'https:') {
+		updateGeoLocation(null);
+	}
 }
 
 // 검색하기 맵 초기화
