@@ -165,8 +165,8 @@ function updateGeoLocation(latLng) {
 						return;
 				}
 
-				var lati = parseFloat(coords.latitude.toFixed(6));
-				var longi = parseFloat(coords.longitude.toFixed(6));
+				var lati = parseFloat(coords.latitude.toFixed(9));
+				var longi = parseFloat(coords.longitude.toFixed(9));
 				var geoLoc = {lat:lati, lng:longi};
 
 				$('#input_where_lati').val(geoLoc.lat);

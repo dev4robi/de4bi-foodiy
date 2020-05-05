@@ -14,8 +14,8 @@ CREATE TABLE `db_foodiy`.`records` (
     `when_date`         DATE NOT NULL,                  -- 일자(yyyy-MM-dd)
     `when_time`         TIME NOT NULL,                  -- 시간(HH:mm:ss)
     `where_place`       VARCHAR(128),                   -- 장소명
-    `where_lati`        FLOAT,                          -- 위도
-    `where_longi`       FLOAT,                          -- 경도
+    `where_lati`        DOUBLE,                         -- 위도
+    `where_longi`       DOUBLE,                         -- 경도
     `who_with`          VARCHAR(256),                   -- 같이있던 사람
     `pic_urls`          VARCHAR(512),                   -- 사진URL들
 

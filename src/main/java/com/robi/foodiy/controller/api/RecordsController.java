@@ -45,14 +45,14 @@ public class RecordsController {
     @PostMapping("/records")
     public ApiResult postRecordsWithMenus(
         // header
-        @RequestHeader("user_jwt")  String userJwt,
+        @RequestHeader("user_jwt") String userJwt,
         // records
         @RequestPart("title")                 String title,
         @RequestPart("when_date")             String whenDate,
         @RequestPart("when_time")             String whenTime,
         @Nullable @RequestPart("where_lati")  String whereLati,
         @Nullable @RequestPart("where_longi") String whereLongi,
-        @RequestPart("where_place")           String wherePlace,
+        @Nullable @RequestPart("where_place") String wherePlace,
         @Nullable @RequestPart("who_with")    String whoWith,
         @Nullable @RequestPart("pics")        MultipartFile[] pics,
         // menus
@@ -77,8 +77,8 @@ public class RecordsController {
             postRecordsDto.setTitle(title);
             postRecordsDto.setWhenDate(whenDate);
             postRecordsDto.setWhenTime(whenTime);
-            postRecordsDto.setWhereLati(whereLati != null ? Float.valueOf(whereLati) : null);
-            postRecordsDto.setWhereLongi(whereLongi != null ? Float.valueOf(whereLongi) : null);
+            postRecordsDto.setWhereLati(whereLati != null ? Double.valueOf(whereLati) : null);
+            postRecordsDto.setWhereLongi(whereLongi != null ? Double.valueOf(whereLongi) : null);
             postRecordsDto.setWherePlace(wherePlace);
             postRecordsDto.setWhoWith(whoWith);
             postRecordsDto.setPics(pics);
@@ -125,7 +125,7 @@ public class RecordsController {
         @RequestPart("when_time")             String whenTime,
         @Nullable @RequestPart("where_lati")  String whereLati,
         @Nullable @RequestPart("where_longi") String whereLongi,
-        @RequestPart("where_place")           String wherePlace,
+        @Nullable @RequestPart("where_place") String wherePlace,
         @Nullable @RequestPart("who_with")    String whoWith,
         @Nullable @RequestPart("pics")        MultipartFile[] pics
     ) {
@@ -137,8 +137,8 @@ public class RecordsController {
             postRecordsDto.setTitle(title);
             postRecordsDto.setWhenDate(whenDate);
             postRecordsDto.setWhenTime(whenTime);
-            postRecordsDto.setWhereLati(whereLati != null ? Float.valueOf(whereLati) : null);
-            postRecordsDto.setWhereLongi(whereLongi != null ? Float.valueOf(whereLongi) : null);
+            postRecordsDto.setWhereLati(whereLati != null ? Double.valueOf(whereLati) : null);
+            postRecordsDto.setWhereLongi(whereLongi != null ? Double.valueOf(whereLongi) : null);
             postRecordsDto.setWherePlace(wherePlace);
             postRecordsDto.setWhoWith(whoWith);
             postRecordsDto.setPics(pics);

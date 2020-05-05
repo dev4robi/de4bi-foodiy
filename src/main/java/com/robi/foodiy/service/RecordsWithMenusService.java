@@ -16,7 +16,6 @@ import com.robi.foodiy.mapper.MenusMapper;
 import com.robi.foodiy.mapper.RecordsMapper;
 import com.robi.util.MapUtil;
 import com.robi.util.MdUtil;
-import com.robi.util.RestHttpUtil;
 import com.robi.util.StorageUtil;
 import com.robi.util.ValidatorUtil;
 
@@ -27,7 +26,6 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.client.RestClientException;
 import org.springframework.web.multipart.MultipartFile;
 
 import lombok.AllArgsConstructor;
