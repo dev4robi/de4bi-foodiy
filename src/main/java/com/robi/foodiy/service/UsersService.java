@@ -36,7 +36,7 @@ public class UsersService {
             return ApiResult.make(false);
         }
 
-        String responseStr = RestHttpUtil.urlConnection("http://dev4robi.net:40000/users/api/jwt/validate",
+        String responseStr = RestHttpUtil.urlConnection("http://de4bi.com:40000/users/api/jwt/validate",
                                                         RestHttpUtil.METHOD_POST,
                                                         MapUtil.toMap("Content-Type", "application/json;charset=utf-8"),
                                                         MapUtil.toMap("userJwt", userJwt, "audience", "foodiy"));
