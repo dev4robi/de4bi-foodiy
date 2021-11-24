@@ -43,7 +43,6 @@ public class RestHttpUtil {
 
     public static String urlConnection(String url, int method, Map<String, Object> reqHeadMap, Map<String, Object> reqBodyMap) throws RestClientException {
         HttpHeaders httpHeader = new HttpHeaders();
-        httpHeader.setContentType(MediaType.APPLICATION_PROBLEM_JSON);
         
         if (reqHeadMap != null) {
             for (String key : reqHeadMap.keySet()) {

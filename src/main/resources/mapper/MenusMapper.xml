@@ -18,18 +18,21 @@
         SELECT *
         FROM menus
         WHERE write_user_id = #{writerId}
+        ORDER BY id DESC
         LIMIT #{menuBgnIdx},#{menuPerPage};
     </select>
     <select id="selectAllByWriterIdAndMenuNameToPage" resultType="com.robi.foodiy.data.dao.MenusDao">
         SELECT *
         FROM menus
         WHERE write_user_id = #{writerId} AND name LIKE '%${menuName}%'
+        ORDER BY id DESC
         LIMIT #{menuBgnIdx},#{menuPerPage};
     </select>
     <select id="selectAllByWriterIdAndTagToPage" resultType="com.robi.foodiy.data.dao.MenusDao">
         SELECT *
         FROM menus
         WHERE write_user_id = #{writerId} AND tags LIKE '%${tag}%'
+        ORDER BY id DESC
         LIMIT #{menuBgnIdx},#{menuPerPage};
     </select>
     <select id="selectAllByWriterIdAndPlaceToPage" resultType="com.robi.foodiy.data.dao.MenusDao">
@@ -39,6 +42,7 @@
             SELECT DISTINCT id
             FROM records
             WHERE write_user_id = #{writerId} AND where_place LIKE '%${place}%')
+        ORDER BY id DESC
         LIMIT #{menuBgnIdx},#{menuPerPage};
     </select>
     <select id="selectAllByWriterIdAndWhoToPage" resultType="com.robi.foodiy.data.dao.MenusDao">
@@ -48,6 +52,7 @@
             SELECT DISTINCT id
             FROM records
             WHERE write_user_id = #{writerId} AND who_with LIKE '%${who}%')
+        ORDER BY id DESC
         LIMIT #{menuBgnIdx},#{menuPerPage};
     </select>
 
