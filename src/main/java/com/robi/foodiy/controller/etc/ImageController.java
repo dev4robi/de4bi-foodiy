@@ -1,7 +1,6 @@
 package com.robi.foodiy.controller.etc;
 
 import java.io.IOException;
-import java.io.InputStream;
 
 import com.robi.util.StorageUtil;
 
@@ -15,20 +14,19 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
-@AllArgsConstructor
 @RestController
 @RequestMapping("/etc")
+@RequiredArgsConstructor
 public class ImageController {
 
     private static Logger logger = LoggerFactory.getLogger(ImageController.class);
 
-    private Environment env;
+    private final Environment env;
     
     @GetMapping(value="/img/{name}", produces = MediaType.IMAGE_PNG_VALUE)
     public @ResponseBody byte[] getImage(@PathVariable("name") String name) {
-        InputStream is = null;
         byte[] rtByte = null;
         
         try {

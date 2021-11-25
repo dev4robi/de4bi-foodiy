@@ -17,25 +17,21 @@ import com.robi.util.ValidatorUtil;
 import org.apache.commons.codec.binary.Hex;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
-@PropertySource("classpath:config.properties")
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Service
 public class MenusService {
 
     private static Logger logger = LoggerFactory.getLogger(MenusService.class);
 
     private final UsersService usersService;
-
     private final MenusMapper menusMapper;
-
     private final Environment env;
 
     public ApiResult getMenusByPageIdx(final String userJwt, final int pageIdx) {

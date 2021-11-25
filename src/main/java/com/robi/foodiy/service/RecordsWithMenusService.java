@@ -22,25 +22,23 @@ import com.robi.util.ValidatorUtil;
 import org.apache.commons.codec.binary.Hex;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
-@PropertySource("classpath:config.properties")
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Service
 public class RecordsWithMenusService {
 
     private static final Logger logger = LoggerFactory.getLogger(RecordsWithMenusService.class);
 
-    UsersService usersService;      // Users 회원인증을 위한 서비스
-    RecordsMapper recordsMapper;    // Records DB접근 매퍼
-    MenusMapper menusMapper;        // Menus DB접근 매퍼
-    Environment env;                // config.properties
+    private final UsersService usersService;      // Users 회원인증을 위한 서비스
+    private final RecordsMapper recordsMapper;    // Records DB접근 매퍼
+    private final MenusMapper menusMapper;        // Menus DB접근 매퍼
+    private final Environment env;                // application.properties
 
     /**
      * <p>userJwt의 user_id값과 write_user_id값이 일치하는 경우, id값을 가진 {@link RecordsDao}를 반환합니다.</p>

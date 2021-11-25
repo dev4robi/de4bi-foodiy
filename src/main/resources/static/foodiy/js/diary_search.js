@@ -197,11 +197,11 @@ function addMenuCard(menu_id, img, name, score, targetDivId) {
     }
 
     var score_color_ary = ['secondary', 'danger', 'warning', 'info', 'success', 'primary'];
-
+    var picUrl = getImageUrl(img);
     var div_card_tag = $(
         '<div style="width:50%" class="embed-responsive embed-responsive-4by3 shadow-sm rounded p-1" id="div_menu_card_' + menu_id + '">' +
             '<input type="hidden" value="' + menu_id + '" id="input_menu_id">' +
-            '<img src="' + g_imgApiUrl + '/' + img + '" class="embed-responsive-item" alt="사진 불러오기 실패!" onclick="onClickMenuCard(' + menu_id + ')">' +
+            '<img src="' + picUrl + '" class="embed-responsive-item" alt="사진 불러오기 실패!" onclick="onClickMenuCard(' + menu_id + ')">' +
             '<span class="badge badge-' + score_color_ary[score] + ' sticky-top">' + name + ' (★' + score + ')</span>' +
         '</div>');
 
@@ -267,7 +267,7 @@ function onClickMenuCard(menuId) {
     $('#btn_delete_menu').attr('onclick', 'onClickDeleteMenu(' + menuId + ')');
     
     // 이미지
-    $('#img_menu').attr('src', g_imgApiUrl + '/' + menu.img_url + '?time=' + new Date().getTime());
+    $('#img_menu').attr('src', getImageUrl(menu.img_url) + '?time=' + new Date().getTime());
 
     // 제목
     $('#h5_modal_title').html(menu.name);
@@ -704,11 +704,11 @@ function onClickShowRecords(recordId, menuId) {
 
                     for (i = 0; i < picCnt; ++i) {
                         var tagIdx = (i + 1);
-                        var picUrl = picUrlAry[i];
+                        var picUrl = getImageUrl(picUrlAry[i]);
                         var picTag = (
                             '<div style="width:100%" class="embed-responsive embed-responsive-4by3 shadow-sm rounded">' +
                                 '<input type="file" class="custom-file-input" onchange="onChangePicture(' + tagIdx + ')" id="input_record_pic' + tagIdx + '" accept="image/*">' +
-                                '<img src="' + g_imgApiUrl + '/' + picUrl + '" class="embed-responsive-item" alt="사진 불러오기 실패!" id="img_records_img' + tagIdx + '">' +
+                                '<img src="' + picUrl + '" class="embed-responsive-item" alt="사진 불러오기 실패!" id="img_records_img' + tagIdx + '">' +
                             '</div>'
                         );
 
@@ -1152,4 +1152,13 @@ function onClickDeleteRecord(recordId) {
         alert('기록 삭제가 취소되었습니다.');
         return;
     }
+}
+
+// 이미지 경로 획득
+function getImageUrl(name) {
+    if (!name) {
+        return '/foodiy/img/foodiy_logo.png';
+    }
+
+    return g_imgApiUrl + '/' + picUrlAry[i];
 }
